@@ -12,12 +12,23 @@ v1.0.0.1). Modern reference and the fixed-step convention: `third_party/hyperbla
 
 ## Verification
 
+**The original TickClock is variable-rate, not a fixed tick.** The decomp has no fixed timestep:
+`GameEngine::TickClock` (0x00481130) measures the real host frame time, rejects frames over 200 ms,
+and smooths the last five scaled deltas, with 18 Hz only as the initial and nominal reference.
+This is recorded by the port-analyst in `docs/CORE-NOTES.md` section 2. The fixed 30 Hz step used by
+this slice's headless checks and by the Unity bootstrap is the 20XX modernisation
+(`third_party/hyperblade-20XX/src/engine/framepacing.h:14` `kTickMs = 1000.0f / 30.0f`): it is a
+deliberate port choice for determinism, **not** a claim that the original ran a fixed 30 Hz tick.
+The decomp path is kept as `EngineClock.AdvanceHostFrame` and is the path a frame-trace parity run
+against the original must use; `AdvanceFixedTick` exists only for the 20XX-style batch pipeline and
+the Unity bootstrap. The 30 Hz self-check asserts the fixed path's arithmetic, not original timing.
+
 Compile check (zero warnings, zero errors; no UnityEngine references):
 
     # temp project outside the repo, C# 9 (Unity 6000.x language level), all Sim/*.cs + a Main
     dotnet build
     dotnet run
-    sim slice: 196/196 checks passed; arena 105/187.5/105 fric 0.01 elas 0.95; fov 85 bungee 12; tick 30 Hz
+    sim slice: 209/209 checks passed; arena 105/187.5/105 fric 0.01 elas 0.95; fov 85 bungee 12; tick 30 Hz
 
 The same checks are reachable from Unity through `UBlade3.Sim.SimSelfCheck`:
 
@@ -68,7 +79,8 @@ camera and offset modes, and Rok carry/throw.
 | steering threshold | 1.000001 (double) | `physicsbody.cpp` ApplySteeringForce |
 | motion integrate | ring 4, mean 0.25, snap 50, forward gain 1.232 | `physicsbody.cpp` IntegrateMotion |
 | banking | 0.1 rad; camera bone 9 | `physicsbody.cpp` UpdateBanking |
-| physics config defaults | force increment / max accel / max speed / force relaxation / bandwidth / net tracking / stop force / burst = 1.0 | `src/app/config.cpp` `g_flOneSteering` (then `Data/DftKeybd.cfg`) |
+| physics loader initialisers | force increment / max accel / max speed / force relaxation / bandwidth / net tracking / stop force / burst = 1.0 | `src/app/config.cpp` (`g_flOneSteering`) |
+| physics shipped values | forceIncrement 1.0, maxAcceleration 2.3, maxSpeed 0.7, forceRelaxation 1.0, bandwidth 1.0, netTracking 1.0, stopForceFactor 1.0, speedBurstFactor 0.8, viewSteepness.z 2.0 | retail `Data/DftStick.cfg` read by `src/app/config.cpp`; recorded in `docs/CORE-NOTES.md` section 4 |
 | glide | carrier speed scale 0.9, bank-free speed 30, speed stat 0.05*rating+0.65, friction*2, bank gain 12 | `cglideonsurface.cpp` |
 | stamina / energy | stat weight 0.0075+0.25, speed rate base 2, half-rok 0.5, defaults energy 100, ratings 5, speed 7, damage 100 | `objectstats.cpp` |
 | speed burst | carrier 1.5, decay 0.8, floor 0.05, epsilon 1e-5 | `cspeedburst.cpp` |
@@ -161,6 +173,7 @@ camera and offset modes, and Rok carry/throw.
 | `CGlideOnSurface::UpdateTerrainPhysics` | 0x0040c270 | `GlideOnSurface.UpdateTerrainPhysics` | full port; the 20XX stat-read guard is used (deviation 2) |
 | `CGlideOnSurface::Release` | 0x0040cb20 | - | TODO (network integration path) |
 | `CSpeedBurst::Process` | 0x004113f0 | `SpeedBurstState.Process` | exact |
+| `PlanAction::Set_SpeedBurst` | 0x0045eb30 | `SpeedBurstState.Activate` | exact: period gate, target 80/period * stamina gate + 1, boost 1.05, axis.x + 0.25, friction 0.1, stationary velocity fallback |
 | `RokObject::RokObject` / SetRenderSlotFlags / ActivateAtSpawnSlot | 0x00473a80 / 0x00473b90 / 0x00473c50 | `RokState` | state exact; mesh-bone hiding deferred to the presentation port |
 | `PlanAction::Set_AttachPak` / `Unset_AttachPak` | 0x00401460 / 0x004015c0 | `RokState.Attach` / `Detach` | exact for the Rok (carrier history + messages); mine/weapon arm TODO |
 | `CBeAttached::Process` | 0x0040dc80 | `Simulation.UpdateCarriedRok` | carried follow position/velocity exact when a transform is supplied; transform-less fallback is a documented stand-in |
@@ -203,37 +216,14 @@ transforms, plan-action launch messages, camera pole gate normal, render-slot bo
 
 ## Documented deviations from the decomp
 
-1. **Fixed 30 Hz step.** The decomp smooths the real host frame delta through the five-slot ring;
-   20XX added `FramePacing::kTickMs = 1000/30` and feeds that constant into TickClock. This slice
-   keeps both: `AdvanceHostFrame` is the decomp path and `AdvanceFixedTick` is the 20XX batch path
-   (the ring average lands on exactly 1/30 s). Unity uses the fixed path for determinism, and that
-   choice is a port convention, not decomp behaviour.
-2. **Rok glide stat guard.** `cglideonsurface.cpp` reads the speed rating through a PlayerObject
-   cast for every glider, including the Rok, which has no stats block. 20XX guards it with
-   `owner->m_nKind == kDromer` ("the original read past its object"). This port takes the 20XX
-   guard and records it here; passing `useTwentyXxStatGuard = false` reproduces the unguarded read.
-3. **Camera aim point.** CTrack aims at bone 9's world position; without the animation port the
-   player's `AimPosition` defaults to the body position. When bone transforms land, only
-   `AimPosition` needs updating.
-4. **NormalAtPoint returns a copy.** The original returns a pointer to one shared `m_vNormal`, so
-   it is non-reentrant and null only at the centre. The port returns a copy and a false flag; no
-   caller relies on pointer identity.
-5. **ResetOnSurface** uses a zeroed clock for its two premultiplied fields (the original reads the
-   engine clock); the routine zeroes both fields immediately afterwards.
-6. **Score points per goal.** RokScoreValue's codes 0/1/2 map to 1x/2x/4x goals and the plans call
-   IncrementScore (one point each). `GoalRules.PointsForScoreValue` encodes the measured 1/2/4
-   values for the rule layer with a TODO to replace it by the plan VM's own calls; the C++ does not
-   itself contain the call counts.
-7. **Period clock semantics are preserved as shipped:** the clock only accumulates while
-   `nPauseMark == 1`; the plans broadcast `MSG_SHOOT`/`MSG_GOAL_SCORED` to start/stop it, which is
-   why the self-check drives a shot after the start drag. This is deliberately not "fixed".
-8. **Keyboard held mask:** the keyboard device table has eight key slots (`TABLE_KEY_COUNT 8`), so
-   `HELD_QUICK_SHOT` (0x100) and `HELD_JUMP` (0x200) cannot be produced by the keyboard in the
-   original; joystick/gamepad paths and plan input remain the sources. Recorded, not invented.
-9. **Float boundary on the arena shell:** exactly on the ellipsoid the float remainder in GetZ may
-   round to a tiny negative, in which case the shipped code answers the 1.0 "outside" value. The
-   self-check accepts either answer at y=187.5 and asserts an exact height one unit inside, so the
-   check is portable across Mono/IL2CPP and .NET without changing the simulation maths.
+1. **The original clock is variable-rate; the fixed 30 Hz step is a port choice.** The decomp's
+   `GameEngine::TickClock` smooths the measured host frame time through the five-slot ring (18 Hz
+   initial/nominal, 200 ms frame guard) - see `docs/CORE-NOTES.md` section 2. 20XX added
+   `FramePacing::kTickMs = 1000/30` and feeds that constant into TickClock
+   (`src/engine/gameengine.cpp:565`). This slice keeps both: `AdvanceHostFrame` is the decomp path;
+   `AdvanceFixedTick` + `FixedStepClock` are the 20XX batch/Unity path (ring average exactly 1/30 s).
+   The 30 Hz self-check is therefore a port verification, not an exactness claim about the original
+   frame rate, and parity runs must use the host-frame path or a captured original frame trace.
 
 ## Files
 

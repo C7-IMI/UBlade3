@@ -351,6 +351,36 @@ namespace UBlade3.Sim
         public bool Active;
         public bool Ready;
 
+        // PlanAction::Set_SpeedBurst (0x0045eb30): a non-zero period allocates the agenda item,
+        // sets its target from the period and the carrier's stamina ratio, raises the steering
+        // scale to 1.05, adds a quarter to the spin axis, drops friction to 0.1, and gives a
+        // near-stationary body its heading as velocity.
+        public void Activate(int period, PlayerStats stats, PhysicsBodyState body, ref float steerScale)
+        {
+            if (period == 0)
+            {
+                Active = false;
+                Ready = true;
+                return;
+            }
+
+            float scale = stats.SpeedRatio > 0.3f ? 1.0f : 0.0f;
+
+            Bind(OwnerSlot);
+            Target = (float)(80.0 / (uint)period * scale + 1.0);
+            Boost = 1.05f;
+            steerScale = 1.05f;
+
+            body.Axis.x = body.Axis.x + 0.25f;
+            body.Friction = 0.1f;
+
+            float length = (float)Math.Sqrt(body.Vel.x * body.Vel.x + body.Vel.y * body.Vel.y + body.Vel.z * body.Vel.z);
+            if (length < 0.1f)
+            {
+                body.Vel = body.VelDir;
+            }
+        }
+
         // CSpeedBurst::Bind: the players either side of the owner in slot order, wrapping through four.
         public void Bind(int ownerSlot)
         {

@@ -564,6 +564,7 @@ namespace UBlade3.Sim
             {
                 case RokConstants.ScoreValueResult2x: return 2;
                 case RokConstants.ScoreValueResult4x: return 4;
+                case RokConstants.ScoreValueResultSpawn: return 4;
                 default: return 1;
             }
         }

@@ -31,20 +31,20 @@
     "inventoryFunctions": 4121,
     "gameFunctions": 3054,
     "libraryFunctions": 1067,
-    "mappedFunctions": 144,
-    "portedFunctions": 124,
+    "mappedFunctions": 145,
+    "portedFunctions": 125,
     "stubFunctions": 20,
-    "unmappedFunctions": 3977,
-    "mappedGameFunctions": 144,
-    "unmappedGameFunctions": 2910,
-    "coveragePercent": 3.49,
-    "gameCoveragePercent": 4.72,
+    "unmappedFunctions": 3976,
+    "mappedGameFunctions": 145,
+    "unmappedGameFunctions": 2909,
+    "coveragePercent": 3.52,
+    "gameCoveragePercent": 4.75,
     "csharpFiles": 29,
-    "csharpLines": 12791,
+    "csharpLines": 13029,
     "csharpClasses": 113,
-    "csharpMethods": 392,
-    "csharpAddressCitations": 244,
-    "csharpFilesWithCitations": 23,
+    "csharpMethods": 395,
+    "csharpAddressCitations": 246,
+    "csharpFilesWithCitations": 24,
     "nextFunctionCount": 50
   },
   "subsystems": [
@@ -164,10 +164,10 @@
       "headerFiles": 54,
       "lines": 26002,
       "functions": 518,
-      "mapped": 22,
+      "mapped": 23,
       "stubs": 2,
-      "unmapped": 496,
-      "coveragePercent": 4.25
+      "unmapped": 495,
+      "coveragePercent": 4.44
     },
     {
       "name": "sound",
@@ -12350,9 +12350,9 @@
       "classDeclarations": 0,
       "firstMarkerLine": 119,
       "inventoryFunctions": 184,
-      "mappedFunctions": 5,
+      "mappedFunctions": 6,
       "stubFunctions": 1,
-      "unmappedFunctions": 179
+      "unmappedFunctions": 178
     },
     {
       "path": "third_party/hyperblade-decomp/src/planvm/plancond.h",
@@ -67887,7 +67887,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs",
-        "csharpLine": 839,
+        "csharpLine": 869,
         "status": "ported"
       },
       {
@@ -67971,7 +67971,7 @@
         "subsystem": "physics",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs",
-        "csharpLine": 103,
+        "csharpLine": 118,
         "status": "ported"
       },
       {
@@ -68335,7 +68335,7 @@
         "subsystem": "planvm",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs",
-        "csharpLine": 211,
+        "csharpLine": 225,
         "status": "ported"
       },
       {
@@ -68419,7 +68419,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs",
-        "csharpLine": 354,
+        "csharpLine": 384,
         "status": "ported"
       },
       {
@@ -68983,6 +68983,20 @@
         "status": "ported"
       },
       {
+        "address": "0x0045eb30",
+        "name": "PlanAction::Set_SpeedBurst",
+        "size": 393,
+        "convention": "__cdecl",
+        "signature": "void __cdecl PlanAction::Set_SpeedBurst(int * param_1, int param_2)",
+        "sourceFile": "third_party/hyperblade-decomp/src/planvm/plancond.cpp",
+        "sourceLine": 790,
+        "subsystem": "planvm",
+        "gameFunction": true,
+        "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs",
+        "csharpLine": 354,
+        "status": "ported"
+      },
+      {
         "address": "0x00461c00",
         "name": "PlanCond::IsDoubleScore",
         "size": 62,
@@ -69007,7 +69021,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs",
-        "csharpLine": 573,
+        "csharpLine": 574,
         "status": "stub"
       },
       {
@@ -69091,7 +69105,7 @@
         "subsystem": "physics",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs",
-        "csharpLine": 341,
+        "csharpLine": 355,
         "status": "ported"
       },
       {
@@ -69147,7 +69161,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs",
-        "csharpLine": 856,
+        "csharpLine": 886,
         "status": "ported"
       },
       {
@@ -69175,7 +69189,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs",
-        "csharpLine": 671,
+        "csharpLine": 672,
         "status": "ported"
       },
       {
@@ -70045,7 +70059,7 @@
         "subsystem": "engine",
         "gameFunction": true,
         "csharpFile": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs",
-        "csharpLine": 573,
+        "csharpLine": 574,
         "status": "stub"
       },
       {
@@ -91194,18 +91208,6 @@
         "signature": "void __cdecl PlanAction::SendMessageToMyCamera(int * param_1, int param_2, dword param_3, int param_4)",
         "sourceFile": "third_party/hyperblade-decomp/src/planvm/plancond.cpp",
         "sourceLine": 741,
-        "subsystem": "planvm",
-        "gameFunction": true,
-        "status": "unmapped"
-      },
-      {
-        "address": "0x0045eb30",
-        "name": "PlanAction::Set_SpeedBurst",
-        "size": 393,
-        "convention": "__cdecl",
-        "signature": "void __cdecl PlanAction::Set_SpeedBurst(int * param_1, int param_2)",
-        "sourceFile": "third_party/hyperblade-decomp/src/planvm/plancond.cpp",
-        "sourceLine": 790,
         "subsystem": "planvm",
         "gameFunction": true,
         "status": "unmapped"
@@ -117921,7 +117923,7 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Data/DataProbe.cs",
-        "lines": 605,
+        "lines": 612,
         "classes": 2,
         "classNames": [
           "DataProbe",
@@ -118075,14 +118077,14 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Data/KeyConfigFile.cs",
-        "lines": 511,
+        "lines": 618,
         "classes": 3,
         "classNames": [
           "KeyConfigFile",
           "KeyRow",
           "ScanfStream"
         ],
-        "methods": 13,
+        "methods": 14,
         "addressCitationCount": 1,
         "addressCitations": {
           "0x0046d8b0": [
@@ -118594,7 +118596,7 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs",
-        "lines": 698,
+        "lines": 699,
         "classes": 8,
         "classNames": [
           "GameEvent",
@@ -118618,11 +118620,11 @@
             510
           ],
           "0x00463220": [
-            573
+            574
           ],
           "0x00463300": [
             6,
-            572
+            573
           ],
           "0x00465150": [
             5,
@@ -118636,7 +118638,7 @@
             534
           ],
           "0x00473b90": [
-            671
+            672
           ],
           "0x0047ae70": [
             7
@@ -118688,7 +118690,7 @@
             448,
             510,
             522,
-            572
+            573
           ],
           "src/ui/infobar.cpp": [
             7
@@ -118697,7 +118699,7 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs",
-        "lines": 783,
+        "lines": 798,
         "classes": 5,
         "classNames": [
           "AttachPak",
@@ -118709,71 +118711,71 @@
         "addressCitationCount": 33,
         "addressCitations": {
           "0x00407520": [
-            103
+            118
           ],
           "0x00407780": [
             3,
-            151
+            166
           ],
           "0x00407890": [
             3,
-            189
+            204
           ],
           "0x00407920": [
             3,
-            202
+            217
           ],
           "0x00407960": [
             4,
-            211
+            226
           ],
           "0x00407a60": [
             8,
-            224
+            239
           ],
           "0x00407ab0": [
             7,
-            236
+            251
           ],
           "0x00407c40": [
             4,
-            286
+            301
           ],
           "0x00408080": [
             4,
-            437
+            452
           ],
           "0x00408190": [
             5,
-            469
+            484
           ],
           "0x004082c0": [
             5,
-            509
+            524
           ],
           "0x00408540": [
             5,
-            579
+            594
           ],
           "0x004085d0": [
             6,
-            599
+            614
           ],
           "0x004086a0": [
             6,
-            631
+            646
           ],
           "0x00408760": [
             6,
-            657
+            672
           ],
           "0x00408880": [
             7,
-            693
+            708
           ],
           "0x00408940": [
             7,
-            720
+            735
           ]
         },
         "decompPathCitations": {
@@ -118781,10 +118783,10 @@
             34
           ],
           "src/engine/objectclasses.h": [
-            771
+            786
           ],
           "src/physics/banking.h": [
-            767
+            782
           ],
           "src/physics/physicsbody.cpp": [
             2
@@ -118796,7 +118798,7 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs",
-        "lines": 880,
+        "lines": 910,
         "classes": 8,
         "classNames": [
           "GlideOnSurface",
@@ -118808,23 +118810,23 @@
           "SpeedBurstResult",
           "SpeedBurstState"
         ],
-        "methods": 14,
-        "addressCitationCount": 23,
+        "methods": 15,
+        "addressCitationCount": 24,
         "addressCitations": {
           "0x00402dc0": [
-            839
+            869
           ],
           "0x0040c270": [
             7,
-            591
+            621
           ],
           "0x00410e90": [
             5,
-            534
+            564
           ],
           "0x004110f0": [
             5,
-            437
+            467
           ],
           "0x004112e0": [
             343
@@ -118832,10 +118834,13 @@
           "0x004113f0": [
             7,
             343,
-            366
+            396
+          ],
+          "0x0045eb30": [
+            354
           ],
           "0x004722a0": [
-            856
+            886
           ],
           "0x004748e0": [
             2,
@@ -118863,7 +118868,7 @@
         },
         "decompPathCitations": {
           "src/engine/crelaxyaw.cpp": [
-            725
+            755
           ],
           "src/engine/cspeedburst.cpp": [
             7,
@@ -118871,7 +118876,7 @@
             343
           ],
           "src/engine/object.cpp": [
-            839
+            869
           ],
           "src/engine/objectstats.cpp": [
             2,
@@ -118879,7 +118884,7 @@
           ],
           "src/engine/player.cpp": [
             4,
-            437
+            467
           ],
           "src/engine/playerobject.h": [
             239
@@ -118892,12 +118897,12 @@
           ],
           "src/planvm/cglideonsurface.cpp": [
             6,
-            591
+            621
           ],
           "src/planvm/cmonitorkeys.cpp": [
             5,
-            437,
-            534
+            467,
+            564
           ]
         }
       },
@@ -118973,7 +118978,7 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs",
-        "lines": 478,
+        "lines": 492,
         "classes": 11,
         "classNames": [
           "ArenaConstants",
@@ -118992,19 +118997,19 @@
         "addressCitationCount": 25,
         "addressCitations": {
           "0x00401460": [
-            306
+            320
           ],
           "0x004015c0": [
-            307
+            321
           ],
           "0x00403290": [
-            259
+            273
           ],
           "0x00403a30": [
-            259
+            273
           ],
           "0x00404670": [
-            341
+            355
           ],
           "0x00407520": [
             155
@@ -119013,34 +119018,34 @@
             155
           ],
           "0x0040c270": [
-            211
+            225
           ],
           "0x0040cb20": [
-            211
+            225
           ],
           "0x004113f0": [
-            247
+            261
           ],
           "0x00421980": [
             52
           ],
           "0x004521d0": [
-            340
+            354
           ],
           "0x00463300": [
-            307
+            321
           ],
           "0x00465150": [
-            308
+            322
           ],
           "0x00469ef0": [
-            340
+            354
           ],
           "0x00469f90": [
-            341
+            355
           ],
           "0x0047d1c0": [
-            377
+            391
           ],
           "0x00481130": [
             112
@@ -119061,15 +119066,16 @@
             22
           ],
           "0xffffffff": [
-            311,
-            312
+            325,
+            326
           ]
         },
         "decompPathCitations": {
           "src/app/config.cpp": [
             15,
             156,
-            197
+            197,
+            212
           ],
           "src/common/staticinitglobals.cpp": [
             23,
@@ -119082,11 +119088,11 @@
             52
           ],
           "src/engine/cspeedburst.cpp": [
-            247
+            261
           ],
           "src/engine/engineclock.h": [
             111,
-            470
+            484
           ],
           "src/engine/engineglobals.h": [
             92
@@ -119099,70 +119105,70 @@
             111
           ],
           "src/engine/gameengine.h": [
-            389
+            403
           ],
           "src/engine/gameoptions.cpp": [
             147
           ],
           "src/engine/object.cpp": [
-            341
+            355
           ],
           "src/engine/objectclasses.h": [
-            389
+            403
           ],
           "src/engine/objectstats.cpp": [
-            212
+            226
           ],
           "src/engine/player.cpp": [
             156
           ],
           "src/engine/rokobject.h": [
-            306
+            320
           ],
           "src/engine/statids.h": [
-            212,
-            389
+            226,
+            403
           ],
           "src/engine/trackingellipsoidstatics.cpp": [
             23
           ],
           "src/physics/collisioncheck.cpp": [
-            340
+            354
           ],
           "src/physics/physicsbody.h": [
             155,
-            450
+            464
           ],
           "src/planvm/cglideonsurface.cpp": [
             156,
-            211
+            225
           ],
           "src/planvm/cheadtrack.cpp": [
             53,
             97,
-            260
+            274
           ],
           "src/planvm/cupdateshotpower.cpp": [
             101,
             104,
-            260
+            274
           ],
           "src/planvm/planactionanim.cpp": [
-            306
+            320
           ],
           "src/planvm/planactionlaunch.cpp": [
             107,
-            259
+            273
           ],
           "src/planvm/planactiontracking.cpp": [
             52,
             89
           ],
           "src/planvm/plancond.cpp": [
-            307
+            321
           ],
           "src/planvm/planstate.cpp": [
-            308
+            322
           ],
           "src/ui/hudglobals.h": [
             53
@@ -119232,15 +119238,23 @@
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimSelfCheck.cs",
-        "lines": 674,
+        "lines": 738,
         "classes": 1,
         "classNames": [
           "SimSelfCheck"
         ],
-        "methods": 23,
-        "addressCitationCount": 0,
-        "addressCitations": {},
-        "decompPathCitations": {}
+        "methods": 24,
+        "addressCitationCount": 1,
+        "addressCitations": {
+          "0x0045eb30": [
+            427
+          ]
+        },
+        "decompPathCitations": {
+          "src/app/config.cpp": [
+            146
+          ]
+        }
       },
       {
         "path": "unity/UBlade3/Assets/Scripts/UBlade3/Sim/Simulation.cs",
@@ -119556,21 +119570,6 @@
     },
     {
       "rank": 18,
-      "address": "0x0045eb30",
-      "name": "PlanAction::Set_SpeedBurst",
-      "size": 393,
-      "subsystem": "planvm",
-      "sourceFile": "third_party/hyperblade-decomp/src/planvm/plancond.cpp",
-      "sourceLine": 790,
-      "priority": 235,
-      "reasons": [
-        "subsystem planvm",
-        "core file planvm/plancond.cpp",
-        "speed burst"
-      ]
-    },
-    {
-      "rank": 19,
       "address": "0x00464c40",
       "name": "PlanAction::ThrowBungee",
       "size": 761,
@@ -119585,7 +119584,7 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 19,
       "address": "0x0045d280",
       "name": "KeyboardDeviceObj::LoadBindingsFromIni",
       "size": 54,
@@ -119601,7 +119600,7 @@
       ]
     },
     {
-      "rank": 21,
+      "rank": 20,
       "address": "0x00408e90",
       "name": "CollisionEllipsoid::~CollisionEllipsoid",
       "size": 11,
@@ -119617,7 +119616,7 @@
       ]
     },
     {
-      "rank": 22,
+      "rank": 21,
       "address": "0x00410df0",
       "name": "CMonitorKeys::Bind",
       "size": 100,
@@ -119632,7 +119631,7 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 22,
       "address": "0x00467f10",
       "name": "PlanCond::GoThroughMuliplier",
       "size": 238,
@@ -119647,7 +119646,7 @@
       ]
     },
     {
-      "rank": 24,
+      "rank": 23,
       "address": "0x004058d0",
       "name": "CollisionPlane::PointNearSurface",
       "size": 49,
@@ -119662,7 +119661,7 @@
       ]
     },
     {
-      "rank": 25,
+      "rank": 24,
       "address": "0x0040d3b0",
       "name": "CProjectAndBounce::Bind",
       "size": 259,
@@ -119677,7 +119676,7 @@
       ]
     },
     {
-      "rank": 26,
+      "rank": 25,
       "address": "0x0040d960",
       "name": "CProjectAndBounce::Process",
       "size": 32,
@@ -119692,7 +119691,7 @@
       ]
     },
     {
-      "rank": 27,
+      "rank": 26,
       "address": "0x0040da80",
       "name": "CProjectAndBounce::Release",
       "size": 347,
@@ -119707,7 +119706,7 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 27,
       "address": "0x00405910",
       "name": "CollisionPlane::RadiusForDirection",
       "size": 11,
@@ -119722,7 +119721,7 @@
       ]
     },
     {
-      "rank": 29,
+      "rank": 28,
       "address": "0x00408f20",
       "name": "CTrack::Bind",
       "size": 110,
@@ -119737,7 +119736,7 @@
       ]
     },
     {
-      "rank": 30,
+      "rank": 29,
       "address": "0x00467110",
       "name": "PlanCond::RokIsCharged",
       "size": 51,
@@ -119752,7 +119751,7 @@
       ]
     },
     {
-      "rank": 31,
+      "rank": 30,
       "address": "0x00467150",
       "name": "PlanCond::RokIsChargedAgainst",
       "size": 104,
@@ -119767,7 +119766,7 @@
       ]
     },
     {
-      "rank": 32,
+      "rank": 31,
       "address": "0x00473f40",
       "name": "RokObject::ApplyRenderSlotPose",
       "size": 502,
@@ -119782,7 +119781,7 @@
       ]
     },
     {
-      "rank": 33,
+      "rank": 32,
       "address": "0x00484cf0",
       "name": "GameEngine::LoadObjectsFromConfig",
       "size": 399,
@@ -119798,7 +119797,7 @@
       ]
     },
     {
-      "rank": 34,
+      "rank": 33,
       "address": "0x00421f90",
       "name": "CameraObject::ViewIt",
       "size": 1210,
@@ -119813,7 +119812,7 @@
       ]
     },
     {
-      "rank": 35,
+      "rank": 34,
       "address": "0x00422a30",
       "name": "CameraObject::SortTransparentQueue",
       "size": 361,
@@ -119828,7 +119827,7 @@
       ]
     },
     {
-      "rank": 36,
+      "rank": 35,
       "address": "0x00422ba0",
       "name": "CameraObject::DrawShadowAndTransparentPass",
       "size": 208,
@@ -119843,7 +119842,7 @@
       ]
     },
     {
-      "rank": 37,
+      "rank": 36,
       "address": "0x00403cf0",
       "name": "PlanAction::KickDownToSurface",
       "size": 115,
@@ -119858,7 +119857,7 @@
       ]
     },
     {
-      "rank": 38,
+      "rank": 37,
       "address": "0x00408cc0",
       "name": "PhysicsBody::ApplyAnimDrivenForce",
       "size": 226,
@@ -119872,7 +119871,7 @@
       ]
     },
     {
-      "rank": 39,
+      "rank": 38,
       "address": "0x0040c200",
       "name": "CGlideOnSurface::OnListChanged",
       "size": 97,
@@ -119888,7 +119887,7 @@
       ]
     },
     {
-      "rank": 40,
+      "rank": 39,
       "address": "0x0045d0b0",
       "name": "KeyboardDeviceObj::~KeyboardDeviceObj",
       "size": 223,
@@ -119904,7 +119903,7 @@
       ]
     },
     {
-      "rank": 41,
+      "rank": 40,
       "address": "0x00410e60",
       "name": "CMonitorKeys::OnListChanged",
       "size": 46,
@@ -119920,7 +119919,7 @@
       ]
     },
     {
-      "rank": 42,
+      "rank": 41,
       "address": "0x004123f0",
       "name": "CUpdateShotPower::Bind",
       "size": 118,
@@ -119935,7 +119934,7 @@
       ]
     },
     {
-      "rank": 43,
+      "rank": 42,
       "address": "0x00422d60",
       "name": "CameraProjectionState::ResetProjection",
       "size": 22,
@@ -119950,7 +119949,7 @@
       ]
     },
     {
-      "rank": 44,
+      "rank": 43,
       "address": "0x00422d80",
       "name": "CameraProjectionState::InitializeProjection",
       "size": 37,
@@ -119965,7 +119964,7 @@
       ]
     },
     {
-      "rank": 45,
+      "rank": 44,
       "address": "0x00430960",
       "name": "CameraProjectionState::RotateY",
       "size": 274,
@@ -119980,7 +119979,7 @@
       ]
     },
     {
-      "rank": 46,
+      "rank": 45,
       "address": "0x00430a80",
       "name": "CameraProjectionState::RotateX",
       "size": 274,
@@ -119995,7 +119994,7 @@
       ]
     },
     {
-      "rank": 47,
+      "rank": 46,
       "address": "0x00430ba0",
       "name": "CameraProjectionState::RotateZ",
       "size": 274,
@@ -120010,7 +120009,7 @@
       ]
     },
     {
-      "rank": 48,
+      "rank": 47,
       "address": "0x0040d4c0",
       "name": "CProjectAndBounce::OnListChanged",
       "size": 71,
@@ -120026,7 +120025,7 @@
       ]
     },
     {
-      "rank": 49,
+      "rank": 48,
       "address": "0x00408f90",
       "name": "CTrack::OnListChanged",
       "size": 49,
@@ -120042,13 +120041,29 @@
       ]
     },
     {
-      "rank": 50,
+      "rank": 49,
       "address": "0x0045cff0",
       "name": "KeyboardDeviceObj::GetActionBitIndex",
       "size": 154,
       "subsystem": "input",
       "sourceFile": "third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp",
       "sourceLine": 246,
+      "priority": 187,
+      "reasons": [
+        "subsystem input",
+        "core file input/keyboarddeviceobj.cpp",
+        "keyboard",
+        "-accessor"
+      ]
+    },
+    {
+      "rank": 50,
+      "address": "0x0045d270",
+      "name": "KeyboardDeviceObj::GetDefaultKeyBindings",
+      "size": 6,
+      "subsystem": "input",
+      "sourceFile": "third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp",
+      "sourceLine": 401,
       "priority": 187,
       "reasons": [
         "subsystem input",

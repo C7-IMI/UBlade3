@@ -111,7 +111,14 @@ namespace UBlade3.Data
             }
             catch (Exception exception)
             {
-                Console.Out.WriteLine("UBLADE3_DATA_FAILED " + Flatten(exception.Message));
+                string message = Flatten(exception.Message);
+
+                if (!message.StartsWith("UBLADE3_DATA_FAILED", StringComparison.Ordinal))
+                {
+                    message = "UBLADE3_DATA_FAILED " + message;
+                }
+
+                Console.Out.WriteLine(message);
 
                 return 1;
             }

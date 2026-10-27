@@ -35,16 +35,31 @@ namespace UBlade3.Sim
     // in the shipped configuration unless the file overrides them).
     public sealed class PhysicsTuning
     {
-        public float NetTracking = PhysicsConstants.DefaultNetTracking;
-        public float Bandwidth = PhysicsConstants.DefaultBandwidth;
-        public float ForceRelaxation = PhysicsConstants.DefaultForceRelaxation;
-        public float MaxSpeed = PhysicsConstants.DefaultMaxSpeed;
-        public float MaxAcceleration = PhysicsConstants.DefaultMaxAcceleration;
-        public float SpeedBurstFactor = PhysicsConstants.DefaultSpeedBurstFactor;
-        public float StopForceFactor = PhysicsConstants.DefaultStopForceFactor;
-        public float ForceIncrement = PhysicsConstants.DefaultForceIncrement;
+        public float NetTracking = PhysicsConstants.LoaderNetTracking;
+        public float Bandwidth = PhysicsConstants.LoaderBandwidth;
+        public float ForceRelaxation = PhysicsConstants.LoaderForceRelaxation;
+        public float MaxSpeed = PhysicsConstants.LoaderMaxSpeed;
+        public float MaxAcceleration = PhysicsConstants.LoaderMaxAcceleration;
+        public float SpeedBurstFactor = PhysicsConstants.LoaderSpeedBurstFactor;
+        public float StopForceFactor = PhysicsConstants.LoaderStopForceFactor;
+        public float ForceIncrement = PhysicsConstants.LoaderForceIncrement;
 
-        public static readonly PhysicsTuning Shipped = new PhysicsTuning();
+        // Before the preferences file is read.
+        public static readonly PhysicsTuning LoaderDefaults = new PhysicsTuning();
+
+        // The retail DATA/DftStick.cfg values (docs/CORE-NOTES.md section 4). The data port should
+        // fill its own instance from the file it actually reads.
+        public static readonly PhysicsTuning Shipped = new PhysicsTuning
+        {
+            NetTracking = PhysicsConstants.ShippedNetTracking,
+            Bandwidth = PhysicsConstants.ShippedBandwidth,
+            ForceRelaxation = PhysicsConstants.ShippedForceRelaxation,
+            MaxSpeed = PhysicsConstants.ShippedMaxSpeed,
+            MaxAcceleration = PhysicsConstants.ShippedMaxAcceleration,
+            SpeedBurstFactor = PhysicsConstants.ShippedSpeedBurstFactor,
+            StopForceFactor = PhysicsConstants.ShippedStopForceFactor,
+            ForceIncrement = PhysicsConstants.ShippedForceIncrement,
+        };
     }
 
     // physicsbody.h PhysicsBody. One instance per simulation object (players, Rok, cameras).

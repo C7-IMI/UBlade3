@@ -194,18 +194,32 @@ namespace UBlade3.Sim
         public const int CameraBone = 9;
         // physicsbody.cpp SetFlatOnTerrain / UpdateVelocityDirection epsilons.
         public const float FlatAxisEpsilon = 0.001f;
-        // src/app/config.cpp: the physics dialog defaults; all eight start at g_flOneSteering = 1.0f.
-        // They are read from Data\DftKeybd.cfg fscanf("%f %f %f %f") before the @v02 line.
-        public const float DefaultForceIncrement = 1.0f;
-        public const float DefaultMaxAcceleration = 1.0f;
-        public const float DefaultMaxSpeed = 1.0f;
-        public const float DefaultForceRelaxation = 1.0f;
-        public const float DefaultBandwidth = 1.0f;
-        public const float DefaultNetTracking = 1.0f;
-        public const float DefaultStopForceFactor = 1.0f;
-        public const float DefaultSpeedBurstFactor = 1.0f;
-        // src/globals.cpp: g_vViewSteepness = (0, 0, 2).
-        public const float DefaultViewSteepnessZ = 2.0f;
+        // src/app/config.cpp: the physics dialog globals' initialisers in the decomp are all
+        // g_flOneSteering = 1.0f; the preferences device file then overwrites them.
+        public const float LoaderForceIncrement = 1.0f;
+        public const float LoaderMaxAcceleration = 1.0f;
+        public const float LoaderMaxSpeed = 1.0f;
+        public const float LoaderForceRelaxation = 1.0f;
+        public const float LoaderBandwidth = 1.0f;
+        public const float LoaderNetTracking = 1.0f;
+        public const float LoaderStopForceFactor = 1.0f;
+        public const float LoaderSpeedBurstFactor = 1.0f;
+
+        // The shipped configuration: DATA/PREFS.TXT selects Data/DftStick.cfg; the parser reads
+        // 1.0 / 2.3 / 0.7 / 1.0 for forceIncrement / maxAcceleration / maxSpeed / forceRelaxation,
+        // then bandwidth 1.0, netTracking 1.0, stopForceFactor 1.0, speedBurstFactor 0.8 and
+        // viewSteepness.z 2.0. See docs/CORE-NOTES.md section 4 (port-analyst, retail install's
+        // DftStick.cfg); the decomp's parser order is src/app/config.cpp:159-164.
+        public const float ShippedForceIncrement = 1.0f;
+        public const float ShippedMaxAcceleration = 2.3f;
+        public const float ShippedMaxSpeed = 0.7f;
+        public const float ShippedForceRelaxation = 1.0f;
+        public const float ShippedBandwidth = 1.0f;
+        public const float ShippedNetTracking = 1.0f;
+        public const float ShippedStopForceFactor = 1.0f;
+        public const float ShippedSpeedBurstFactor = 0.8f;
+        // src/globals.cpp: g_vViewSteepness = (0, 0, 2); the shipped file leaves z at 2.0.
+        public const float ShippedViewSteepnessZ = 2.0f;
     }
 
     // decomp src/planvm/cglideonsurface.cpp (0x0040c270 UpdateTerrainPhysics, 0x0040cb20 Release),

@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v1",
-  "generatedAt": "2026-10-27T05:48:12.559Z",
+  "generatedAt": "2026-10-27T05:50:45.835Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "gameExecutable": {
     "file": "HyperX-XP.exe",
@@ -18,20 +18,20 @@
     "models": 26,
     "modelsLibrary": 173,
     "sounds": 363,
-    "digest": "9189865a39c96113",
+    "digest": "0135846dd22b3e3d",
     "warnings": 0
   },
   "simulation": {
-    "checksPassed": 196,
-    "checksTotal": 196,
+    "checksPassed": 209,
+    "checksTotal": 209,
     "note": "Sim core self-check; fixed-step clock is a port choice pending parity with the original variable TickClock."
   },
   "portLedger": {
     "gameFunctions": 3054,
-    "mapped": 144,
+    "mapped": 145,
     "stubs": 20,
-    "unmapped": 3977,
-    "gameCoveragePercent": 4.72
+    "unmapped": 3976,
+    "gameCoveragePercent": 4.75
   },
   "commands": [
     "python scripts/check_all.py",

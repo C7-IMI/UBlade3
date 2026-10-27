@@ -18,15 +18,15 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | Inventory functions (CSV or markers) | 4,121 |
 | Game functions below 0x004a0000 | 3,054 |
 | Library/CRT functions | 1,067 |
-| Mapped C# functions | 144 |
+| Mapped C# functions | 145 |
 | Mapped as stubs (TODO/NotImplemented) | 20 |
-| Mapped as ported | 124 |
-| Unmapped functions | 3,977 |
-| Whole-image coverage | 3.49% |
-| Game-code coverage | 4.72% |
+| Mapped as ported | 125 |
+| Unmapped functions | 3,976 |
+| Whole-image coverage | 3.52% |
+| Game-code coverage | 4.75% |
 | C# port files | 29 |
-| C# port lines | 12,791 |
-| C# address citations | 244 |
+| C# port lines | 13,029 |
+| C# address citations | 246 |
 
 ## Per-subsystem
 
@@ -42,7 +42,7 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | math | 9 | 12 | 2,566 | 60 | 11 | 0 | 49 | 18.33% |
 | net | 10 | 25 | 6,651 | 95 | 1 | 0 | 94 | 1.05% |
 | physics | 11 | 18 | 4,221 | 78 | 33 | 17 | 45 | 42.31% |
-| planvm | 47 | 54 | 26,002 | 518 | 22 | 2 | 496 | 4.25% |
+| planvm | 47 | 54 | 26,002 | 518 | 23 | 2 | 495 | 4.44% |
 | sound | 6 | 9 | 2,459 | 48 | 1 | 0 | 47 | 2.08% |
 | ui | 49 | 59 | 23,723 | 351 | 4 | 0 | 347 | 1.14% |
 | unknown | 1 | 1 | 1,526 | 1,797 | 0 | 0 | 1,797 | 0.00% |
@@ -55,7 +55,7 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/AnimationLists.cs | 82 | 1 | 2 | 0 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/BooieConfig.cs | 187 | 2 | 4 | 3 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/Catalogs.cs | 534 | 7 | 11 | 4 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Data/DataProbe.cs | 605 | 2 | 23 | 0 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Data/DataProbe.cs | 612 | 2 | 23 | 0 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/DataTextFile.cs | 195 | 2 | 7 | 1 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/DromeFile.cs | 187 | 1 | 7 | 2 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/GameConfigFile.cs | 91 | 1 | 3 | 1 |
@@ -63,7 +63,7 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/GameDataRoot.cs | 748 | 3 | 27 | 0 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/GauntletConfig.cs | 156 | 1 | 5 | 1 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/IniFile.cs | 265 | 3 | 10 | 2 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Data/KeyConfigFile.cs | 511 | 3 | 13 | 1 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Data/KeyConfigFile.cs | 618 | 3 | 14 | 1 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/ObjectDefinition.cs | 545 | 10 | 12 | 7 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/ObjectDefinitionReader.cs | 726 | 1 | 13 | 7 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Data/ParseUtil.cs | 441 | 2 | 14 | 4 |
@@ -72,13 +72,13 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs | 1,198 | 9 | 30 | 35 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CollisionEllipsoid.cs | 439 | 2 | 16 | 17 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/EngineClock.cs | 211 | 2 | 14 | 4 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs | 698 | 8 | 27 | 29 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs | 783 | 5 | 21 | 33 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs | 880 | 8 | 14 | 23 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs | 699 | 8 | 27 | 29 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs | 798 | 5 | 21 | 33 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs | 910 | 8 | 15 | 24 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs | 286 | 3 | 13 | 18 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs | 478 | 11 | 0 | 25 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs | 492 | 11 | 0 | 25 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimMath.cs | 325 | 4 | 28 | 8 |
-| unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimSelfCheck.cs | 674 | 1 | 23 | 0 |
+| unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimSelfCheck.cs | 738 | 1 | 24 | 1 |
 | unity/UBlade3/Assets/Scripts/UBlade3/Sim/Simulation.cs | 286 | 2 | 13 | 10 |
 
 ### Mapped functions
@@ -92,13 +92,13 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | 0x00401c40 | PlanAction::SetBungeeLength | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:1187 |
 | 0x00401ee0 | PlanAction::ResetCameraBufferSize | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:534 |
 | 0x00402070 | PlanAction::InitRearViewPos | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:1178 |
-| 0x00402dc0 | Object::CopyPhysicsStateTo | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:839 |
+| 0x00402dc0 | Object::CopyPhysicsStateTo | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:869 |
 | 0x00403110 | TransformObject::TransformPoint | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimMath.cs:309 |
 | 0x004031e0 | PlanAction::SendLaunchMessage | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:6 |
 | 0x00403290 | PlanAction::Launch | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:7 |
 | 0x00403a30 | PlanAction::Throw | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:6 |
 | 0x00404670 | Object::ComputePoleGateNormal | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/ArenaState.cs:5 |
-| 0x00407520 | PhysicsBody::PhysicsBody | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs:103 |
+| 0x00407520 | PhysicsBody::PhysicsBody | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs:118 |
 | 0x00407780 | PhysicsBody::BindToObject | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs:3 |
 | 0x00407890 | PhysicsBody::ResetSpeeds | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs:3 |
 | 0x00407920 | PhysicsBody::ResetDynamics | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PhysicsBodyState.cs:3 |
@@ -124,13 +124,13 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | 0x0040a100 | CHeadTrack::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:6 |
 | 0x0040a7b0 | CTrackTraj::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:7 |
 | 0x0040c270 | CGlideOnSurface::UpdateTerrainPhysics | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:7 |
-| 0x0040cb20 | CGlideOnSurface::Release | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs:211 |
+| 0x0040cb20 | CGlideOnSurface::Release | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs:225 |
 | 0x0040dc80 | CBeAttached::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:5 |
 | 0x0040de50 | CBeAttached::Release | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:5 |
 | 0x00410e90 | CMonitorKeys::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:5 |
 | 0x004110f0 | Player::ProcessTrickInput | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:5 |
 | 0x004112e0 | CSpeedBurst::CSpeedBurst | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:343 |
-| 0x00411310 | CSpeedBurst::Bind | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:354 |
+| 0x00411310 | CSpeedBurst::Bind | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:384 |
 | 0x004113f0 | CSpeedBurst::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:7 |
 | 0x004124a0 | CUpdateShotPower::Process | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:1103 |
 | 0x00421980 | CameraObject::CameraObject | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/CameraState.cs:2 |
@@ -171,20 +171,21 @@ port under unity/UBlade3/Assets/Scripts/UBlade3.
 | 0x0044c1b0 | Game::RunFrame | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/Simulation.cs:122 |
 | 0x004521d0 | CollisionCheck::DromerLaserHurdleCollision | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/ArenaState.cs:4 |
 | 0x00452ba0 | MessageQueue::LoadList | ported | unity/UBlade3/Assets/Scripts/UBlade3/Data/Catalogs.cs:316 |
+| 0x0045eb30 | PlanAction::Set_SpeedBurst | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:354 |
 | 0x00461c00 | PlanCond::IsDoubleScore | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:6 |
-| 0x00463220 | GameEngine::ShowRokValue | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:573 |
+| 0x00463220 | GameEngine::ShowRokValue | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:574 |
 | 0x00463300 | PlanAction::IncRokValue | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:6 |
 | 0x00464720 | PlanAction::IncrementScore | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:559 |
 | 0x00465150 | PlanCond::RokScoreValue | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:5 |
 | 0x00468b90 | PlanCond::CheckScoreOnOwnGoal | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:5 |
 | 0x00469ef0 | CollisionCheck::BouncedInGoal | stub | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:534 |
-| 0x00469f90 | CollisionCheck::DromerMultiplierCollision | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs:341 |
+| 0x00469f90 | CollisionCheck::DromerMultiplierCollision | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/SimConstants.cs:355 |
 | 0x0046c010 | JumboTextList::Load | ported | unity/UBlade3/Assets/Scripts/UBlade3/Data/Catalogs.cs:441 |
 | 0x0046d710 | Config::LoadPreferences | ported | unity/UBlade3/Assets/Scripts/UBlade3/Data/KeyConfigFile.cs:142 |
 | 0x0046d8b0 | Config::ParseFile | ported | unity/UBlade3/Assets/Scripts/UBlade3/Data/KeyConfigFile.cs:27 |
-| 0x004722a0 | EngineObject::SetVelocity | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:856 |
+| 0x004722a0 | EngineObject::SetVelocity | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:886 |
 | 0x00473a80 | RokObject::RokObject | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:3 |
-| 0x00473b90 | RokObject::SetRenderSlotFlags | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:671 |
+| 0x00473b90 | RokObject::SetRenderSlotFlags | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/MatchRules.cs:672 |
 | 0x00473c50 | RokObject::ActivateAtSpawnSlot | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/RokState.cs:3 |
 | 0x004748e0 | ObjectStats::InitDefaults | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:2 |
 | 0x00474930 | ObjectStats::GetWeightedStat | ported | unity/UBlade3/Assets/Scripts/UBlade3/Sim/PlayerState.cs:3 |
@@ -254,39 +255,39 @@ scored by subsystem, core source file and core-system name, then ordered by addr
 | 15 | 0x0040c0b0 | CGlideOnSurface::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cglideonsurface.cpp:35 | subsystem planvm, core file planvm/cglideonsurface.cpp, skater glide |
 | 16 | 0x0042e7d0 | CollisionPlane::SegmentIntersection | physics | third_party/hyperblade-decomp/src/physics/collisionplane.cpp:50 | subsystem physics, core file physics/collisionplane.cpp, ray/ellipsoid |
 | 17 | 0x0045e430 | PlanAction::LaunchGunDirection | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:354 | subsystem planvm, core file planvm/plancond.cpp, rok launch |
-| 18 | 0x0045eb30 | PlanAction::Set_SpeedBurst | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:790 | subsystem planvm, core file planvm/plancond.cpp, speed burst |
-| 19 | 0x00464c40 | PlanAction::ThrowBungee | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:5277 | subsystem planvm, core file planvm/plancond.cpp, rok throw |
-| 20 | 0x0045d280 | KeyboardDeviceObj::LoadBindingsFromIni | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:407 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -Load |
-| 21 | 0x00408e90 | CollisionEllipsoid::~CollisionEllipsoid | physics | third_party/hyperblade-decomp/src/physics/collisionellipsoid.cpp:10 | subsystem physics, core file physics/collisionellipsoid.cpp, arena shell, -destructor |
-| 22 | 0x00410df0 | CMonitorKeys::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cmonitorkeys.cpp:24 | subsystem planvm, core file planvm/cmonitorkeys.cpp, input to physics |
-| 23 | 0x00467f10 | PlanCond::GoThroughMuliplier | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7749 | subsystem planvm, core file planvm/plancond.cpp, multiplier AI |
-| 24 | 0x004058d0 | CollisionPlane::PointNearSurface | physics | third_party/hyperblade-decomp/src/physics/collisionplane.cpp:30 | subsystem physics, core file physics/collisionplane.cpp, arena shell |
-| 25 | 0x0040d3b0 | CProjectAndBounce::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:25 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
-| 26 | 0x0040d960 | CProjectAndBounce::Process | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:283 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
-| 27 | 0x0040da80 | CProjectAndBounce::Release | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:349 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
-| 28 | 0x00405910 | CollisionPlane::RadiusForDirection | physics | third_party/hyperblade-decomp/src/physics/collisionplane.cpp:43 | subsystem physics, core file physics/collisionplane.cpp, arena radius |
-| 29 | 0x00408f20 | CTrack::Bind | engine | third_party/hyperblade-decomp/src/engine/ctrack.cpp:48 | subsystem engine, core file engine/ctrack.cpp, camera tracking |
-| 30 | 0x00467110 | PlanCond::RokIsCharged | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7115 | subsystem planvm, core file planvm/plancond.cpp, multiplier |
-| 31 | 0x00467150 | PlanCond::RokIsChargedAgainst | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7131 | subsystem planvm, core file planvm/plancond.cpp, multiplier |
-| 32 | 0x00473f40 | RokObject::ApplyRenderSlotPose | engine | third_party/hyperblade-decomp/src/engine/rokobject.cpp:270 | subsystem engine, core file engine/rokobject.cpp, rok |
-| 33 | 0x00484cf0 | GameEngine::LoadObjectsFromConfig | engine | third_party/hyperblade-decomp/src/engine/gameengine.cpp:2938 | subsystem engine, core file engine/gameengine.cpp, data loader, -Load |
-| 34 | 0x00421f90 | CameraObject::ViewIt | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:244 | subsystem engine, core file engine/cameraobject.cpp, camera |
-| 35 | 0x00422a30 | CameraObject::SortTransparentQueue | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:591 | subsystem engine, core file engine/cameraobject.cpp, camera |
-| 36 | 0x00422ba0 | CameraObject::DrawShadowAndTransparentPass | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:654 | subsystem engine, core file engine/cameraobject.cpp, camera |
-| 37 | 0x00403cf0 | PlanAction::KickDownToSurface | planvm | third_party/hyperblade-decomp/src/planvm/planactionlaunch.cpp:463 | subsystem planvm, core file planvm/planactionlaunch.cpp, rok surface |
-| 38 | 0x00408cc0 | PhysicsBody::ApplyAnimDrivenForce | physics | third_party/hyperblade-decomp/src/physics/physicsbody.cpp:1026 | subsystem physics, core file physics/physicsbody.cpp |
-| 39 | 0x0040c200 | CGlideOnSurface::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cglideonsurface.cpp:68 | subsystem planvm, core file planvm/cglideonsurface.cpp, skater glide, -bookkeeping |
-| 40 | 0x0045d0b0 | KeyboardDeviceObj::~KeyboardDeviceObj | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:338 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -destructor |
-| 41 | 0x00410e60 | CMonitorKeys::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cmonitorkeys.cpp:42 | subsystem planvm, core file planvm/cmonitorkeys.cpp, input to physics, -bookkeeping |
-| 42 | 0x004123f0 | CUpdateShotPower::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cupdateshotpower.cpp:18 | subsystem planvm, core file planvm/cupdateshotpower.cpp, shot power |
-| 43 | 0x00422d60 | CameraProjectionState::ResetProjection | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:13 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
-| 44 | 0x00422d80 | CameraProjectionState::InitializeProjection | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:19 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
-| 45 | 0x00430960 | CameraProjectionState::RotateY | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:228 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
-| 46 | 0x00430a80 | CameraProjectionState::RotateX | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:266 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
-| 47 | 0x00430ba0 | CameraProjectionState::RotateZ | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:304 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
-| 48 | 0x0040d4c0 | CProjectAndBounce::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:59 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight, -bookkeeping |
-| 49 | 0x00408f90 | CTrack::OnListChanged | engine | third_party/hyperblade-decomp/src/engine/ctrack.cpp:72 | subsystem engine, core file engine/ctrack.cpp, camera tracking, -bookkeeping |
-| 50 | 0x0045cff0 | KeyboardDeviceObj::GetActionBitIndex | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:246 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -accessor |
+| 18 | 0x00464c40 | PlanAction::ThrowBungee | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:5277 | subsystem planvm, core file planvm/plancond.cpp, rok throw |
+| 19 | 0x0045d280 | KeyboardDeviceObj::LoadBindingsFromIni | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:407 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -Load |
+| 20 | 0x00408e90 | CollisionEllipsoid::~CollisionEllipsoid | physics | third_party/hyperblade-decomp/src/physics/collisionellipsoid.cpp:10 | subsystem physics, core file physics/collisionellipsoid.cpp, arena shell, -destructor |
+| 21 | 0x00410df0 | CMonitorKeys::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cmonitorkeys.cpp:24 | subsystem planvm, core file planvm/cmonitorkeys.cpp, input to physics |
+| 22 | 0x00467f10 | PlanCond::GoThroughMuliplier | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7749 | subsystem planvm, core file planvm/plancond.cpp, multiplier AI |
+| 23 | 0x004058d0 | CollisionPlane::PointNearSurface | physics | third_party/hyperblade-decomp/src/physics/collisionplane.cpp:30 | subsystem physics, core file physics/collisionplane.cpp, arena shell |
+| 24 | 0x0040d3b0 | CProjectAndBounce::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:25 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
+| 25 | 0x0040d960 | CProjectAndBounce::Process | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:283 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
+| 26 | 0x0040da80 | CProjectAndBounce::Release | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:349 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight |
+| 27 | 0x00405910 | CollisionPlane::RadiusForDirection | physics | third_party/hyperblade-decomp/src/physics/collisionplane.cpp:43 | subsystem physics, core file physics/collisionplane.cpp, arena radius |
+| 28 | 0x00408f20 | CTrack::Bind | engine | third_party/hyperblade-decomp/src/engine/ctrack.cpp:48 | subsystem engine, core file engine/ctrack.cpp, camera tracking |
+| 29 | 0x00467110 | PlanCond::RokIsCharged | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7115 | subsystem planvm, core file planvm/plancond.cpp, multiplier |
+| 30 | 0x00467150 | PlanCond::RokIsChargedAgainst | planvm | third_party/hyperblade-decomp/src/planvm/plancond.cpp:7131 | subsystem planvm, core file planvm/plancond.cpp, multiplier |
+| 31 | 0x00473f40 | RokObject::ApplyRenderSlotPose | engine | third_party/hyperblade-decomp/src/engine/rokobject.cpp:270 | subsystem engine, core file engine/rokobject.cpp, rok |
+| 32 | 0x00484cf0 | GameEngine::LoadObjectsFromConfig | engine | third_party/hyperblade-decomp/src/engine/gameengine.cpp:2938 | subsystem engine, core file engine/gameengine.cpp, data loader, -Load |
+| 33 | 0x00421f90 | CameraObject::ViewIt | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:244 | subsystem engine, core file engine/cameraobject.cpp, camera |
+| 34 | 0x00422a30 | CameraObject::SortTransparentQueue | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:591 | subsystem engine, core file engine/cameraobject.cpp, camera |
+| 35 | 0x00422ba0 | CameraObject::DrawShadowAndTransparentPass | engine | third_party/hyperblade-decomp/src/engine/cameraobject.cpp:654 | subsystem engine, core file engine/cameraobject.cpp, camera |
+| 36 | 0x00403cf0 | PlanAction::KickDownToSurface | planvm | third_party/hyperblade-decomp/src/planvm/planactionlaunch.cpp:463 | subsystem planvm, core file planvm/planactionlaunch.cpp, rok surface |
+| 37 | 0x00408cc0 | PhysicsBody::ApplyAnimDrivenForce | physics | third_party/hyperblade-decomp/src/physics/physicsbody.cpp:1026 | subsystem physics, core file physics/physicsbody.cpp |
+| 38 | 0x0040c200 | CGlideOnSurface::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cglideonsurface.cpp:68 | subsystem planvm, core file planvm/cglideonsurface.cpp, skater glide, -bookkeeping |
+| 39 | 0x0045d0b0 | KeyboardDeviceObj::~KeyboardDeviceObj | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:338 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -destructor |
+| 40 | 0x00410e60 | CMonitorKeys::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cmonitorkeys.cpp:42 | subsystem planvm, core file planvm/cmonitorkeys.cpp, input to physics, -bookkeeping |
+| 41 | 0x004123f0 | CUpdateShotPower::Bind | planvm | third_party/hyperblade-decomp/src/planvm/cupdateshotpower.cpp:18 | subsystem planvm, core file planvm/cupdateshotpower.cpp, shot power |
+| 42 | 0x00422d60 | CameraProjectionState::ResetProjection | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:13 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
+| 43 | 0x00422d80 | CameraProjectionState::InitializeProjection | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:19 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
+| 44 | 0x00430960 | CameraProjectionState::RotateY | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:228 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
+| 45 | 0x00430a80 | CameraProjectionState::RotateX | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:266 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
+| 46 | 0x00430ba0 | CameraProjectionState::RotateZ | engine | third_party/hyperblade-decomp/src/engine/cameraprojectionstate.cpp:304 | subsystem engine, core file engine/cameraprojectionstate.cpp, projection |
+| 47 | 0x0040d4c0 | CProjectAndBounce::OnListChanged | planvm | third_party/hyperblade-decomp/src/planvm/cprojectandbounce.cpp:59 | subsystem planvm, core file planvm/cprojectandbounce.cpp, rok flight, -bookkeeping |
+| 48 | 0x00408f90 | CTrack::OnListChanged | engine | third_party/hyperblade-decomp/src/engine/ctrack.cpp:72 | subsystem engine, core file engine/ctrack.cpp, camera tracking, -bookkeeping |
+| 49 | 0x0045cff0 | KeyboardDeviceObj::GetActionBitIndex | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:246 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -accessor |
+| 50 | 0x0045d270 | KeyboardDeviceObj::GetDefaultKeyBindings | input | third_party/hyperblade-decomp/src/input/keyboarddeviceobj.cpp:401 | subsystem input, core file input/keyboarddeviceobj.cpp, keyboard, -accessor |
 
 ## Per-source-file counts
 
@@ -966,7 +967,7 @@ scored by subsystem, core source file and core-system name, then ordered by addr
 | third_party/hyperblade-decomp/src/planvm/planactiontracking.cpp | cpp | 1,201 | 33 | 5 | 1 | 28 | 0 |
 | third_party/hyperblade-decomp/src/planvm/planarg.cpp | cpp | 310 | 28 | 0 | 0 | 28 | 0 |
 | third_party/hyperblade-decomp/src/planvm/planarg.h | header | 230 | 0 | 0 | 0 | 0 | 3 |
-| third_party/hyperblade-decomp/src/planvm/plancond.cpp | cpp | 8,833 | 184 | 5 | 1 | 179 | 0 |
+| third_party/hyperblade-decomp/src/planvm/plancond.cpp | cpp | 8,833 | 184 | 6 | 1 | 178 | 0 |
 | third_party/hyperblade-decomp/src/planvm/plancond.h | header | 170 | 0 | 0 | 0 | 0 | 4 |
 | third_party/hyperblade-decomp/src/planvm/planeditor.cpp | cpp | 84 | 2 | 0 | 0 | 2 | 0 |
 | third_party/hyperblade-decomp/src/planvm/planeditor.h | header | 14 | 0 | 0 | 0 | 0 | 0 |

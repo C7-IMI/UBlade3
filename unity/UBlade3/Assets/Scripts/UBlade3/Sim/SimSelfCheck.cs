@@ -142,6 +142,31 @@ namespace UBlade3.Sim
             Check(failures, RokConstants.RokValueMax == 4 && RokConstants.RokValueMin == -4, "rok value clamp +-4");
             Check(failures, ClockConstants.CountdownStartMs == 10000 && ClockConstants.CountdownSecs == 9, "period countdown 10 s / 9 s");
             Check(failures, ClockConstants.OvertimeEarlyMs == 10000 && ClockConstants.OvertimeFinalMs == 30000, "overtime 10/30 s");
+
+            // src/app/config.cpp loader initialisers vs the retail Data/DftStick.cfg values
+            // (docs/CORE-NOTES.md section 4).
+            Check(failures, PhysicsConstants.LoaderForceIncrement == 1.0f
+                            && PhysicsConstants.LoaderMaxAcceleration == 1.0f
+                            && PhysicsConstants.LoaderMaxSpeed == 1.0f
+                            && PhysicsConstants.LoaderSpeedBurstFactor == 1.0f,
+                "physics loader initialisers are all one");
+            Check(failures, PhysicsConstants.ShippedForceIncrement == 1.0f
+                            && PhysicsConstants.ShippedMaxAcceleration == 2.3f
+                            && PhysicsConstants.ShippedMaxSpeed == 0.7f
+                            && PhysicsConstants.ShippedForceRelaxation == 1.0f
+                            && PhysicsConstants.ShippedBandwidth == 1.0f
+                            && PhysicsConstants.ShippedNetTracking == 1.0f
+                            && PhysicsConstants.ShippedStopForceFactor == 1.0f
+                            && PhysicsConstants.ShippedSpeedBurstFactor == 0.8f,
+                "shipped DftStick tuning values");
+            Check(failures, PhysicsTuning.Shipped.MaxAcceleration == 2.3f
+                            && PhysicsTuning.Shipped.MaxSpeed == 0.7f
+                            && PhysicsTuning.Shipped.SpeedBurstFactor == 0.8f
+                            && PhysicsTuning.Shipped.Bandwidth == 1.0f,
+                "PhysicsTuning.Shipped matches DftStick");
+            Check(failures, PhysicsTuning.LoaderDefaults.MaxAcceleration == 1.0f
+                            && PhysicsTuning.LoaderDefaults.MaxSpeed == 1.0f,
+                "PhysicsTuning.LoaderDefaults matches the decomp initialisers");
         }
 
         private static void CheckClock(List<string> failures)
@@ -235,6 +260,8 @@ namespace UBlade3.Sim
             Check(failures, Near(markers.GoalMouthNorth.y, 184.5f, 1e-3f) && Near(markers.GoalMouthNorth.z, -14.0f, 0f), "north goal mouth marker");
             Check(failures, Near(markers.GoalMouthSouth.y, -184.5f, 1e-3f) && Near(markers.GoalMouthSouth.z, -14.0f, 0f), "south goal mouth marker");
             Check(failures, Near(markers.SurfaceYPlus.x, 104.8f, 1e-4f) && Near(markers.SurfaceYPlus.y, 6.0f, 0f), "surface y-plus marker");
+            Check(failures, Near(markers.SurfaceYPlus.z, -5.538f, 0.05f), "surface y-plus marker z = -5.538");
+            Check(failures, Near(markers.SurfaceCentre.z, -28.705f, 0.05f), "surface centre marker z = -28.705");
             Check(failures, Near(markers.SurfaceYMinus.z, markers.SurfaceYPlus.z, 1e-6f), "south surface marker reuses the +6 height (shipped bug)");
         }
 
@@ -396,6 +423,23 @@ namespace UBlade3.Sim
             steerScale = 1.0f;
             SpeedBurstResult result = burst.Process(clock, stats, ObjectConstants.SlotNone, ref steerScale);
             Check(failures, !result.Finished, "idle speed burst does not finish early");
+
+            // PlanAction::Set_SpeedBurst (0x0045eb30): period 8 with a fresh stamina ratio starts the
+            // boost at 1.05 with target 80/8*1 + 1, raises axis.x by 0.25 and friction to 0.1.
+            PlayerState burstPlayer = new PlayerState(0);
+            burstPlayer.Stats.SpeedRatio = 1.0f;
+            burstPlayer.Body.Vel = Vec3.Zero;
+            burstPlayer.Body.VelDir = new Vec3(1.0f, 0.0f, 0.0f);
+            float burstSteer = 1.0f;
+            burstPlayer.SpeedBurst.Activate(8, burstPlayer.Stats, burstPlayer.Body, ref burstSteer);
+            Check(failures, Near(burstSteer, 1.05f, 1e-6f), "speed burst start raises the steering scale to 1.05");
+            Check(failures, Near(burstPlayer.SpeedBurst.Boost, 1.05f, 1e-6f), "speed burst start boost 1.05");
+            Check(failures, Near(burstPlayer.SpeedBurst.Target, 11.0f, 1e-5f), "speed burst target 80/period + 1");
+            Check(failures, Near(burstPlayer.Body.Axis.x, 0.25f, 1e-6f), "speed burst start adds a quarter to axis x");
+            Check(failures, Near(burstPlayer.Body.Friction, 0.1f, 1e-6f), "speed burst start friction 0.1");
+            Check(failures, Near(burstPlayer.Body.Vel.x, 1.0f, 1e-6f), "near-stationary body takes its heading as velocity");
+            burstPlayer.SpeedBurst.Activate(0, burstPlayer.Stats, burstPlayer.Body, ref burstSteer);
+            Check(failures, !burstPlayer.SpeedBurst.Active && burstPlayer.SpeedBurst.Ready, "period 0 removes the speed burst");
         }
 
         private static void CheckMultiplier(List<string> failures)
@@ -432,7 +476,11 @@ namespace UBlade3.Sim
             Check(failures, GoalRules.CheckScoreOnOwnGoal(7, 2, 8) == 1, "own-goal check: other goal");
             Check(failures, GoalRules.CheckScoreOnOwnGoal(7, 9, 7) == 1, "own-goal check: non skater carrier answers yes");
             Check(failures, GoalRules.BouncedInGoal(true, false) == 1 && GoalRules.BouncedInGoal(false, true) == 2 && GoalRules.BouncedInGoal(false, false) == 0, "bounced-in-goal answers");
-            Check(failures, GoalRules.PointsForScoreValue(2) == 4 && GoalRules.PointsForScoreValue(1) == 2, "score value codes map to 2x/4x points (plan VM TODO)");
+            Check(failures, GoalRules.PointsForScoreValue(0) == 1
+                            && GoalRules.PointsForScoreValue(1) == 2
+                            && GoalRules.PointsForScoreValue(2) == 4
+                            && GoalRules.PointsForScoreValue(3) == 4,
+                "score value codes map to the plan-data 1/2/4/4 points");
         }
 
         private static void CheckPeriods(List<string> failures)

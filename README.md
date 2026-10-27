@@ -16,9 +16,9 @@ original data formats. **Current verified milestone:**
 - Unity 6000.6.7f1 project compiles and builds; Port Lab capture passes.
 - Exact original-data probe: 14 teams, 14 dromes, 140 team objects, 464 drome objects, 0 warnings (from
   `D:\Games\HyperBlade\HYB`; assets are local only).
-- Simulation-core self-check: 196/196 passed; arena 105 x 187.5 x 105, camera FOV 85/bungee 12, rules/steering
+- Simulation-core self-check: 209/209 passed; arena 105 x 187.5 x 105, camera FOV 85/bungee 12, rules/steering
   constants cited from the decompilation.
-- Port ledger: 144 mapped / 20 stubs / 3,977 unmapped = 4.72% of the 3,054 game functions. **The exact full clone is
+- Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
 [docs/PORT-LEDGER.md](./docs/PORT-LEDGER.md), [docs/PORT-LEDGER.json](./docs/PORT-LEDGER.json) and
