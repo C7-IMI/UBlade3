@@ -1,0 +1,42 @@
+{
+  "schema": "ublade3.checks/v1",
+  "generatedAt": "2026-10-27T05:48:12.559Z",
+  "gameInstall": "D:\\Games\\HyperBlade\\HYB",
+  "gameExecutable": {
+    "file": "HyperX-XP.exe",
+    "bytes": 860160,
+    "sha256": "514bcec6805f27136bed6e4de8796e75d99f224a94e3d7098a4477b029ea24cd",
+    "note": "Matches hyperblade-decomp HYPERX.EXE v1.0.0.1 target."
+  },
+  "originalData": {
+    "files": 3018,
+    "teams": 14,
+    "dromes": 14,
+    "teamObjects": 140,
+    "dromeObjects": 464,
+    "plans": 32,
+    "models": 26,
+    "modelsLibrary": 173,
+    "sounds": 363,
+    "digest": "9189865a39c96113",
+    "warnings": 0
+  },
+  "simulation": {
+    "checksPassed": 196,
+    "checksTotal": 196,
+    "note": "Sim core self-check; fixed-step clock is a port choice pending parity with the original variable TickClock."
+  },
+  "portLedger": {
+    "gameFunctions": 3054,
+    "mapped": 144,
+    "stubs": 20,
+    "unmapped": 3977,
+    "gameCoveragePercent": 4.72
+  },
+  "commands": [
+    "python scripts/check_all.py",
+    "Unity -batchmode -quit -nographics -projectPath unity/UBlade3 -executeMethod UBlade3.EditorTools.UBlade3Checks.RunAll",
+    "powershell -File scripts/ublade3_unity.ps1 -Mode build",
+    "powershell -File scripts/ublade3_unity.ps1 -Mode capture"
+  ]
+}

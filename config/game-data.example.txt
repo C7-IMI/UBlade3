@@ -1,0 +1,3 @@
+# Copy this to unity/UBlade3/Assets/StreamingAssets/game-data-path.txt, or set HYPERBLADE_GAME_DATA.
+# Point at the folder containing Data/ (teams, dromes, models, textures, sounds).
+D:\Games\HyperBlade\HYB

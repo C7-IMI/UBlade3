@@ -1,0 +1,39 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+Recordings/
+*.csproj
+*.sln
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+
+# Local original game data and build output (proprietary; never commit)
+GameData/
+dist/
+.work/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local evidence/logs that are not source
+tools/tmp/
+artifacts/ublade3/*.log
+artifacts/rea/full-desktop.json
+artifacts/rea/hyb-entropy.json

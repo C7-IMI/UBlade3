@@ -1,0 +1,2 @@
+# Local HyperBlade install root (contains data\). Not committed with assets; this file is a local convenience.
+# Use HYPERBLADE_GAME_DATA instead if you prefer an environment variable.

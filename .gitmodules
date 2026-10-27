@@ -1,0 +1,6 @@
+[submodule "third_party/hyperblade-decomp"]
+	path = third_party/hyperblade-decomp
+	url = https://github.com/zach2good/hyperblade-decomp.git
+[submodule "third_party/hyperblade-20XX"]
+	path = third_party/hyperblade-20XX
+	url = https://github.com/zach2good/hyperblade-20XX.git

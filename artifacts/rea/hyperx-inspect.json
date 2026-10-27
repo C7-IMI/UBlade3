@@ -1,0 +1,225 @@
+{
+  "evidence_id": "ev_3e644d2e2abd50598d3c6c52e4de1b9680ae6966c056f97c9c689ed3311c52bc",
+  "subject": {
+    "name": "hyperx.exe",
+    "digest": {
+      "sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60"
+    },
+    "local_path": "D:\\Games\\HyperBlade\\HYB\\hyperx.exe",
+    "format": "pe",
+    "architecture": null
+  },
+  "provider": {
+    "id": "rea-artifact-graph",
+    "name": "REA safe artifact graph provider",
+    "version": "1"
+  },
+  "analysis_profile": null,
+  "predicate_type": "rea.analysis",
+  "operation": "inspect_artifact",
+  "parameters": {
+    "integrity_policy": "fail",
+    "input_path": "D:\\Games\\HyperBlade\\HYB\\hyperx.exe"
+  },
+  "raw_result": null,
+  "normalized_result": {
+    "inspection_id": "ai_cdb9f2c15f3c03bbd12eda986ac4c2d3774394e508615121036e96caae11ff06",
+    "subject": {
+      "manifest_id": "agm_f7738138d59a0f587e4fda0fdc4b5ab390be123845800a00ae0a582e3922121d",
+      "root_artifact_id": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+      "root_sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60",
+      "root_format": "pe"
+    },
+    "substeps": [
+      {
+        "substep_id": "ais_c0f65ccbfcb70d72a566c05f45331ab615ce8cfebf4bca5868771207c6bef58f",
+        "operation": "inventory_artifact",
+        "status": "completed",
+        "evidence_id": "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474",
+        "evidence": {
+          "evidence_id": "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474",
+          "subject": {
+            "name": "hyperx.exe",
+            "digest": {
+              "sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60"
+            },
+            "local_path": "D:\\Games\\HyperBlade\\HYB\\hyperx.exe",
+            "format": "pe",
+            "architecture": null
+          },
+          "provider": {
+            "id": "rea-artifact-graph",
+            "name": "REA safe artifact graph provider",
+            "version": "1"
+          },
+          "analysis_profile": null,
+          "predicate_type": "rea.analysis",
+          "operation": "inventory_artifact",
+          "parameters": {
+            "integrity_policy": "fail"
+          },
+          "raw_result": null,
+          "normalized_result": {
+            "manifest": {
+              "manifest_id": "agm_f7738138d59a0f587e4fda0fdc4b5ab390be123845800a00ae0a582e3922121d",
+              "root_artifact_id": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+              "root_sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60",
+              "root_format": "pe",
+              "graph_sha256": "47249107f4e6fca868596314f0edd3533b27d1de640376272d6392cff8aa08eb",
+              "node_count": 1,
+              "occurrence_count": 1,
+              "edge_count": 0
+            },
+            "nodes": [
+              {
+                "artifact_id": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+                "format": "pe",
+                "sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60",
+                "size": 1359872,
+                "media_type": null,
+                "architecture": null,
+                "content_state": "materialized",
+                "limitations": []
+              }
+            ],
+            "occurrences": [
+              {
+                "occurrence_id": "occ_b1a29fda9020d99c3b099e460498a458cb968bcdcd61cb96ab31d55df39d0ff8",
+                "artifact_id": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+                "parent_occurrence_id": null,
+                "logical_path": ".",
+                "entry_kind": "file",
+                "artifact_kind": "executable",
+                "artifact_format": "pe",
+                "declared_size": 1359872,
+                "compressed_size": null,
+                "executable": true,
+                "encrypted": false,
+                "hash_status": "verified",
+                "source_location": null,
+                "limitations": []
+              }
+            ],
+            "edges": [],
+            "provenance": [],
+            "integrity_contradictions": [],
+            "coverage": {
+              "scope": "root",
+              "status": "complete"
+            },
+            "limitations": [
+              "Inventory covers root bytes only; child container entries were not examined."
+            ]
+          },
+          "confidence": "observed",
+          "authority": "shipped-artifact",
+          "environment": null,
+          "limitations": [
+            "Inventory covers root bytes only; child container entries were not examined."
+          ],
+          "relationship_coverage": null,
+          "locations": [],
+          "evidence_links": []
+        }
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "aio_599ccf44d3098907930c0218afa2cbe4b364be028743af1f75082ce914863de1",
+        "kind": "root-manifest",
+        "subject": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+        "value": {
+          "manifest_id": "agm_f7738138d59a0f587e4fda0fdc4b5ab390be123845800a00ae0a582e3922121d",
+          "root_artifact_id": "art_c664b1d611b66a298ca38bd08cc3d2fb341c93438d337d46df6072051e2d00f5",
+          "root_sha256": "08c7b7a462847089d41a4e3ac0d61df3409ec8c9107cb97deff08364c4c0de60",
+          "root_format": "pe",
+          "graph_sha256": "47249107f4e6fca868596314f0edd3533b27d1de640376272d6392cff8aa08eb",
+          "node_count": 1,
+          "occurrence_count": 1,
+          "edge_count": 0
+        },
+        "evidence_id": "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+      }
+    ],
+    "hypotheses": [
+      {
+        "hypothesis_id": "aih_f9787bf061278edac1b8977d780b48889c2a97717f8614e2e99fc0ebd24feacb",
+        "statement": "The PE artifact may contain managed CLI metadata or native code; inventory bytes alone do not distinguish them.",
+        "confidence": "low",
+        "basis_evidence_ids": [
+          "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+        ],
+        "limitation": "Format classification proposes a bounded follow-up; it is not semantic proof."
+      }
+    ],
+    "contradictions": [],
+    "unexplored_branches": [
+      {
+        "branch_id": "aib_19430ad8a02f3f5ebf372d58397ac24093afaa04bc76bd66810ac2d1612d1137",
+        "reason": "format-specific-analysis-required",
+        "detail": "inspect_managed_artifact was not run by provider-neutral artifact inspection.",
+        "next_probe": {
+          "operation": "inspect_managed_artifact",
+          "rationale": "Check execution-free CLI metadata before choosing a deep native provider.",
+          "authority": "managed-static-analysis"
+        },
+        "evidence_id": "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+      },
+      {
+        "branch_id": "aib_11d551654d3fee4686cc18d212851afed1f29322180c5bafbaf56ed66df220fb",
+        "reason": "format-specific-analysis-required",
+        "detail": "open_binary was not run by provider-neutral artifact inspection.",
+        "next_probe": {
+          "operation": "open_binary",
+          "rationale": "Open as native code only when managed inspection reports a native or mixed boundary.",
+          "authority": "native-analysis-provider"
+        },
+        "evidence_id": "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+      }
+    ],
+    "next_probes": [
+      {
+        "operation": "inspect_managed_artifact",
+        "rationale": "Check execution-free CLI metadata before choosing a deep native provider.",
+        "authority": "managed-static-analysis"
+      },
+      {
+        "operation": "open_binary",
+        "rationale": "Open as native code only when managed inspection reports a native or mixed boundary.",
+        "authority": "native-analysis-provider"
+      }
+    ],
+    "coverage": {
+      "status": "complete-within-substeps",
+      "substeps_completed": 1,
+      "observations_retained": 1,
+      "observations_omitted": 0,
+      "hypotheses_retained": 1,
+      "hypotheses_omitted": 0,
+      "unexplored_branches_retained": 2,
+      "unexplored_branches_omitted": 0,
+      "next_probes_retained": 2,
+      "next_probes_omitted": 0
+    },
+    "evidence_links": [
+      "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+    ],
+    "limitations": [
+      "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+      "Inventory covers root bytes only; child container entries were not examined."
+    ]
+  },
+  "confidence": "observed",
+  "authority": "shipped-artifact",
+  "environment": null,
+  "limitations": [
+    "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics.",
+    "Inventory covers root bytes only; child container entries were not examined."
+  ],
+  "relationship_coverage": null,
+  "locations": [],
+  "evidence_links": [
+    "ev_3df26120819e8696d9277f429b0f893e246328ca88594168708b0ae677239474"
+  ],
+  "caller_input_path": "D:\\Games\\HyperBlade\\HYB\\hyperx.exe"
+}

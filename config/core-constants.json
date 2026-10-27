@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "title": "UBlade3 core constants (exact, source-cited)",
+  "purpose": "Machine-readable constants and formulas for the first playable exact C# port of HyperBlade 1996. Every value cites the decompilation source line or the original DATA file it was read from. Values from DATA are read from a locally owned, read-only retail install; they are not committed here.",
+  "sources": {
+    "decomp": "third_party/hyperblade-decomp/src (byte-matching decompilation of HYPERX.EXE v1.0.0.1)",
+    "decompSymbols": "third_party/hyperblade-decomp/symbols/functions.csv",
+    "referencePort": "third_party/hyperblade-20XX (modernised reference; any deviation is labelled referenceOnly)",
+    "data": "DATA folder of an owned retail HyperBlade install (D:/Games/HyperBlade/HYB/data during extraction); files are named by basename only here",
+    "planDump": "DATA/PLANS/*.PBN read with third_party/hyperblade-decomp/tools/plan_dump.py; plan bytecode is original game data"
+  },
+  "units": {
+    "world": {
+      "value": "unitless data units",
+      "source": "DATA/HOUDRO.ENV: arena collision ellipsoid is 105 x 187.5 x 105 data units (engine/arenaellipsoidstatic.cpp:13-15 with common/staticinitglobals.cpp:38); Dromer spawn positions are 40 75 0 (DATA/LOSAN.HTM:4). No metric conversion of world space exists in the decompilation.",
+      "note": "Do not convert to metres or centimetres. The only centimetre arithmetic in the decompilation is the renderer projection (see projection.*)."
+    },
+    "velocity": {
+      "value": "DATA speed parameters are data units per second; the physics bodies carry per-frame displacement",
+      "source": "physics/physicsbody.cpp:131 (flForwardSpeedDt = flDelta * m_flSpeed); physics/physicsbody.cpp:180 and 196 (same delta multiply on reset/retick); planvm/cglideonsurface.cpp:368 (per-frame target = flForwardSpeedDt * rating factor * g_flMaxSpeed)",
+      "note": "PhysicsBody::flSpeed, flSpeedDt, flAccelDt, vel and step are per-frame quantities. The decompilation converts back to per second by multiplying by flInvDelta, for example physics/collisioncheck.cpp:353 and planvm/cglideonsurface.cpp:271. DATA SetMotionParams speed=48 (LOSAN.HTM:4) therefore means 48 units per second, which is 48/18 = 2.667 units per frame at the 18 Hz reference."
+    },
+    "acceleration": {
+      "value": "DATA acceleration parameters are data units per second squared; per-frame implementations use delta squared",
+      "source": "physics/physicsbody.cpp:132 (flAccelDt = flDeltaSquared * m_flAccel); globals.cpp:225 and 795 (g_flGravityGameEngine = g_flGravity = 32.0f); physics/physicsbody.cpp:194 (flGravDeltaVel = flDeltaSquared * flGravAccel)",
+      "note": "Because a body carries per-frame displacement, a per-frame velocity change of accel * delta squared is the same physical acceleration as accel units per second squared at the current rate."
+    },
+    "time": {
+      "value": "milliseconds for clocks and timeouts; seconds for engine delta",
+      "source": "engine/engineclock.h:37-43; engine/gameengine.cpp:609-623 (timeGetTime deltas scaled by MS_TO_SEC = 0.001f); engine/gameengine.cpp:574"
+    },
+    "angle": {
+      "value": "degrees in DATA and object parameters, radians in physics",
+      "source": "physics/physicsbody.cpp:108 and 138-145 (DEGREES_TO_RADIANS 0.0174532925, azimuth -270 stored in DATA/LOSAN.HTM:4 becomes 90); globals.cpp:533 (g_flDegreesPerTurn = 360.0f); globals.cpp:537 (camera deg-to-rad 0.0174532923847436905)"
+    },
+    "ratings": {
+      "value": "stored in HTM as whole numbers, kept as float",
+      "source": "globals.cpp:768-769 (g_pszPercentD = %d); engine/gameengine.cpp:2442+ (Cmd_SetRatings reads the statement as a number and stores a float)"
+    }
+  },
+  "fixedTimestep": {
+    "originalModel": {
+      "value": "smoothed variable timestep with an 18 Hz initial reference",
+      "source": "engine/gameengine.cpp:593-633 (GameEngine::TickClock, 0x00481130); engine/gameengine.cpp:1150-1188 (GameEngine::InitMatchTimers, 0x00481d60)"
+    },
+    "constants": [
+      { "id": "MATCH_FRAME_RATE", "value": 18.0, "units": "frames per second (nominal)", "source": "engine/gameengine.cpp:1150", "note": "InitMatchTimers sets flInvDelta = flPrevInvDelta = 18.0" },
+      { "id": "MATCH_RATE_SQUARED", "value": 324.0, "units": "1/s^2", "source": "engine/gameengine.cpp:1151", "note": "18.0 squared" },
+      { "id": "MATCH_STEP", "value": 0.05555555555555555, "units": "seconds", "source": "engine/gameengine.cpp:1152", "note": "1.0f / 18.0f; flDelta initial value" },
+      { "id": "CLOCK_RING_LENGTH", "value": 5, "units": "frames", "source": "engine/engineclock.h:8", "note": "the ring holds the mean frame time" },
+      { "id": "MAX_FRAME_TIME_MS", "value": 200.0, "units": "milliseconds", "source": "engine/gameengine.cpp:573", "note": "a frame longer than this returns before the delta is folded in" },
+      { "id": "MS_TO_SEC", "value": 0.001, "units": "seconds per millisecond", "source": "engine/gameengine.cpp:574" },
+      { "id": "g_flFifthGameEngine", "value": 0.2, "units": "dimensionless", "source": "ui/screens/tournamentsetupuiscreen.cpp:22 (0.2f * g_flOneGameEngine); g_flOneGameEngine = 1.0f in common/staticinitglobals.cpp:33", "note": "one fifth; the five-slot ring sums to the mean frame delta" },
+      { "id": "g_flGravityGameEngine", "value": 32.0, "units": "data units per second squared", "source": "globals.cpp:225", "note": "m_flGravityDt = 32 * flDeltaSquared (engine/gameengine.cpp:4414)" },
+      { "id": "g_flGravity", "value": 32.0, "units": "data units per second squared", "source": "globals.cpp:795", "note": "stored into PhysicsBody::flGravAccel by BindToObject (physics/physicsbody.cpp:135)" },
+      { "id": "g_flGravityHalf", "value": 0.5, "units": "dimensionless", "source": "globals.cpp:521", "note": "half-step position correction in IntegrateGravity and StepWithGravity" }
+    ],
+    "tickFormula": {
+      "source": "engine/gameengine.cpp:609-633",
+      "steps": [
+        "nPrevTickMs = nTickMs; nTickMs = timeGetTime(); g_flFrameDelta = (float)nTickMs - nPrevTickMs",
+        "if (g_flFrameDelta > 200.0f) return; if (g_flFrameDelta < 0.0f) return",
+        "g_flFrameDelta = 0.2f * g_flFrameDelta * 0.001f",
+        "nSlot = nRingIndex",
+        "flDelta = flDelta - aflDeltaRing[nSlot] + g_flFrameDelta",
+        "flDeltaSquared = flDelta * flDelta",
+        "flInvDelta = 1.0f / flDelta",
+        "flInvDeltaSquared = flInvDelta * flInvDelta",
+        "aflDeltaRing[nSlot] = g_flFrameDelta",
+        "nRingIndex = (nRingIndex + 1) % 5"
+      ],
+      "result": "flDelta is the mean of the last five frame deltas in seconds; flInvDelta is its reciprocal (the smoothed frame rate). At the 18 Hz reference flDelta = 1/18 s."
+    },
+    "frameOrder": {
+      "source": "engine/game.cpp:51-114 (Game::RunFrame, 0x0044c1b0); engine/gameengine.cpp:4382-4457 (GameEngine::PerFrameUpdate, 0x00486b20)",
+      "steps": [
+        "Game::RunFrame records the frame start, calls Renderer::BeginScene, then g_pGameEngine->PerFrameUpdate(), then EndScene, scene draw, HUD draw, Renderer::PresentFrame",
+        "PerFrameUpdate clears ENGINEOBJECT_POSED on every object, then switches on m_wRunState",
+        "ENGINE_RUN_PLAYING: TickClock(); m_flGravityDt = 32.0f * flDeltaSquared; for each object PhysicsBody::PerFrameTick(); Postpass() when a network session is active; BroadcastCollisionEvents(); ProcessInputCommandQueue(); ClearPendingEvents(); session pump/sync",
+        "ENGINE_RUN_PAUSED: only the main camera's ViewIt() runs",
+        "ENGINE_RUN_RESTART: RestartMatch() then TogglePause(hWnd, 1) and return"
+      ]
+    },
+    "physicsBodyTick": {
+      "source": "physics/physicsbody.cpp:185-236",
+      "preUpdate": [
+        "flStep = flDelta * flPrevInvDelta",
+        "flSpeed *= flStep",
+        "vel *= flStep",
+        "flForwardAccel = flDeltaSquared * flPrevInvDeltaSquared * flForwardAccel",
+        "flGravDeltaVel = flDeltaSquared * flGravAccel",
+        "flForwardSpeedDt = flDelta * flBaseForwardSpeed",
+        "flAccelDt = flDeltaSquared * flAccel"
+      ],
+      "then": "target Process(0) for LOCAL/BUILDING phases, ProcessReceivedPacket plus target Release(0) for NETWORK, PlanState PostUpdateCleanup, and ObjectStats::UpdateMomentumAndEnergy for KIND_DROMER"
+    },
+    "modernReferenceDeviation": {
+      "value": "fixed 30 Hz simulation tick",
+      "source": "third_party/hyperblade-20XX/src/engine/framepacing.h:14 (kTickMs = 1000.0f / 30.0f); third_party/hyperblade-20XX/src/engine/gameengine.cpp:565 (g_flFrameDelta = FramePacing::kTickMs)",
+      "note": "This is the 20XX modernisation, not the 1996 behaviour. For the exact clone implement TickClock as above; the 20XX fixed tick is useful only as a parity harness choice if the Lead decides to hold the clock fixed."
+    }
+  },
+  "arena": {
+    "trackingEllipsoidScale": { "value": 1.5, "source": "common/staticinitglobals.cpp:38", "units": "dimensionless" },
+    "arenaEllipsoid": {
+      "source": "engine/arenaellipsoidstatic.cpp:13-17; globals.cpp:820-821",
+      "semiAxes": { "x": 105.0, "y": 187.5, "z": 105.0, "formula": "70.0f * 1.5f, 125.0f * 1.5f, 70.0f * 1.5f" },
+      "friction": 0.01,
+      "elasticity": 0.95,
+      "inverseSquared": { "invXX": 0.00009070294784580498, "invYY": 0.00002844444444444444, "invZZ": 0.00009070294784580498, "formula": "1.0f / (semiAxis * semiAxis) with g_flCollisionOne = 1.0f" },
+      "shapeKind": "SHAPE_KIND_ELLIPSOID (physics/collisionellipsoid.cpp:42-53)",
+      "globalAddress": "0x004ceff8 (physics/collisionellipsoid.h:84)"
+    },
+    "cameraTrackingEllipsoid": {
+      "source": "engine/trackingellipsoidstatics.cpp:12-16",
+      "semiAxes": { "x": 102.8, "y": 185.3, "z": 102.8, "formula": "105.0f - 2.2f, 187.5f - 2.2f, 105.0f - 2.2f" },
+      "friction": 0.01,
+      "elasticity": 0.5,
+      "globalAddress": "0x004cb3d0 (physics/collisionellipsoid.h:76)",
+      "note": "2.2 units inside the arena so camera tracking stays inside the wall (trackingellipsoidstatics.cpp:1)"
+    },
+    "collisionShapeConstants": [
+      { "id": "g_flCollisionOne", "value": 1.0, "source": "globals.cpp:323" },
+      { "id": "g_flZeroCollisionObj", "value": 0.0, "source": "globals.cpp:349" },
+      { "id": "g_flTwoEllipsoid", "value": 2.0, "source": "globals.cpp:539" },
+      { "id": "g_flThreeEllipsoid", "value": 3.0, "source": "globals.cpp:540" },
+      { "id": "AXIS_EPS_UPPER", "value": 0.0001, "source": "physics/collisionellipsoid.cpp:92-93", "note": "direction-component band for parameterising IntersectRay" },
+      { "id": "AXIS_EPS_LOWER", "value": -0.0001, "source": "physics/collisionellipsoid.cpp:93" },
+      { "id": "AXIS_EPS", "value": 0.00001, "source": "physics/collisionellipsoid.cpp:302", "note": "ComputeRadialBoundaryXY" },
+      { "id": "AXIS_EPS_SQUARE", "value": 0.00001, "source": "physics/collisionellipsoid.cpp:303" },
+      { "id": "AXIS_BAND", "value": 0.0001, "source": "physics/collisionellipsoid.cpp:358", "note": "NormalAtPoint axis band" },
+      { "id": "DIRECTION_EPS", "value": 1e-08, "source": "physics/collisionellipsoid.cpp:446", "note": "RadiusForDirection zero-direction floor" }
+    ],
+    "ellipsoidFormulas": {
+      "source": "physics/collisionellipsoid.cpp (addresses in comments)",
+      "inside": "flSum = invZZ*z*z + invYY*y*y + invXX*x*x; inside when flSum <= 1.0 (PointInside, 0x00408ea0, lines 16-25)",
+      "nearSurface": "flSum <= 0.99 (PointNearSurface, 0x00408ee0, lines 28-38)",
+      "height": "GetZ(x,y): remainder = (1 - x*invXX*x) - y*invYY*y; if remainder < 0 return 1; else return -sqrt(remainder) * radiusZ (0x0042f0d0, lines 346-356)",
+      "normal": "NormalAtPoint picks the axis whose band the point is outside (z band checked first, then x, then y); returns null only at the centre; epsilon 0.0001; result is not re-entrant and lives in m_vNormal (0x0042f120, lines 362-443)",
+      "radialBoundaryXY": "flRadius = sqrt(flSquare / (flSquare*invXX + invYY*y*y)) with flSquare = x*x, or 1e-5 when |x| <= 1e-5; sign follows x <= 0; y = (y/x)*flRadius, z unchanged (0x0042f040, lines 307-341)",
+      "radiusForDirection": "horizontal = (|x| + |z|) / 2; absY = |y|; total = absY + horizontal; if total < 1e-8 return 0; return (horizontal*radiusX + absY*radiusY) / (3*total) (0x0042f350, lines 450-462)",
+      "rayIntersection": "solved in double, parameterised by the first direction component outside +/-0.0001; quadratic root flRoot = halfB*halfB - ((invZZ*armB*armB + invYY*armA*armA) - 1) / quad; near/far roots; Vec3::FindClosest orders them (0x0042eb00, lines 97-299)"
+    },
+    "matchMarkers": {
+      "source": "engine/game.cpp:249-283 (Game::InitMatchMarkers, 0x0047d1c0); globals.cpp:272-288",
+      "derived": {
+        "markerRimEast": { "x": 107.0, "y": 0.0, "z": 10.0, "note": "x = arenaRadiusX + 2.0f" },
+        "markerGoalNorth": { "x": 0.0, "y": 140.625, "z": 0.0, "note": "y = arenaRadiusY * 0.75f" },
+        "markerGoalSouth": { "x": 0.0, "y": -140.625, "z": 0.0, "note": "y = arenaRadiusY * -0.75f" },
+        "markerSurfaceYPlus": { "x": 104.8, "y": 6.0, "z": -5.538, "note": "z = GetZ(radiusX - 0.2f, 6.0f) = -sqrt(1 - x*x*invXX - y*y*invYY) * radiusZ" },
+        "markerSurfaceYMinus": { "x": 104.8, "y": -6.0, "z": -5.538, "note": "the original passes +6.0f to GetZ here too (game.cpp:270 comment)" },
+        "markerSurfaceCentre": { "x": 101.0, "y": 0.0, "z": -28.705, "note": "z = GetZ(radiusX - 4.0f, 0.0f)" },
+        "markerGoalMouthNorth": { "x": 0.0, "y": 184.5, "z": -14.0, "note": "y = arenaRadiusY - 3.0f" },
+        "markerGoalMouthSouth": { "x": 0.0, "y": -184.5, "z": -14.0, "note": "y = 3.0f - arenaRadiusY" }
+      }
+    }
+  },
+  "camera": {
+    "sources": [
+      "engine/cameraobject.cpp:51-130 (CameraObject::CameraObject, 0x00421980)",
+      "engine/cameraobject.cpp:190-236 (UpdateSmoothing/UpdateDirSmoothing, 0x00421d80/0x00421ef0)",
+      "engine/cameraobject.cpp:244-394 (ViewIt, 0x00421f90)",
+      "engine/cameraobject.cpp:530-588 (InitViewTransforms, 0x00422750)",
+      "engine/cameraprojectionstate.cpp:35-106 and 136-224 (CreateProjectionState/Configure/BuildMatrix)",
+      "engine/ctrack.cpp:90-640 (CTrack::Process, 0x00408fd0)"
+    ],
+    "constants": [
+      { "id": "halfFovDegrees", "value": 42.5, "units": "degrees", "source": "engine/cameraobject.cpp:115", "note": "full field of view is 85 degrees; halfFov = degToRad * 85.0f / 2.0f" },
+      { "id": "halfFovRadians", "value": 0.7417649263516068, "units": "radians", "source": "engine/cameraobject.cpp:115 with globals.cpp:537", "note": "0.0174532923847436905 * 42.5" },
+      { "id": "fullFovRadians", "value": 1.4835298527032136, "units": "radians", "source": "derived from engine/cameraobject.cpp:115" },
+      { "id": "bungeeLength", "value": 12.0, "units": "data units", "source": "engine/cameraobject.cpp:63", "note": "m_flBungeeLength at construction; CTrack pulls with (distance - length) * 1.5 (engine/ctrack.cpp:211)" },
+      { "id": "positionHistorySize", "value": 6, "units": "frames", "source": "engine/cameraobject.cpp:71" },
+      { "id": "positionHistoryWeight", "value": 0.16666667, "units": "dimensionless", "source": "engine/cameraobject.cpp:76", "note": "1/6" },
+      { "id": "directionHistorySize", "value": 4, "units": "frames", "source": "engine/cameraobject.cpp:73" },
+      { "id": "directionHistoryWeight", "value": 0.25, "units": "dimensionless", "source": "engine/cameraobject.cpp:77", "note": "1/4" },
+      { "id": "viewFracX", "value": 0.5, "source": "engine/cameraobject.cpp:66" },
+      { "id": "viewFracY", "value": 0.5, "source": "engine/cameraobject.cpp:67" },
+      { "id": "startLookZ", "value": -100.0, "source": "globals.cpp:538 (g_flCameraStartLookZ)" },
+      { "id": "cameraShakeZ", "value": 3.0, "source": "engine/cameraobject.cpp:773 (g_flCameraShakeZ)" },
+      { "id": "cameraShakeXFormula", "value": "m_aPosRing[nIndex].x * -0.01f", "source": "engine/cameraobject.cpp:277" },
+      { "id": "cameraShakeYFormula", "value": "m_aPosRing[nIndex].y * -0.001f", "source": "engine/cameraobject.cpp:278" },
+      { "id": "cameraTilt", "value": "pi / 2.0f", "source": "engine/cameraobject.cpp:574", "note": "RotateX(-tilt) when g_bBottomUpDIB else RotateX(tilt)" },
+      { "id": "farClip", "value": 1000.0, "units": "data units", "source": "engine/cameraprojectionstate.cpp:55" },
+      { "id": "nearClipPerspectiveFormula", "value": "halfWidthCm * cos(halfFov) / sin(halfFov)", "source": "engine/cameraprojectionstate.cpp:102" },
+      { "id": "nearClipRow3", "value": 1.0, "source": "engine/cameraprojectionstate.cpp:92" },
+      { "id": "projectionDotsPerInch", "value": 72.0, "source": "engine/cameraprojectionstate.cpp:66; common/staticinitglobals.cpp:22", "note": "renderer-only physical screen assumption" },
+      { "id": "cmPerInch", "value": 2.54, "source": "common/staticinitglobals.cpp:24" },
+      { "id": "cmPerPixel", "value": 0.03527777777777778, "units": "centimetres per pixel", "source": "engine/cameraprojectionstate.cpp:66 (1 / (72 / 2.54))", "note": "renderer-only; do not use as world scale" },
+      { "id": "solarWindFactor", "value": 30.0, "source": "globals.cpp:258", "note": "CTrack pull gain (engine/ctrack.cpp:327-329, 344-346)" },
+      { "id": "cameraLookHeight", "value": 2.0, "units": "data units", "source": "globals.cpp:260" },
+      { "id": "cameraTrackingHeight", "value": 0.5, "units": "data units", "source": "globals.cpp:261" },
+      { "id": "cameraMinHeight", "value": 1.0, "units": "data units", "source": "globals.cpp:262" },
+      { "id": "camTrackVelocityGain", "value": 2.0, "source": "globals.cpp:650-651", "note": "engine/ctrack.cpp:215 doubles the pull when it is already negative" },
+      { "id": "camFracFull", "value": 1.0, "source": "globals.cpp:519" },
+      { "id": "pi", "value": 3.14159274, "source": "globals.cpp:632-633" }
+    ],
+    "trackingFormulas": {
+      "source": "engine/ctrack.cpp:90-640",
+      "step": "flStep = flDelta * 50.0f (engine/ctrack.cpp:110)",
+      "countdownOnTargetChange": "flFrames = invDelta * 0.75f, floored at 10, when a previous target exists; otherwise invDelta * 1.5f (engine/ctrack.cpp:131-143)",
+      "trackVector": "vTrack = target - cameraPos; vTrack.z += cameraTrackingHeight; vLook = target - cameraPos; vLook.z += cameraLookHeight (engine/ctrack.cpp:201-209)",
+      "pull": "flPull = (|vTrack| - bungeeLength) * 1.5f; if flPull <= 0 then flPull *= 2.0f; desiredVel = normalize(vTrack) * flPull (engine/ctrack.cpp:211-220)",
+      "flyBranch": "states BEH_FLY, BEH_RAIL_SLIDE or countdown: vel += (desiredVel - vel*0.6f); clamp |vel| <= flStep; pos += vel; clamp inside g_camTrackEllipsoid by IntersectSegment + FindClosest (engine/ctrack.cpp:240-279)",
+      "chaseBranch": "vWish = target - facing*bungeeLength; clamp inside g_camTrackEllipsoid; vPull = vWish - camPos; smart camera adds vPull*30 then clamps; normal chase: vel += (desiredVel - vel*0.6f) + vPull*30; clamp |vel| <= flStep; pos += vel (engine/ctrack.cpp:280-358)",
+      "outOfViewCorrection": "if |offset from wish line| > 2.0f and not out of view: camPos += half the gap, vel += 0.25f * (chasePos - camPos) (engine/ctrack.cpp:360-444)",
+      "finalPosition": "vSum = pos + dir*settings.y + side*settings.x + up*settings.z; scaled = surfNormal * cameraMinHeight; ray-clamp vSum on the cam ellipsoid; vFinal = normalize(target - (scaled + vSum)) * bungeeLength; pos = target - vFinal (engine/ctrack.cpp:446-499)",
+      "lookDirection": "m_pDir = vLook; with a secondary tracked object: normalize(normalize(secondaryPos - pos) + vTrack); with countdown: swing six steps, angle from acos of the horizontal directions (engine/ctrack.cpp:501-632)",
+      "smoothing": "posOut += (bodyPos - aPosRing[i]) * posWeight; dirOut += (bodyVelDir - aDirRing[i]) * dirWeight; ring[i] = current; indices advance modulo counts (engine/cameraobject.cpp:191-216)"
+    },
+    "viewItFormulas": {
+      "source": "engine/cameraobject.cpp:244-394",
+      "basis": "dirOut = m_aPosRing[nIndex] based shake vector; right = shake x dirOut normalised; up = right x dirOut normalised; the right/basis rows are transposed into m_pRotB",
+      "eye": "vPos = posOut + cross(settings.x) + dir(settings.y) + normal(settings.z) where cross = dir x trackedSurfNormal (engine/cameraobject.cpp:319-335)",
+      "cull": "frustum cull uses the composed view matrix; clip.w is matrix row 3 when m_bHasRow3 is set, otherwise 1.0 (engine/cameraobject.cpp:366-373)"
+    },
+    "viewSteepness": {
+      "default": { "x": 0.0, "y": 0.0, "z": 2.0, "source": "app/config.cpp:89 (Vec3 g_vViewSteepness = { 0, 0, g_flTwoSteering }), g_flTwoSteering = 2.0f at common/staticinitglobals.cpp:40" },
+      "shippedStickOverride": { "z": 2.0, "source": "DATA/DFTSTICK.CFG @v02 record, read at app/config.cpp:164" },
+      "shippedKeyboardFallbackOverride": { "z": 1.0, "source": "DATA/DFTKEYBD.CFG @v02 record, read at app/config.cpp:164" }
+    },
+    "trackOffsets": {
+      "order": ["birdsEye", "firstPerson", "overShoulder", "overShoulderRok", "fall"],
+      "source": "globals.cpp:352-358 (g_apTrackOffsets); storage declared engine/game.cpp:42-47; reader app/config.cpp:169-175; consumer planvm/planactiontracking.cpp:198,229,262,346 and planvm/plancond.cpp:1148-1150",
+      "shippedEffectiveValues": {
+        "source": "DATA/PREFS.TXT selects Data/DftStick.cfg. The reader order (app/config.cpp:159-175) leaves the four track-offset triples unread because the shipped @v02 record carries two floats past the five the format takes, so the floats after it do not line up; all offsets keep their zero initialisers (engine/game.cpp:42-46).",
+        "birdsEye": [0.0, 0.0, 0.0],
+        "firstPerson": [0.0, 0.0, 0.0],
+        "overShoulder": [0.0, 0.0, 0.0],
+        "overShoulderRok": [0.0, 0.0, 0.0],
+        "fall": [0.0, 0.0, 0.0]
+      },
+      "keyboardFallbackEffectiveValues": {
+        "source": "same reader order with the 38-row DATA/DFTKEYBD.CFG; the @v02 record leaves 1.2 and 2.0 before its colon, so birdsEye reads x=1.2, y=2.0 then fails and the other offsets stay zero",
+        "birdsEye": [1.2, 2.0, 0.0],
+        "firstPerson": [0.0, 0.0, 0.0],
+        "overShoulder": [0.0, 0.0, 0.0],
+        "overShoulderRok": [0.0, 0.0, 0.0],
+        "fall": [0.0, 0.0, 0.0]
+      }
+    }
+  },
+  "movement": {
+    "configDefaults": {
+      "source": "app/config.cpp:78-89",
+      "values": {
+        "g_flNetTracking": 1.0,
+        "g_flBandwidth": 1.0,
+        "g_flForceRelaxation": 1.0,
+        "g_flMaxSpeed": 1.0,
+        "g_flMaxAcceleration": 1.0,
+        "g_flSpeedBurstFactor": 1.0,
+        "g_flStopForceFactor": 1.0,
+        "g_flForceIncrement": 1.0
+      },
+      "note": "all start at g_flOneSteering = 1.0f (globals.cpp:829) before DATA/DFTSTICK.CFG or DATA/DFTKEYBD.CFG is read"
+    },
+    "shippedEffective": {
+      "source": "DATA/PREFS.TXT -> Data/DftStick.cfg, read by app/config.cpp:136-186; file begins with 40 integer rows (flags, key, index), then four floats, then the @v02 record",
+      "stick": {
+        "g_flForceIncrement": 1.0,
+        "g_flMaxAcceleration": 2.3,
+        "g_flMaxSpeed": 0.7,
+        "g_flForceRelaxation": 1.0,
+        "g_flBandwidth": 1.0,
+        "g_flNetTracking": 1.0,
+        "g_flStopForceFactor": 1.0,
+        "g_flSpeedBurstFactor": 0.8,
+        "g_bVictimCam": 0,
+        "g_vViewSteepnessZ": 2.0
+      },
+      "keyboardFallback": {
+        "g_flForceIncrement": 0.8,
+        "g_flMaxAcceleration": 1.0,
+        "g_flMaxSpeed": 1.0,
+        "g_flForceRelaxation": 0.8,
+        "g_flBandwidth": 0.8,
+        "g_flNetTracking": 1.25,
+        "g_flStopForceFactor": 1.0,
+        "g_flSpeedBurstFactor": 0.9,
+        "g_bVictimCam": 0,
+        "g_vViewSteepnessZ": 1.0
+      }
+    },
+    "steeringConstants": [
+      { "id": "TURN_SCALE", "value": 0.072, "source": "physics/physicsbody.cpp:242" },
+      { "id": "TURN_LIMIT", "value": 0.2, "source": "physics/physicsbody.cpp:243" },
+      { "id": "AXIS_FLOOR_IDLE", "value": 0.005, "source": "physics/physicsbody.cpp:240" },
+      { "id": "g_flMovementAxisDecay", "value": 0.15, "source": "globals.cpp:534" },
+      { "id": "SHOOT_DRIVE_TAIL_MS", "value": 1000, "units": "milliseconds", "source": "physics/physicsbody.cpp:238" },
+      { "id": "STEER_SCALE_THRESHOLD", "value": 1.000001, "source": "physics/physicsbody.cpp:525" },
+      { "id": "g_flMinVelDirSpeed", "value": 0.001, "units": "data units per second", "source": "globals.cpp:797" },
+      { "id": "ROK_CARRIER_SPEED_SCALE", "value": 0.9, "source": "planvm/cglideonsurface.cpp:29" },
+      { "id": "g_flBankFreeSpeed", "value": 30.0, "units": "data units per second", "source": "planvm/cglideonsurface.cpp:641" },
+      { "id": "1.232", "value": 1.232, "source": "physics/physicsbody.cpp:668", "note": "flForwardSpeedDt = |body.step| * flDelta * 1.232" }
+    ],
+    "movementAxesFormulas": {
+      "source": "physics/physicsbody.cpp:334-519 (PhysicsBody::UpdateMovementAxes, 0x00407c40)",
+      "weightedBalance": "ObjectStats::GetWeightedStat(RATING_BALANCE)",
+      "flPush": "(((balance * 0.14f) + 0.5f) * flAccelDt * g_flForceIncrement)",
+      "flPull": "(((balance * 0.12f) + 0.4f) * flSpeed * flDeltaSquared)",
+      "flCap": "(((balance * 0.06f) + 0.2f) * flAccelDt * g_flMaxAcceleration)",
+      "shootDrive": "HELD_SHOOT holds axis.x += flPush; release keeps driving for 1000 ms past the release",
+      "turn": "flTurn = g_flNetTracking * flSpeed * 0.072f; left/right set axis.y to +/-flTurn (times 4.0f while stop is held) and clamp to flSpeed * 0.2f after the pull term",
+      "forwardCentring": "with HELD_FORWARD the code rotates the axis toward the latched direction: flDot = 1 - dot(velDirLatched, velDir); flCross = latched.y*dir.x - latched.x*dir.y; the sign of flCross moves axis.y by |flDot|*flPush",
+      "cap": "if |axis.x| >= flCap, axis.x = sign(axis.x) * flCap; otherwise unchanged",
+      "decay": "when no relevant input, |axis| > 0.005 decays by 0.15 per frame; below that it is zeroed"
+    },
+    "steeringForceFormula": {
+      "source": "physics/physicsbody.cpp:529-557 (PhysicsBody::ApplySteeringForce, 0x00408080)",
+      "lateral": "vLateral = surfNormal x velDir (components: n.z*d.y - n.y*d.z, d.z*n.x - n.z*d.x, n.y*d.x - d.y*n.x), normalised",
+      "normal": "if flSteerScale > 1.000001: smoothVel += (vLateral*axis.y + velDir) * flSteerScale; else smoothVel += vLateral*axis.y + velDir*axis.x"
+    },
+    "speedAndDrag": {
+      "source": "planvm/cglideonsurface.cpp:118-453 (CGlideOnSurface::UpdateTerrainPhysics, 0x0040c270)",
+      "frictionAtOrAboveOne": "velDir = local transform column 1 (m_a[0..2][1]); vel = velDir * 0.01 (Vec3::ScaleTo(m_pVelDir, 0.01f, m_pVel); velDir unchanged); smoothVel and bankForce cleared; if already on the surface return",
+      "terrainStep": "target = vel + prevPos; shell.RayIntersection(&surfNormal, &target, &pos); vDiff = pos - prevPos; vStep = vDiff + smoothVel + bankForce; flSpeed = |vStep|; if invDelta * speed > 0.001 velDir = vStep / speed, otherwise keep the previous direction",
+      "bank": "vBank computed from surfNormal * flGravDeltaVel; flDouble = flDelta * flGravDeltaVel * normal.z * (friction * 2.0f) * 12.0f",
+      "targetSpeed": "flTarget = flForwardSpeedDt * (weightedSpeed * 0.05f + 0.65f) * carrierScale * alt * g_flMaxSpeed, where carrierScale = 0.9f when this player carries the rok else 1.0f, and alt = 1.0f when pos.z > 0 else flSteerScale",
+      "drag": "if speed <= flTarget: if flDouble <= speed, vNext = vOut - velDir*flDouble; when dot(vNext, vel) < 0 and the owner is a goalie with no input, post MSG_GLIDE_TO_STOP and set vOut = 0",
+      "step": "vel = vOut; then body.step = vel * invDelta, the per-second form of the per-frame velocity (planvm/cglideonsurface.cpp:449-452)",
+      "verticalProjection": "normal = arenaEllipsoid.NormalAtPoint(worldPos); velDir -= normal * dot(normal, velDir); normalise (planvm/cglideonsurface.cpp:414-441)"
+    },
+    "bodyIntegrationFormulas": {
+      "source": "physics/physicsbody.cpp",
+      "integrateMotion": "move.dir = target - pos; normalize; if |target-pos| > 50 snap pos = target; flStep = flDeltaSquared * g_flBandwidth; flAccelDt = flStep; flStep *= distance; ringSmooth[nRingIndex] = flStep * move.dir; smoothVel = 0.25f * sum(ringSmooth[0..3]); flForwardSpeedDt = |body.step| * flDelta * 1.232f; vel += smoothVel; InitOnSurface(0); ringHistory[nRingIndex] = vel when speed > 0.001; velDir = normalized sum of ringHistory[0..3]; nRingIndex = (nRingIndex+1) % 4 (0x004082c0, lines 615-695)",
+      "initOnSurface": "prevPos = pos; next = pos + vel; shell.RayIntersection(&surfNormal, &next, &pos); surfNormal = shell.NormalAtPoint(pos); flSpeed = |vel|; if flSpeed > 0.001 velDir = vel / flSpeed; velDirLatched = velDir; smoothVel = bankForce = 0 (0x00408190, lines 568-611)",
+      "updateVelocityDirection": "drag = 1 - friction; blend = drag - shell.friction; weight = shell.elasticity * body.elasticity; dot = vel . surfNormal; proj = -dot * surfNormal; vel = (vel + proj) * blend + proj * weight; flSpeed = |vel|; if > 0.001 velDir = vel / flSpeed (0x00408760, lines 795-834)",
+      "stepWithGravity": "prevPos = pos; pos += flFrac * vel; pos.z -= flFrac * (0.5f * flGravDeltaVel); vel.z -= flFrac * flGravDeltaVel; flSpeed = |vel|; velDir = vel / flSpeed when speed > 0.001 (0x004086a0, lines 766-791)",
+      "integrateGravity": "prevPos = pos; pos += vel; pos.z -= 0.5f * flGravDeltaVel; if flGravDeltaVel < 0.01f: flGravAccel = 32; flGravDeltaVel = flDeltaSquared * 32; vel.z -= flGravDeltaVel; flSpeed = |vel| (0x004085d0, lines 730-761)",
+      "resetOnSurface": "ResetDynamics; pos.z = prevPos.z = shell.GetZ(pos.x,pos.y); surfNormal = shell.NormalAtPoint(pos); velDir latched and projected into the plane, normalized; vel = flSpeed * velDir; smoothVel = axis = 0; flFacing = 0 (0x00407ab0, lines 275-329)",
+      "setFlatOnTerrain": "target.z = shell.GetZ; place object; normal basis into local transform; rotation Z by flFacing; ApplyRenderSlotPose (0x00408a60, lines 941-1023)",
+      "updateBanking": "HELD_ROTATE rotates velDir by +/- g_flBankingAngleRad (0.1f rad) around Z and repositions the main camera at camera bone 9 minus bungee along the body's local Y (0x00408940, lines 873-937)"
+    },
+    "objectStatsFormulas": {
+      "source": "engine/objectstats.cpp",
+      "weightedStat": "GetWeightedStat(index) = (energy * g_flStatWeightScale + 0.25f) * m_aStats[index + 1], with g_flStatWeightScale = 0.0075f (common/staticinitglobals.cpp:13) and energy = m_aStats[0] (0x00474930, lines 48-55)",
+      "defaults": "InitDefaults: every stat 5.0f, stat[0] = 100.0f, SPEED = 7.0f, DAMAGE = 100.0f; m_flScale = m_flSpeedRatio = g_flBaseStatsSentinel = 1.0f (0x004748e0, lines 26-45; globals.cpp:270)",
+      "speedRatio": "flMomentum = (((stamina - 4.0f) * 0.15f + 0.5f) * flDelta + 1.0f) * m_flSpeedRatio; capped at 1.0f (0x00474bb0, lines 185-195)",
+      "energy": "energy regenerates by (g_flSpeedRateBase + 0.5f - stamina*0.15f) * flDelta, capped 100; g_flSpeedRateBase = 2.0f (globals.cpp:271); draining below 30 and above 100 toggles g_bEnergyDraining (0x00474bb0, lines 185-245)"
+    },
+    "speedBurst": {
+      "source": "engine/cspeedburst.cpp:19-22, 77-146; planvm/plancond.cpp:789-830 (PlanAction::Set_SpeedBurst, 0x0045eb30)",
+      "constants": { "CARRIER_RATE": 1.5, "DECAY_RATE": 0.8, "STAMINA_FLOOR": 0.05, "BOOST_EPSILON": 0.00001 },
+      "start": "if speedRatio > 0.3 the scale is 1.0f else 0.0f; m_flTarget = (80.0f / period) * scale + 1.0f; flSteerScale = 1.05f; axis.x += 0.25f; flFriction = 0.1f",
+      "process": "while flSteerScale > 1.0f: speedRatio *= 1 - flDelta * (1.5f when carrying else 1.0f), floored at 0.05f; if target > boost then boost += flDelta; else on the floored frame boost *= (1 - flDelta * 0.8f) and when it reaches 1.0f the item detaches"
+    }
+  },
+  "rok": {
+    "dataMotionParams": {
+      "source": "DATA/HOUDRO.ENV, DefineObject type=Rok name=AndRoll modfile=Rokmix (same keys in every ENV); parser engine/gameengine.cpp:1757-1875 (Cmd_SetMotionParams, 0x00482b00)",
+      "accel": 64.0,
+      "speed": 70.0,
+      "azim": 90.0,
+      "elev": 0.0,
+      "fric": 0.175,
+      "elas": 0.37,
+      "collisionBubble": { "type": "RokBubble", "radius": 1.0, "centroid": [0.0, 0.0, 0.0] }
+    },
+    "objectConstants": [
+      { "id": "SPAWN_SLOT_ANY", "value": "0xffffffff", "source": "engine/rokobject.h:12" },
+      { "id": "initialRokValue", "value": 0, "source": "engine/rokobject.cpp:39" },
+      { "id": "initialKillState", "value": -1, "source": "engine/rokobject.cpp:40" },
+      { "id": "carrierSlotInit", "value": [0, 0, 1, 1], "source": "engine/rokobject.cpp:41-44" },
+      { "id": "renderSlotByValue", "value": "abs(value) 0 or 1 -> bone 0; 2 -> bone 7; 4 -> bone 8; killState != -1 -> bone 2; at spawn slot -> bone 0", "source": "engine/rokobject.cpp:71-116 (SetRenderSlotFlags, 0x00473b90)" }
+    ],
+    "flight": {
+      "source": "planvm/cprojectandbounce.cpp:25-338 (CProjectAndBounce, 0x0040d510/0x0040d980/0x0040da80)",
+      "bindClamp": "if 80.0f * flDelta < vel.z then vel.z = 80.0f / flDelta (g_flFrameRateReference = 80.0f, globals.cpp:292; planvm/cprojectandbounce.cpp:35-38)",
+      "gravity": "IntegrateGravity each frame: pos += vel; pos.z -= 0.5f * flGravDeltaVel; vel.z -= flGravDeltaVel with flGravDeltaVel = flDeltaSquared * 32 (physics/physicsbody.cpp:730-761)",
+      "ellipsoidClamp": "when pos.z < 0 and the point is outside g_arenaEllipsoid, IntersectSegment(prevPos,pos) gives near/far, FindClosest picks the boundary point, the body is pushed to it plus 1.0f in z, UpdateVelocityDirection bounces, and StepWithGravity(1 - fraction) advances the remainder (planvm/cprojectandbounce.cpp:115-199)",
+      "sideBoundary": "when pos.z >= 0 and invXX*x*x + invYY*y*y > 1.0f, ComputeRadialBoundaryXY clamps x/y, normal at boundary, UpdateVelocityDirection, velocity.z is restored (planvm/cprojectandbounce.cpp:200-231)",
+      "speedCap": "flCap = 2.0f * flForwardSpeedDt; if |vel| > flCap, |vel| = flCap and vel = velDir * speed (planvm/cprojectandbounce.cpp:239-248)",
+      "step": "step = vel * invDelta when mode 0 (planvm/cprojectandbounce.cpp:250-265)",
+      "springVariant": "CProjectAndBounce::IntegrateSpringAndGravity pulls toward m_vStep with flDeltaSquared and applies GRAVITY_SCALE = 16.0f * flDeltaSquared on z; this is a different integrator from the flight path and must not be mixed with it (planvm/cprojectandbounce.cpp:279-338)",
+      "collisionResponse": "UpdateVelocityDirection: drag = 1 - friction; blend = drag - shellFriction; weight = shellElasticity * bodyElasticity; vel = (vel - dot*normal)*blend + (-dot*normal)*weight (physics/physicsbody.cpp:795-834)"
+    },
+    "launchFormulas": {
+      "source": "planvm/planactionlaunch.cpp",
+      "throw": "speed = ((shotPower * 0.04f + 0.8f) * 110.0f) * flDelta; velDir = carrier velDir with z += 0.5f then normalised (0x00403a30, lines 419-454)",
+      "launchToward": "speed = ((shotPower * 0.02f + 0.9f) * 100.0f) * flDelta; velDir = normalize(target position) (planvm/planactionlaunch.cpp:700-810)",
+      "launchAt": "leads the target by the rok's flight time to the goal, with scatter dice DICE_WIDE = 7, DICE_NARROW = 6, JITTER_SPAN = 21, JITTER_BIAS = 10 (0x00403d70, lines 491-497)",
+      "kickDown": "DAMP_RATE = 10.0f; if vel.z > 0 halve it; vel.z -= flDelta*10; clamp vel.z at 0; vel.x *= -0.25; vel.y *= -0.25 (0x00403cf0, lines 459-487)"
+    }
+  },
+  "rules": {
+    "score": {
+      "storage": { "source": "engine/gameengine.cpp:4862-4900, 4902-4910", "home": "m_nScoreHome", "away": "m_nScoreAway", "increment": "IncrementHomeScore/IncrementAwayScore add one; Reset sets both to -1 and then immediately calls InfoBar::IncrementScore(5) and (4), which increments both to 0 (engine/gameengine.cpp:4902-4910; ui/infobar.cpp:1304-1325)" },
+      "displayLines": { "SCORE_LINE_TEAM2": 4, "SCORE_LINE_TEAM1": 5, "source": "ui/infobar.h:28-29" },
+      "goalValueMapping": {
+        "source": "planvm/plancond.cpp:5451-5506 (PlanCond::RokScoreValue, 0x00465150)",
+        "rule": "the goal clamps the rok's signed value: SGoal clamps up to at least 1, NGoal clamps down to at most -1 and flips the sign; then value 1 -> arm 0, value 2 -> arm 1, value 4 -> arm 2; any other value -> arm 0; if the rok is attached the code writes 4 and then overwrites it in every path (dead arm 4); if the rok is at its spawn slot the result is 3",
+        "pointValues": { "arm0": 1, "arm1": 2, "arm2": 4, "arm3": 4, "arm4": "unreachable (overwritten)" },
+        "evidence": "DATA/PLANS/NGOAL.PBN and SGOAL.PBN via tools/plan_dump.py: arm [0] sends MSG_NGoalScored to slot 23 once, arm [1] twice, arm [2] four times, arm [3] four times; DATA/PLANS/INSCRTBL.PBN (the GOD/scoreboard plan) calls id_ACF_IncrementScore once per received MSG_NGoalScored/MSG_SGoalScored. Arm [3] also calls id_ACF_IncRokValue(8) four times, ending the rok value at -4."
+      },
+      "eventFlow": {
+        "source": "engine/messageids.h:8 (MSG_GOAL_SCORED 0x07); engine/gameengine.cpp:4334-4377 (BroadcastEvent); planvm/plancond.cpp:4959-4969 (PlanAction::IncrementScore, 0x00464720); ui/infobar.cpp:1304-1325 (InfoBar::IncrementScore, 0x0047ae70)",
+        "steps": [
+          "the goal plan receives its own goal-scored message and arms the post-score behaviour",
+          "RokScoreValue decides the scoring arm; each arm emits one to four MSG_GoalScored broadcasts and the matching MSG_NGoalScored/SGoalScored messages to SLOT_GOD (23)",
+          "the GOD plan (INSCRTBL.PBN) calls id_ACF_IncrementScore(0) for home or (1) for away once per message, then rebroadcasts the goal message to slots 0 to 3",
+          "InfoBar::IncrementScore turns the line into the numeric score text and dirty flags"
+        ]
+      },
+      "ownGoal": { "source": "planvm/plancond.cpp:068b90 area (PlanCond::CheckScoreOnOwnGoal, 0x00468b90); DATA/PLANS/NGOAL.PBN arm[0..3] each test id_DCF_CheckScoreOnOwnGoal before crediting r1x/r2x/r4x goal stats", "note": "own-goal credit is plan data; the engine exposes no own-goal flag" }
+    },
+    "rokValue": {
+      "source": "planvm/plancond.cpp:3853-3915 (PlanAction::IncRokValue, 0x00463300); engine/rokobject.h:34-36",
+      "range": [-4, 4],
+      "step": 2,
+      "sign": "signed, team relative; even carriers are the reference, odd carrier slots flip the sign in PlanCond::RokValueInMyFavor (planvm/plancond.cpp:6806-6830)",
+      "requestCodes": { "ARENA_TRACK_UP": 7, "ARENA_TRACK_DOWN": 8, "reset": 0, "source": "planvm/plancond.cpp:3242-3243 (7 and 8); IncRokValue request 0 zeroes the value" },
+      "up": "nMode += 2; the first step past 0 plays MSG_DOUBLE_SCORE with 0; clamped at 4",
+      "down": "nMode -= 2; the first step past 0 plays MSG_DOUBLE_SCORE with 1; clamped at -4",
+      "special": "if the stored value is exactly 1 it is normalised to 0 before the request is applied (planvm/plancond.cpp:3863-3866)",
+      "displayFmt": "x%d of abs(value), positive and negative labels on different rows (ui/infobar.cpp:91-129 (InfoBar::UpdateRokValue); ui/hud.cpp:754-777)",
+      "gates": {
+        "source": "DATA/PLANS/MULTPLR.PBN via tools/plan_dump.py; PlanCond::RokIsCharged (planvm/plancond.cpp:7116-7127), RokIsChargedAgainst (7132-7144)",
+        "arming": "behaviour ScoreArming: on id_MSG_YerHit, RokInWhichTeamsPoss arm [0] calls id_ACF_IncRokValue(7), arm [1] calls id_ACF_IncRokValue(8), arm [2] does nothing; then RokIsCharged arm [0] sends id_MSG_BetterRed to slot 80",
+        "chargedTest": "RokIsCharged returns 1 while m_nKillState == -1, plus 2 when the rok sits at its spawn slot; RokIsChargedAgainst returns 1 while m_nKillState == -1",
+        "aiThreshold": "PlanCond::GoThroughMuliplier: delta = rok value (sign-flipped for odd carrier slot); if delta >= 4 answer 1; else compare against the team's RATING_MULTIPLIER0 when winning or RATING_MULTIPLIER1 when losing, clamp the threshold to 4 with 2 as the default when the rating is outside ±4, and if the coach condition flag is set force 4 (planvm/plancond.cpp:7745-7818)"
+      }
+    },
+    "periods": {
+      "source": "engine/gameengine.cpp:573-583, 593-766, 1150-1188; ui/screens/gameconfiguiscreen.cpp:30-35; engine/gameoptions.cpp:136-139",
+      "periodCount": 4,
+      "firstPeriod": 1,
+      "finalPeriodIndex": 3,
+      "lengthsMs": { "short": 180000, "medium": 300000, "long": 420000 },
+      "defaultLengthMs": 300000,
+      "defaultLengthSource": "engine/gameoptions.cpp:136-139 (ReadPeriodLength default 0x493e0 = 300000 ms); DATA/BOOIE.INI has no PeriodLength key in the shipped copy, so the default applies",
+      "countdown": { "startBeforeMs": 10000, "firstShownSeconds": 9, "source": "engine/gameengine.cpp:576-577, 667-686" },
+      "overtimeMs": { "earlyPeriods": 10000, "finalPeriod": 30000, "source": "engine/gameengine.cpp:582-583, 635-642" },
+      "end": "when nPeriod reaches PERIOD_COUNT (4) after the run-on the match is over; end-of-period/end-of-game events are broadcast on the transition (engine/gameengine.cpp:688-766)",
+      "earlyEnd": "a period ends early when all players are injured or either team is injured, or when m_bEndPeriodRequested is set by a plan action (engine/gameengine.cpp:651-706)"
+    },
+    "pauseAndClockEvents": {
+      "source": "engine/gameengine.cpp:4331-4377 (GameEngine::BroadcastEvent)",
+      "shoot": "MSG_SHOOT sets nPauseMark = 1 and records nPauseStartMs, extending nPeriodStartMs by the pause",
+      "goal": "MSG_GOAL_SCORED resets the event base and clears nPauseMark",
+      "startDrag": "MSG_START_DRAG resets the event base, nPeriodStartMs and nPauseStartMs and clears nPauseMark",
+      "planSync": "PlanAction::SyncSystem replays the goal plan's broadcasts and sets home/away score from the packed word; elapsed time is packed in tenths of a second (planvm/plancond.cpp:612-679)"
+    }
+  },
+  "input": {
+    "keyBindings": {
+      "source": "input/keyboarddeviceobj.cpp:610-622; keyboard names and defaults; DATA/DFTKEYBD.CFG; DATA/BOOIE.INI [Keys]",
+      "names": ["Forward", "Stop", "RotateLeft", "RotateRight", "Attack", "SpeedBurst", "Shoot", "Pass", "QuickShot", "Jump"],
+      "defaultVkCodes": { "Forward": 38, "Stop": 40, "RotateLeft": 37, "RotateRight": 39, "Attack": 83, "SpeedBurst": 68, "Shoot": 32, "Pass": 67, "QuickShot": 70, "Jump": 69 },
+      "defaultVkNames": { "Forward": "VK_UP", "Stop": "VK_DOWN", "RotateLeft": "VK_LEFT", "RotateRight": "VK_RIGHT", "Attack": "S", "SpeedBurst": "D", "Shoot": "VK_SPACE", "Pass": "C", "QuickShot": "F", "Jump": "E" },
+      "bindingOrder": [0, 1, 2, 3, 5, 4, 6, 7, 8, 9],
+      "physicalKeySlots": ["Forward", "Stop", "RotateLeft", "RotateRight", "SpeedBurst", "Attack", "Shoot", "Pass"],
+      "physicalKeySlotsNote": "CommitKeyBindings applies bindingOrder when writing m_anKey: slot 4 gets pnKeys[5] (D, SpeedBurst) and slot 5 gets pnKeys[4] (S, Attack), so the physical table is Up, Down, Left, Right, D, S, Space, C (input/keyboarddeviceobj.cpp:381-384, 618)",
+      "keyboardTableKeyCount": 8,
+      "note": "the keyboard device listens to eight keys only (TABLE_KEY_COUNT = 8, input/keyboarddeviceobj.cpp:111,126). QuickShot and Jump are read from BOOIE.INI and kept in g_anKeyBindings but are not in the keyboard's eight-slot m_anKey table."
+    },
+    "heldMask": {
+      "source": "physics/physicsbody.h:25-41; planvm/cmonitorkeys.cpp:25-40, 59-119",
+      "bits": { "HELD_FORWARD": 1, "HELD_STOP": 2, "HELD_ROTATE_LEFT": 4, "HELD_ROTATE_RIGHT": 8, "HELD_SPEED_BURST": 16, "HELD_ATTACK": 32, "HELD_SHOOT": 64, "HELD_PASS": 128, "HELD_QUICK_SHOT": 256, "HELD_JUMP": 512 },
+      "flow": "CMonitorKeys::Process copies KeyboardDeviceObj::m_nHeldMask into PhysicsBody::nHeldBindings, calls Player::ProcessTrickInput, then applies ApplySteeringForce (MON_DRIVE_YER_GUY/MON_ARCADE_STYLE) or the goalie clamp (MON_GOALIE_CTRL), stores nPrevHeldBindings, and writes the previous word back into the keyboard device"
+    },
+    "actionBindings": {
+      "source": "input/actionbindings.cpp:7-33 (g_aActionBindings, 0x004c4208); input/actionbinding.h:11-23",
+      "count": 25,
+      "flags": { "UP": "0x80000000", "MASK": "0x7fff", "DOUBLE_TAP": "0x10001", "HIGH_HALF": "0xffff0000", "QUICK": "0x40000000", "HELD": "0x20000000|0x40000000" },
+      "rows": [
+        { "action": "HELD|0x0002", "combine": 0, "clear": "0x00000081", "key": 8 },
+        { "action": "UP|0x0008", "combine": 2, "clear": "0x00000081", "key": 8 },
+        { "action": "UP|QUICK|0x0008", "combine": 2, "clear": "0x00000081", "key": 8 },
+        { "action": "UP|0x0004", "combine": 2, "clear": "0x00000081", "key": 8 },
+        { "action": "UP|QUICK|0x0004", "combine": 2, "clear": "0x00000081", "key": 8 },
+        { "action": "DOUBLE_TAP", "combine": 0, "clear": "0x00000092", "key": 9 },
+        { "action": "DOUBLE_TAP<<1", "combine": 0, "clear": "0x00000091", "key": 10 },
+        { "action": "0x00000020", "combine": 0, "clear": "0x0000009f", "key": 11 },
+        { "action": "UP|QUICK|0x0020", "combine": 0, "clear": "0x0000009f", "key": 12 },
+        { "action": "0x00000004", "combine": "0x00000020", "clear": "0x0000009b", "key": 13 },
+        { "action": "0x00000008", "combine": "0x00000020", "clear": "0x00000097", "key": 14 },
+        { "action": "0x00000001", "combine": "0x00000020", "clear": "0x0000009c", "key": 15 },
+        { "action": "0x00000002", "combine": "0x00000020", "clear": "0x0000009d", "key": 16 },
+        { "action": "DOUBLE_TAP<<2", "combine": 0, "clear": "0x00000099", "key": 17 },
+        { "action": "DOUBLE_TAP<<3", "combine": 0, "clear": "0x00000095", "key": 18 },
+        { "action": "DOUBLE_TAP", "combine": "0x00000020", "clear": "0x0000009c", "key": 19 },
+        { "action": "0x00000010", "combine": 0, "clear": "0x000000ad", "key": 20 },
+        { "action": "UP|0x0010", "combine": 0, "clear": "0xffffffff", "key": 21 },
+        { "action": "UP|QUICK|0x0010", "combine": 0, "clear": "0xffffffff", "key": 21 },
+        { "action": "0x00000040", "combine": 0, "clear": "0x0000009d", "key": 22 },
+        { "action": "UP|0x0040", "combine": 0, "clear": "0xffffffff", "key": 23 },
+        { "action": "UP|QUICK|0x0040", "combine": 0, "clear": "0xffffffff", "key": 23 },
+        { "action": "0x00000080", "combine": 0, "clear": "0xffffffbf", "key": 24 },
+        { "action": "UP|0x0080", "combine": 0, "clear": "0xffffffff", "key": 25 },
+        { "action": "UP|QUICK|0x0080", "combine": 0, "clear": "0xffffffff", "key": 25 }
+      ]
+    },
+    "timing": [
+      { "id": "DOUBLE_TAP_MS", "value": 250, "units": "milliseconds", "source": "input/keyboarddeviceobj.cpp:68 (0xfa)" },
+      { "id": "REPEAT_STEP_MS", "value": 50, "units": "milliseconds", "source": "input/keyboarddeviceobj.cpp:69 (0x32)" },
+      { "id": "MSG_NEW_INPUT", "value": "0x43", "source": "engine/messageids.h:34" }
+    ],
+    "newInputActions": {
+      "source": "DATA/PLANS/INPUT.PBN via third_party/hyperblade-decomp/tools/plan_dump.py; message data is the binding's m_nKey",
+      "map": {
+        "8": "id_MSG_Stop to the viewed owner",
+        "9": "id_MSG_Jump",
+        "10": "id_MSG_SetAnimation with parameter 164",
+        "11": "no-op",
+        "12": "id_DCF_PickAttackMove then id_MSG_Attack with 0..7",
+        "13": "id_MSG_Attack 4",
+        "14": "id_MSG_Attack 5",
+        "15": "id_MSG_Attack 1",
+        "16": "id_MSG_Attack 6",
+        "17": "id_MSG_Attack 2",
+        "18": "id_MSG_Attack 3",
+        "19": "no-op",
+        "20": "id_MSG_SpeedBurst 1",
+        "21": "id_MSG_SpeedBurst 0",
+        "22": "id_DCF_AnalyzePadB (shoot start: head cam on, shot meter, CUpdateShotPower)",
+        "23": "id_DCF_AnalyzePadB (shoot release: throw wind-up, throw, reticle reset)",
+        "24": "id_DCF_AnalyzePadA (pass variants to teammate)",
+        "25": "id_DCF_AnalyzePadA (pass/throw/change track object)",
+        "26-29": "id_MSG_SubstituteDromer 0..3",
+        "30": "pass to the viewed owner"
+      }
+    }
+  },
+  "dataFiles": {
+    "teamsHtm": {
+      "format": "text; DefineTeam one line, then DefineObject type=Dromer blocks with SetMotionParams, SetPlans, SetRatings1/2/3 and optional SetGoalieRatings* blocks",
+      "example": "DATA/LOSAN.HTM:3 DefineTeam name=The_Shockwave ... environment=losdro.env",
+      "ratingsKeys": "id_RAT_ names; the loader table is engine/gameengine.cpp:2442-2542 (Cmd_SetRatings, 0x00483b50)",
+      "motionKeys": ["accel", "speed", "azim", "elev", "fric", "elas"],
+      "motionExample": "DATA/LOSAN.HTM:4 pos = 40 75 0 accel=30 speed= 48 azim= -270 elev = 45 fric=.01 elas=0.32"
+    },
+    "dromesEnv": {
+      "format": "text; DefineObject blocks of type Drome/Rok/NGoal/SGoal/Ramp/Multiplier/Turnstile/LimboPole/LaserHurdle/Armory/Mine/Swarf/Hurdle/Randomizer, each with SetMotionParams, SetPlans and SetCollisionObject lines",
+      "example": "DATA/HOUDRO.ENV:2 DefineObject type=Drome ...; :6 DefineObject type=Rok ...; :9 SetPlans rok; :11 SetCollisionObject type=RokBubble radius=1 ...",
+      "collisionObjectKeys": ["type", "component", "radius", "centroid", "useDetail"]
+    },
+    "booieIni": {
+      "source": "DATA/BOOIE.INI; names read by engine/gameoptions.cpp; defaults verified at engine/gameoptions.cpp:100-139 and further read getters",
+      "sections": ["Options", "Keys", "Misc", "GamePad"],
+      "keys": {
+        "SfxVolume": 7,
+        "MusicVolume": 4,
+        "ScreenSize": 6,
+        "AttackMode": 0,
+        "TeammateMode": 0,
+        "Difficulty": 0,
+        "InstallLevel": 2,
+        "DromeTextured": 1,
+        "GamePad.Attack": 1,
+        "GamePad.Shoot": 4,
+        "GamePad.Speed": 3,
+        "GamePad.Pass": 2
+      }
+    },
+    "keyConfigs": {
+      "source": "DATA/DFTKEYBD.CFG, DATA/DFTSTICK.CFG, DATA/DFTMOUSE.CFG; parsing order app/config.cpp:136-186",
+      "layout": "40 rows of (int flags, int key, int index), then four floats: forceIncrement, maxAcceleration, maxSpeed, forceRelaxation, then @v02 <victimCam int> <5 floats: bandwidth, netTracking, stopForceFactor, speedBurstFactor, viewSteepness.z> :, then four triples of floats intended as birdseye, firstPerson, overShoulder, overShoulderRok track offsets",
+      "shippedPrefs": "DATA/PREFS.TXT contains Data\\DftStick.cfg (forward slashes in JSON here; the file uses a backslash)",
+      "rowCounts": { "dftkeybd": 38, "dftstick": 40, "dftmouse": 30 }
+    },
+    "plans": {
+      "format": "DATA/PLANS/*.PBN, ADLIB compiled p-code; DATA/PLANS.CAT lists the plan files; read with third_party/hyperblade-decomp/tools/plan_dump.py",
+      "filesRelevantToCore": ["NGOAL.PBN", "SGOAL.PBN", "INSCRTBL.PBN (GOD/scoreboard)", "MULTPLR.PBN", "INPUT.PBN", "ROK.PBN", "CARRYROK.PBN", "HUMAN.PBN", "CAMERA.PBN", "STARTGUN.PBN", "GOALIE.PBN"]
+    }
+  },
+  "nonConstants": {
+    "tickReferenceNote": "There is no single fixed tick rate in the original. The 18 Hz value is the initial and nominal reference; the game actually advances by the smoothed measured frame time. Any C# implementation that claims exactness must reproduce TickClock or explicitly pin a tick and record the deviation.",
+    "unitWarning": "Only the renderer projection uses centimetres (72 dpi, 2.54 cm per inch). Do not use those numbers to scale world positions, velocities or the arena."
+  }
+}
