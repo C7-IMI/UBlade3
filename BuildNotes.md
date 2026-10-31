@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.025
+
+**N17 MatchStats read seam, real Sim awareness bubbles, animation-trigger classification; preview 011.**
+
+- Date: 2026-10-31
+- Change: PlanAiMatchStats + exact actions 8/10/11 timer bodies and MatchStats StartTimer/StopTimer;
+  default roster binds the accumulator; labelled diagnostic plan read seam. New Sim/AwarenessBubbles
+  radius/overlap API consumed by action 71 (sphere approximation of bound bubbles).
+  MatchAnimationMessageBridge maps YerDown and classifies Contact/Catch/release as non-message
+  triggers.
+- Verified: N17_CHECK_OK stats applied=1 lastStat=37 value=2199 read branch=1; bubble owner=4
+  radius=30 pairs=2 nearest=5@7.5 (zero radii -> 0); YerDown injected=1, nonMessage=3, unmapped=0;
+  N4-N16 regressions green; 216 text files PASS.
+- Release 2026.10.31.011-csharp-preview: ZIP 39,010,289 bytes SHA-256
+  `190fb981489c9271fa880b0e95c1606371a9c56602a70a7a4b8fdf70d188ee20`; extracted player starts
+  with audio on, no external process.
+- Boundary: no shipped plan stat read body, bubble is a sphere without collision response/damage,
+  animation transitions hard switches, audio headless record-only. Preview, not parity.
+- Docs: docs/NATIVE-EFFECTS-N17.md.
+
 ## 2026.10.31.024
 
 **Plan effects consumers: stats, bubbles, animation-message injection; C# preview 010.**

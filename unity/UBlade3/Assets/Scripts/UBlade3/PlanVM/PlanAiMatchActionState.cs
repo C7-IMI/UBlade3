@@ -54,6 +54,16 @@ namespace UBlade3.PlanVM
 
         public float LastBubbleRadius = -1.0f;
 
+        public int LastBubbleColObject = -1;
+
+        public int LastStatTimerSlot = -1;
+
+        public int LastStatTimerId = -1;
+
+        public int StatTimerStartEvents;
+
+        public int StatTimerStopEvents;
+
         public int FrictionEvents;
 
         public int LocationEvents;

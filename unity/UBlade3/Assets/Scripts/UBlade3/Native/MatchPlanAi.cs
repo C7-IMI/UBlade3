@@ -222,6 +222,21 @@ namespace UBlade3.Native
 
         public int UnsupportedHandlerCount;
 
+        // N17: real Sim awareness-bubble radius/collision bindings.
+        public int AwarenessBubbleApplications;
+
+        public int AwarenessCollisions;
+
+        public int AwarenessNearestSlot = -1;
+
+        public float AwarenessNearestDistance = -1.0f;
+
+        public float AwarenessBubbleRadiusLast = -1.0f;
+
+        private int appliedBubbleEvents;
+
+        private readonly List<AwarenessCollision> awarenessBuffer = new List<AwarenessCollision>();
+
         public float PhysicsDistanceStart = -1.0f;
 
         public float PhysicsDistanceMin = float.MaxValue;
@@ -560,6 +575,22 @@ namespace UBlade3.Native
         }
 
         /// <summary>Posts an engine-level plan message into this slot's plan instance (possession, free ROK).</summary>
+        /// <summary>
+        /// N17 verification hook: runs the plan-context MatchStats decision read body against this
+        /// adapter's live MatchStats table. The decomp has no shipped PlanCond/PlanAction MatchStats
+        /// reader, so this diagnostic decision proves the wired read seam with a real accumulated
+        /// value and is not registered as a default plan decision id.
+        /// </summary>
+        public short ProbeMatchStatDecision(int statId)
+        {
+            return PlanAiMatchStats.ProbeDecision(host, null, statId);
+        }
+
+        public short ProbeMatchStatDecision(int slot, int statId)
+        {
+            return PlanAiMatchStats.ProbeDecisionAt(host, slot, statId);
+        }
+
         public void InjectSceneMessage(int message, int arg, int sender)
         {
             if (!Bound || world == null)
@@ -1024,6 +1055,25 @@ namespace UBlade3.Native
             PlanActionStatEvents = effects.StatEvents;
             PlanActionBubbleEvents = effects.BubbleScaleEvents;
             PlanActionSpeedBurstEvents = effects.SpeedBurstEvents;
+
+            if (effects.BubbleScaleEvents > appliedBubbleEvents)
+            {
+                int delta = effects.BubbleScaleEvents - appliedBubbleEvents;
+                appliedBubbleEvents = effects.BubbleScaleEvents;
+                int bubbleSlot = Slot;
+
+                if (AwarenessBubbles.TryGetSlotForCollisionObject(
+                        effects.LastBubbleColObject, out bubbleSlot))
+                {
+                    // The action named one of the six COB_DR*_AWARENESS objects; write that slot.
+                }
+
+                AwarenessBubbles.SetRadius(sim, bubbleSlot, effects.LastBubbleRadius);
+                AwarenessBubbleApplications += delta;
+                AwarenessBubbleRadiusLast = effects.LastBubbleRadius;
+            }
+
+            UpdateAwarenessTelemetry();
             ApplyPlanActionAudio(effects);
         }
 
@@ -1141,6 +1191,24 @@ namespace UBlade3.Native
             AgendaBlockedEvents = Math.Max(AgendaBlockedEvents, agenda.BlockedEvents);
             AgendaBreakawayEvents = Math.Max(AgendaBreakawayEvents, agenda.BreakawayEvents);
             AgendaRelaxAdvanceEvents = Math.Max(AgendaRelaxAdvanceEvents, agenda.RelaxAdvanceEvents);
+        }
+
+        private void UpdateAwarenessTelemetry()
+        {
+            AwarenessCollisions = AwarenessBubbles.CollectCollisions(sim, awarenessBuffer);
+            int nearestSlot;
+            float nearestDistance;
+
+            if (AwarenessBubbles.NearestOpponent(sim, Slot, out nearestSlot, out nearestDistance) != 0)
+            {
+                AwarenessNearestSlot = nearestSlot;
+                AwarenessNearestDistance = nearestDistance;
+            }
+            else
+            {
+                AwarenessNearestSlot = -1;
+                AwarenessNearestDistance = -1.0f;
+            }
         }
 
         /// <summary>N13: action PlaySound ids are SNDFILES.LST positions; PlayIndex is the source PlaySpecific route.</summary>
@@ -2107,6 +2175,11 @@ namespace UBlade3.Native
                     .Append(",avoidDetach=").Append(AgendaAvoidDetaches)
                     .Append(",relaxDetach=").Append(AgendaRelaxDetaches)
                     .Append(",unsupportedHandlers=").Append(UnsupportedHandlerCount).Append(']');
+                text.Append(" n17=[bubbleApplied=").Append(AwarenessBubbleApplications)
+                    .Append(",radius=").Append(AwarenessBubbleRadiusLast.ToString("0.####"))
+                    .Append(",collisions=").Append(AwarenessCollisions)
+                    .Append(",nearest=").Append(AwarenessNearestSlot)
+                    .Append(",nearestDistance=").Append(AwarenessNearestDistance.ToString("0.###")).Append(']');
             }
 
             if (!string.IsNullOrEmpty(Failure))

@@ -266,7 +266,10 @@ namespace UBlade3.PlanVM
                 return;
             }
 
-            int colObject = node.Args[1].IntValue;
+            PlanWord colWord = node.Args[1].Word;
+            int colObject = colWord.IsPronoun
+                ? host.ArgResolver.ResolvePronoun(colWord.Low, colWord)
+                : node.Args[1].IntValue;
             int statId = node.Args[2].IntValue;
             float stat = actor.Stats.GetScalar(statId);
             float low = ResolveFloat(host, node, 3);
@@ -274,6 +277,7 @@ namespace UBlade3.PlanVM
             float radius = (high - low) * (stat * PlanStatScale) + low;
             PlanAiActionState effects = PlanAiActionStateStore.Get(actor);
             effects.LastBubbleRadius = radius;
+            effects.LastBubbleColObject = colObject;
             effects.BubbleScaleEvents++;
             host.RecordAction(PlanOpcodes.ActionIds.ScaleBubToRating, node, nArg,
                 "colObject=" + colObject + " stat=" + statId + " radius=" + radius.ToString("0.####")

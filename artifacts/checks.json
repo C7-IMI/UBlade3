@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T11:30:13.711Z",
+  "generatedAt": "2026-10-31T11:47:16.322Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -555,14 +555,27 @@
         "hard switches no crossfade",
         "staged captures"
       ]
+    },
+    "effectsN17": {
+      "status": "N17 MatchStats read seam, Sim awareness bubbles, trigger classification verified",
+      "stats": "action9 applied=1 lastStat=37 value=2199; diagnostic plan read branch=1",
+      "bubbles": "Sim AwarenessBubbles API; action71 radius=30; pairs=2 nearest=5@7.5; zero radii -> 0 pairs",
+      "triggers": "YerDown injected=1; Contact/Catch/release nonMessage=3; unmapped=0",
+      "doc": "docs/NATIVE-EFFECTS-N17.md",
+      "gaps": [
+        "no shipped PlanCond stat read body",
+        "bubble sphere approximation no collision response/damage",
+        "hard animation transitions/no crossfade",
+        "actions10/11 timers not reached in window"
+      ]
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.010-csharp-preview",
-    "status": "native C# preview with stat/bubble/animation-trigger consumers packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.010-csharp-preview-win64.zip",
-    "bytes": 39007448,
-    "sha256": "d600b663228f80d1e63af0166633429dcc9e6e86da6960ae352eb2fc7e3b95f9",
+    "version": "2026.10.31.011-csharp-preview",
+    "status": "native C# preview with stats/bubble/trigger seams packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.011-csharp-preview-win64.zip",
+    "bytes": 39010289,
+    "sha256": "190fb981489c9271fa880b0e95c1606371a9c56602a70a7a4b8fdf70d188ee20",
     "externalProcess": false,
     "preview": true,
     "audioDefault": true,

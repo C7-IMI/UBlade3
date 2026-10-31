@@ -255,3 +255,13 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.024
 
+## 24 - 2026-10-31
+
+- Request: close remaining plan stat/bubble/animation-trigger effects.
+- Work: MatchStats read seam/actions 8/10/11, Sim awareness-bubble API, YerDown mapping and
+  non-message trigger classification; preview 011.
+- Evidence: N17 stats 37=2199 read branch=1, bubble radius 30/pairs 2/nearest 5@7.5, triggers
+  injected=1 nonMessage=3; N4-N16 green; release 011 39010289 bytes 190fb981...
+- Boundary: no shipped stat read body, bubble no collision response, no crossfade. Goal active.
+- Version: 2026.10.31.025
+

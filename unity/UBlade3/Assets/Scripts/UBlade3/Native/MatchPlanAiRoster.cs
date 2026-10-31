@@ -83,6 +83,9 @@ namespace UBlade3.Native
 
         private readonly Simulation sim;
 
+        // N17: the live MatchStats table is owned by the default roster and bound into PlanVM.
+        public readonly MatchStatAccumulator MatchStats = new MatchStatAccumulator();
+
         private readonly MatchPlayControl control;
 
         private ulong digest = PlanVmDigest.Offset;
@@ -234,6 +237,7 @@ namespace UBlade3.Native
         /// <summary>Runs after the heuristic update and before the match's pending AI requests.</summary>
         public void BeforeMatchTick(uint nowMs)
         {
+            MatchStats.Tick(this, sim);
             if (!Enabled)
             {
                 return;

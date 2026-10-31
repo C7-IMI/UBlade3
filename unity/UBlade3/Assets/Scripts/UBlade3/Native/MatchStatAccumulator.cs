@@ -74,6 +74,10 @@ namespace UBlade3.Native
 
         private readonly int[] lastEvents = new int[PlayerSlots];
 
+        private readonly int[] lastTimerStart = new int[PlayerSlots];
+
+        private readonly int[] lastTimerStop = new int[PlayerSlots];
+
         private readonly bool[] observed = new bool[PlayerSlots];
 
         public int AppliedEvents;
@@ -82,6 +86,8 @@ namespace UBlade3.Native
 
         public int MultiplePerTick;
 
+        public int TimerEvents;
+
         public int LastSlot = -1;
 
         public int LastStatId = -1;
@@ -89,6 +95,17 @@ namespace UBlade3.Native
         public float LastValue;
 
         public readonly List<string> Trace = new List<string>();
+
+        public MatchStatAccumulator()
+        {
+            // N17: the plan-context MatchStats reader points at this accumulator's live table.
+            PlanAiMatchStats.Bind(GetStat);
+        }
+
+        public void BindPlanContext()
+        {
+            PlanAiMatchStats.Bind(GetStat);
+        }
 
         public float GetStat(int slot, int statId)
         {
@@ -145,8 +162,12 @@ namespace UBlade3.Native
                 {
                     observed[actorSlot] = true;
                     lastEvents[actorSlot] = effects.StatEvents;
+                    lastTimerStart[actorSlot] = effects.StatTimerStartEvents;
+                    lastTimerStop[actorSlot] = effects.StatTimerStopEvents;
                     continue;
                 }
+
+                TickTimers(actorSlot, effects, sim);
 
                 int delta = effects.StatEvents - lastEvents[actorSlot];
 
@@ -186,6 +207,8 @@ namespace UBlade3.Native
                 Trace.Add("stat actor=" + actorSlot + " target=" + LastSlot + " id=" + LastStatId
                           + " value=" + LastValue.ToString("0.###", CultureInfo.InvariantCulture)
                           + " count=" + delta);
+
+
             }
         }
 
@@ -315,6 +338,87 @@ namespace UBlade3.Native
             return stats[slot, statId];
         }
 
+        // MatchStats::StartTimer (engine/matchstats.cpp HYPERX 0x00491c90).
+        public float StartTimer(int slot, int statId, double nowMs)
+        {
+            if (slot < 0 || slot >= PlayerSlots || statId < 0 || statId >= StatCount)
+            {
+                RejectedEvents++;
+                return float.NaN;
+            }
+
+            if (stats[slot, statId] == 0.0f)
+            {
+                stats[slot, statId] = (float)nowMs;
+            }
+
+            TimerEvents++;
+            return stats[slot, statId];
+        }
+
+        // MatchStats::StopTimer (engine/matchstats.cpp HYPERX 0x00491cd0).
+        public float StopTimer(int slot, int statId, double nowMs)
+        {
+            if (slot < 0 || slot >= PlayerSlots || statId < 0 || statId >= StatCount)
+            {
+                RejectedEvents++;
+                return float.NaN;
+            }
+
+            float now = (float)nowMs;
+            stats[slot, statId] = now;
+
+            switch (statId)
+            {
+                case StatTopStampEnd:
+                    stats[slot, StatTimeOfPossession] =
+                        stats[slot, StatTopStampEnd] - stats[slot, StatTopStampStart]
+                        + stats[slot, StatTimeOfPossession];
+                    stats[slot, StatTopStampStart] = 0.0f;
+                    break;
+                case StatTorStampEnd:
+                    stats[slot, StatTimeOnRail] =
+                        stats[slot, StatTorStampEnd] - stats[slot, StatTorStampStart]
+                        + stats[slot, StatTimeOnRail];
+                    stats[slot, StatTorStampStart] = 0.0f;
+                    break;
+                case StatHtStampEnd:
+                    stats[slot, StatHangTime] =
+                        stats[slot, StatHtStampEnd] - stats[slot, StatHtStampStart]
+                        + stats[slot, StatHangTime];
+                    stats[slot, StatHtStampStart] = 0.0f;
+                    break;
+                case StatPptStampEnd:
+                    stats[slot, StatPowerPlayTime] =
+                        stats[slot, StatPptStampEnd] - stats[slot, StatPptStampStart]
+                        + stats[slot, StatPowerPlayTime];
+                    stats[slot, StatPptStampStart] = 0.0f;
+                    break;
+            }
+
+            TimerEvents++;
+            return stats[slot, statId];
+        }
+
+        private void TickTimers(int actorSlot, PlanAiActionState effects, Simulation sim)
+        {
+            int startDelta = effects.StatTimerStartEvents - lastTimerStart[actorSlot];
+            int stopDelta = effects.StatTimerStopEvents - lastTimerStop[actorSlot];
+            lastTimerStart[actorSlot] = effects.StatTimerStartEvents;
+            lastTimerStop[actorSlot] = effects.StatTimerStopEvents;
+            int now = sim == null ? 0 : unchecked((int)sim.Rules.Clock.TickMs);
+
+            for (int i = 0; i < startDelta; i++)
+            {
+                StartTimer(effects.LastStatTimerSlot, effects.LastStatTimerId, now);
+            }
+
+            for (int i = 0; i < stopDelta; i++)
+            {
+                StopTimer(effects.LastStatTimerSlot, effects.LastStatTimerId, now);
+            }
+        }
+
         private float Percent(int slot, int part, int whole)
         {
             return (stats[slot, part] / stats[slot, whole]) * 100.0f;
@@ -326,6 +430,7 @@ namespace UBlade3.Native
             text.Append(Marker).Append("_STATE applied=").Append(AppliedEvents)
                 .Append(" rejected=").Append(RejectedEvents)
                 .Append(" multiplePerTick=").Append(MultiplePerTick)
+                .Append(" timerEvents=").Append(TimerEvents)
                 .Append(" lastSlot=").Append(LastSlot)
                 .Append(" lastStat=").Append(LastStatId)
                 .Append(" lastValue=").Append(LastValue.ToString("0.###",

@@ -25,8 +25,8 @@ fully playable exact engine.
 
 - **Exact parity build (native embedded engine):** `dist/UBlade3-2026.10.31.002-win64.zip` —
   exactly the original engine inside Unity, no external process.
-- **Native C# playable preview:** `dist/UBlade3-CSharpPreview-2026.10.31.010-csharp-preview-win64.zip`
-  (39,007,448 bytes, SHA-256 `d600b663228f80d1e63af0166633429dcc9e6e86da6960ae352eb2fc7e3b95f9`) —
+- **Native C# playable preview:** `dist/UBlade3-CSharpPreview-2026.10.31.011-csharp-preview-win64.zip`
+  (39,010,289 bytes, SHA-256 `190fb981489c9271fa880b0e95c1606371a9c56602a70a7a4b8fdf70d188ee20`) —
   original assets, C# simulation, default PlanVM AI, scoring/HUD/audio, display presets 720p/1080p/1440p/4K.
   Playable preview, not final parity; run `Play-UBlade3-CSharp.bat` or the exe with `--play-autostart`.
 
@@ -96,7 +96,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - Match audio: [docs/NATIVE-AUDIO-MATCH.md](./docs/NATIVE-AUDIO-MATCH.md).
 - Remaining plan handlers: [docs/PLAN-HANDLERS-N13.md](./docs/PLAN-HANDLERS-N13.md), [N14](./docs/PLAN-HANDLERS-N14.md).
 - Plan animation consumer: [docs/NATIVE-ANIMATION-MATCH.md](./docs/NATIVE-ANIMATION-MATCH.md).
-- Plan effects consumers: [docs/NATIVE-EFFECTS.md](./docs/NATIVE-EFFECTS.md).
+- Plan effects consumers: [docs/NATIVE-EFFECTS.md](./docs/NATIVE-EFFECTS.md), [N17 stat/bubble seams](./docs/NATIVE-EFFECTS-N17.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

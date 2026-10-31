@@ -1,5 +1,5 @@
 param(
-  [string]$Version = "2026.10.31.010-csharp-preview",
+  [string]$Version = "2026.10.31.011-csharp-preview",
   [switch]$ForceBuild
 )
 $ErrorActionPreference = "Stop"

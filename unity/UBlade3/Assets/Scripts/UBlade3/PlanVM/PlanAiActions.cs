@@ -47,6 +47,11 @@ namespace UBlade3.PlanVM
             table.Add(PlanOpcodes.ActionIds.SpeedBurstSituation, PlanAiMatchActionsN13.SpeedBurstSituation);
             table.Add(PlanOpcodes.ActionIds.SendLaunchMessage, PlanAiMatchActionsN13.SendLaunchMessage);
 
+            // N17: documented MatchStats-writing action handlers.
+            table.Add(PlanOpcodes.ActionIds.NoteStats4Possessors, PlanAiMatchStatsActions.NoteStats4Possessors);
+            table.Add(PlanOpcodes.ActionIds.StartStatTimer, PlanAiMatchStatsActions.StartStatTimer);
+            table.Add(PlanOpcodes.ActionIds.EndStatTimer, PlanAiMatchStatsActions.EndStatTimer);
+
             return table;
         }
 

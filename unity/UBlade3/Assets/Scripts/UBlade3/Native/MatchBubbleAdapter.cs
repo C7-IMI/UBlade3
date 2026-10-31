@@ -45,6 +45,8 @@ namespace UBlade3.Native
 
         public int AwarenessPairs;
 
+        public int SimCollisionPairs;
+
         public readonly List<string> Trace = new List<string>();
 
         public MatchBubbleAdapter()
@@ -109,7 +111,24 @@ namespace UBlade3.Native
                 AppliedEvents++;
                 LastSlot = actorSlot;
                 LastRadius = effects.LastBubbleRadius;
-                AwarenessPairs = CountAwarenessNeighbours(sim, actorSlot);
+
+                // N17: write the action-71 radius into the Sim awareness-bubble API and count the
+                // overlaps from the Sim collision query, not from an adapter-local loop.
+                AwarenessBubbles.SetRadius(sim, actorSlot, effects.LastBubbleRadius);
+                System.Collections.Generic.List<AwarenessCollision> collisions =
+                    new System.Collections.Generic.List<AwarenessCollision>();
+                int total = AwarenessBubbles.CollectCollisions(sim, collisions);
+                AwarenessPairs = 0;
+
+                for (int collisionIndex = 0; collisionIndex < collisions.Count; collisionIndex++)
+                {
+                    if (collisions[collisionIndex].OwnerSlot == actorSlot)
+                    {
+                        AwarenessPairs++;
+                    }
+                }
+
+                SimCollisionPairs = total;
                 Trace.Add("bubble actor=" + actorSlot + " radius=" + radius[actorSlot].ToString(
                     "0.####", CultureInfo.InvariantCulture) + " neighbours=" + AwarenessPairs);
             }
@@ -165,7 +184,8 @@ namespace UBlade3.Native
                 .Append(" lastRadius=").Append(LastRadius.ToString("0.####",
                     CultureInfo.InvariantCulture))
                 .Append(" awarenessPairs=").Append(AwarenessPairs)
-                .Append(" simCollisionPath=none(adapter-only)");
+                .Append(" simCollisionPairs=").Append(SimCollisionPairs)
+                .Append(" simCollisionPath=SimAwarenessBubbles");
 
             for (int slot = 0; slot < PlayerSlots; slot++)
             {

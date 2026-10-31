@@ -24,6 +24,19 @@ namespace UBlade3.Native
         private readonly Dictionary<string, int> messageByName =
             new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
+        // N17: DATA/ENUMIDS.H id_MSG_YerDown is id 56 (the decomp messageids.h omits the symbol,
+        // but the original ENUMIDS list places it between Breakaway (55) and ExitBehavior (57)).
+        private readonly Dictionary<string, int> messageAliases =
+            new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "YerDown", 56 },
+            };
+
+        // AnimAssm action names that are not id_MSG_ symbols. The original ParseScriptLine stores
+        // MSG_NOMSG for a trigger name that does not start with the plan-symbol prefix; these are
+        // animation action labels, not plan scene messages. They are counted and never injected.
+        private static readonly string[] NonMessageTriggerNames = { "Contact", "Catch", "release" };
+
         public MatchAnimationConsumer Animation;
 
         public MatchPlanAiRoster Roster;
@@ -40,6 +53,12 @@ namespace UBlade3.Native
 
         public int UnmappedTriggers;
 
+        public int NonMessageTriggers;
+
+        public int YerDownInjected;
+
+        public int MappedMessageTriggers;
+
         public readonly List<string> Trace = new List<string>();
 
         public MatchAnimationMessageBridge()
@@ -50,6 +69,11 @@ namespace UBlade3.Native
                 {
                     messageByName[entry.Value] = entry.Key;
                 }
+            }
+
+            foreach (KeyValuePair<string, int> entry in messageAliases)
+            {
+                messageByName[entry.Key] = entry.Value;
             }
         }
 
@@ -118,6 +142,19 @@ namespace UBlade3.Native
                 ? action.Substring("id_MSG_".Length)
                 : action;
 
+            for (int index = 0; index < NonMessageTriggerNames.Length; index++)
+            {
+                if (string.Equals(messageName, NonMessageTriggerNames[index],
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    NonMessageTriggers++;
+                    Trace.Add("non-message slot=" + player.Slot + " frame=" + trigger.Frame
+                              + " action=" + action
+                              + " (AnimAssm action name is not an id_MSG_ symbol; source stores MSG_NOMSG)");
+                    return;
+                }
+            }
+
             int messageId;
 
             if (!messageByName.TryGetValue(messageName, out messageId))
@@ -127,6 +164,8 @@ namespace UBlade3.Native
                           + " action=" + action + " mappedName=" + messageName);
                 return;
             }
+
+            MappedMessageTriggers++;
 
             MatchPlanAi target = Roster == null ? null : Roster.Adapter(targetSlot);
 
@@ -145,6 +184,11 @@ namespace UBlade3.Native
 
             target.InjectSceneMessage(messageId, param, player.Slot);
             InjectedMessages++;
+
+            if (string.Equals(messageName, "YerDown", StringComparison.OrdinalIgnoreCase))
+            {
+                YerDownInjected++;
+            }
             Trace.Add("inject slot=" + player.Slot + " target=" + targetSlot + " message="
                       + messageName + "(" + messageId + ") param=" + param + " frame=" + trigger.Frame);
             Debug.Log(Marker + "_INJECT slot=" + player.Slot + " target=" + targetSlot
@@ -160,7 +204,10 @@ namespace UBlade3.Native
                 .Append(" syncTriggers=").Append(SyncTriggers)
                 .Append(" injected=").Append(InjectedMessages)
                 .Append(" failures=").Append(InjectFailures)
-                .Append(" unmapped=").Append(UnmappedTriggers);
+                .Append(" unmapped=").Append(UnmappedTriggers)
+                .Append(" nonMessage=").Append(NonMessageTriggers)
+                .Append(" mapped=").Append(MappedMessageTriggers)
+                .Append(" yerDownInjected=").Append(YerDownInjected);
             return text.ToString();
         }
 
@@ -255,7 +302,8 @@ namespace UBlade3.Native
                     return;
                 }
 
-                Stats = new MatchStatAccumulator();
+                Stats = Play.Control != null && Play.Control.PlanRoster != null
+                    ? Play.Control.PlanRoster.MatchStats : new MatchStatAccumulator();
                 Bubbles = new MatchBubbleAdapter();
                 Messages = new MatchAnimationMessageBridge();
                 Messages.Attach(Scene.Animation, Play.Control == null ? null : Play.Control.PlanRoster);

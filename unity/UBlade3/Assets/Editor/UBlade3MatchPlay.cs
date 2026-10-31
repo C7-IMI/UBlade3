@@ -4178,5 +4178,319 @@ namespace UBlade3.EditorTools
             }
         }
 
+
+        // --- N17: MatchStats read seam, Sim awareness bubbles, animation trigger map ----------
+
+        public static void CheckN17()
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += RunN17Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N17_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N17_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N17_CHECK_FAILED failures=" + failures);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN17Check()
+        {
+            int failures = 0;
+            MatchAnimationConsumer.ForceEnabled = true;
+            MatchEffectsDriver.ForceEnabled = false;
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || play.Control.PlanRoster.MatchStats == null)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N17_MISMATCH no default PlanVM/MatchStats roster");
+                return 1;
+            }
+
+            MatchScene scene = play.Scene;
+            MatchPlanAiRoster roster = play.Control.PlanRoster;
+            MatchPlayN11Script.Stage(play.Control);
+
+            for (int guard = 0; guard < 300 && play.Control.Ticks < 240; guard++)
+            {
+                play.Control.Advance(HeldBinding.None, held =>
+                {
+                    play.Scene.TickScene(held);
+                    MatchPlayN11Script.HoldStaged(play.Control.Sim);
+                });
+            }
+
+            MatchStatAccumulator stats = roster.MatchStats;
+            Debug.Log("UBLADE3_NATIVE_MATCH_N17_STATS " + stats.Describe());
+
+            int statSlot = -1;
+            int statId = -1;
+            float statValue = 0.0f;
+
+            for (int slot = 0; slot < MatchStatAccumulator.PlayerSlots && statSlot < 0; slot++)
+            {
+                float[] values = stats.GetStats(slot);
+
+                for (int stat = 0; stat < MatchStatAccumulator.StatCount; stat++)
+                {
+                    if (values[stat] != 0.0f && !float.IsNaN(values[stat]))
+                    {
+                        statSlot = slot;
+                        statId = stat;
+                        statValue = values[stat];
+                        break;
+                    }
+                }
+            }
+
+            int statReadBranch = 0;
+            MatchPlanAi statReader = null;
+
+            for (int probeSlot = 0; probeSlot < roster.PlanSlots.Count; probeSlot++)
+            {
+                statReader = roster.Adapter(roster.PlanSlots[probeSlot]);
+
+                if (statReader != null)
+                {
+                    break;
+                }
+            }
+
+            if (statSlot >= 0 && statReader != null)
+            {
+                statReadBranch = statReader.ProbeMatchStatDecision(statSlot, statId);
+                Debug.Log("UBLADE3_NATIVE_MATCH_N17_STAT_DECISION slot=" + statSlot + " stat=" + statId
+                          + " value=" + statValue.ToString("0.###") + " branch=" + statReadBranch
+                          + " reads=" + PlanAiMatchStats.Reads
+                          + " last=" + PlanAiMatchStats.LastSlot + "/" + PlanAiMatchStats.LastStatId
+                          + "/" + PlanAiMatchStats.LastValue.ToString("0.###"));
+            }
+
+            if (statSlot < 0 || stats.AppliedEvents <= 0 || statReadBranch != 1 || PlanAiMatchStats.Reads <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N17_MISMATCH stat-read applied=" + stats.AppliedEvents
+                          + " slot=" + statSlot + " branch=" + statReadBranch
+                          + " reads=" + PlanAiMatchStats.Reads);
+            }
+
+            int bubbleOwner = -1;
+            float bubbleRadius = -1.0f;
+
+            for (int slot = 0; slot < ObjectConstants.PlayerObjectCount; slot++)
+            {
+                float radius = AwarenessBubbles.GetRadius(scene.Sim.Sim, slot);
+
+                if (radius > 0.0f)
+                {
+                    bubbleOwner = slot;
+                    bubbleRadius = radius;
+                    break;
+                }
+            }
+
+            if (bubbleOwner < 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N17_MISMATCH no-Sim-awareness-radius (action 71 not applied)");
+            }
+
+            int bubbleOther = bubbleOwner >= 0 ? ((bubbleOwner + 1) % ObjectConstants.PlayerObjectCount) : -1;
+            int bubblePairBefore = 0;
+
+            if (bubbleOwner >= 0)
+            {
+                MatchPlayN10Script.SetPlayerAt(play.Control.Sim, bubbleOther,
+                    scene.Sim.Sim.Players[bubbleOwner].Body.Pos.x + (bubbleRadius * 0.25f),
+                    scene.Sim.Sim.Players[bubbleOwner].Body.Pos.y, 1.0f, 0.0f);
+                System.Collections.Generic.List<AwarenessCollision> pairs =
+                    new System.Collections.Generic.List<AwarenessCollision>();
+                AwarenessBubbles.CollectCollisions(scene.Sim.Sim, pairs);
+                bubblePairBefore = pairs.Count;
+                int nearest = AwarenessBubbles.NearestOpponent(scene.Sim.Sim, bubbleOwner,
+                    out int nearestSlot, out float nearestDistance);
+                Debug.Log("UBLADE3_NATIVE_MATCH_N17_BUBBLE owner=" + bubbleOwner
+                          + " radius=" + bubbleRadius.ToString("0.###")
+                          + " pairs=" + bubblePairBefore
+                          + " nearest=" + nearest + "/" + nearestSlot
+                          + "/" + nearestDistance.ToString("0.###")
+                          + " " + AwarenessBubbles.Describe(scene.Sim.Sim));
+                float[] savedRadii = new float[ObjectConstants.PlayerObjectCount];
+
+                for (int slot = 0; slot < savedRadii.Length; slot++)
+                {
+                    savedRadii[slot] = AwarenessBubbles.GetRadius(scene.Sim.Sim, slot);
+                    AwarenessBubbles.SetRadius(scene.Sim.Sim, slot, 0.0f);
+                }
+
+                pairs.Clear();
+                AwarenessBubbles.CollectCollisions(scene.Sim.Sim, pairs);
+                int pairsZero = pairs.Count;
+
+                for (int slot = 0; slot < savedRadii.Length; slot++)
+                {
+                    AwarenessBubbles.SetRadius(scene.Sim.Sim, slot, savedRadii[slot]);
+                }
+
+                if (bubblePairBefore <= 0 || pairsZero != 0)
+                {
+                    failures++;
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N17_MISMATCH bubble radius did not affect collision query:"
+                              + " before=" + bubblePairBefore + " zero=" + pairsZero);
+                }
+            }
+
+            // Animation trigger map: a YerDown trigger must inject, and the three non-message
+            // action names must be counted exactly and never injected.
+            MatchAnimationMessageBridge messages = new MatchAnimationMessageBridge();
+            messages.Attach(scene.Animation, roster);
+            int yerDownBefore = messages.YerDownInjected;
+            int nonMessageBefore = messages.NonMessageTriggers;
+            int injectedBefore = messages.InjectedMessages;
+            int fixtureCount = 0;
+            int yerDownClips = 0;
+            int nonMessageClips = 0;
+
+            string[] fixtureNames = { "id_MSG_YerDown", "Contact", "Catch", "release" };
+
+            for (int index = 0; index < fixtureNames.Length; index++)
+            {
+                string clipName;
+                int clipId;
+                int segment;
+
+                if (!FindTriggerClip(scene.Animation, fixtureNames[index], out clipName, out clipId, out segment))
+                {
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N17_TRIGGER_GAP action=" + fixtureNames[index]
+                              + " (no clip trigger in the registry)");
+                    continue;
+                }
+
+                fixtureCount++;
+                int beforeNonMessage = messages.NonMessageTriggers;
+                int beforeInjected = messages.InjectedMessages;
+                scene.Animation.PlayFixture(1, clipId, 1.0f, 0, "n17-fixture-" + fixtureNames[index]);
+
+                for (int tick = 0; tick < 120; tick++)
+                {
+                    play.TickPlay(HeldBinding.None);
+                }
+
+                scene.Animation.RefreshCounters();
+                Debug.Log("UBLADE3_NATIVE_MATCH_N17_TRIGGER_FIXTURE action=" + fixtureNames[index]
+                          + " clip=" + clipId + " name=" + clipName + " segment=" + segment
+                          + " injected+" + (messages.InjectedMessages - beforeInjected)
+                          + " nonMessage+" + (messages.NonMessageTriggers - beforeNonMessage));
+
+                if (string.Equals(fixtureNames[index], "id_MSG_YerDown", StringComparison.OrdinalIgnoreCase))
+                {
+                    yerDownClips++;
+
+                    if (messages.YerDownInjected <= yerDownBefore)
+                    {
+                        failures++;
+                        Debug.Log("UBLADE3_NATIVE_MATCH_N17_MISMATCH YerDown trigger did not inject");
+                    }
+                }
+                else
+                {
+                    nonMessageClips++;
+
+                    if (messages.NonMessageTriggers <= beforeNonMessage
+                        || messages.InjectedMessages != beforeInjected)
+                    {
+                        failures++;
+                        Debug.Log("UBLADE3_NATIVE_MATCH_N17_MISMATCH non-message trigger was not classified: "
+                                  + fixtureNames[index]);
+                    }
+                }
+            }
+
+            if (messages.YerDownInjected <= yerDownBefore)
+            {
+                failures++;
+            }
+
+            if (yerDownClips < 1 || nonMessageClips < 1 || fixtureCount < 1)
+            {
+                failures++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N17_RESULT defaultPlanAi=True ticks=" + play.Control.Ticks
+                      + " statApplied=" + stats.AppliedEvents
+                      + " statSlot=" + statSlot + " statId=" + statId
+                      + " statBranch=" + statReadBranch + " statReads=" + PlanAiMatchStats.Reads
+                      + " bubbleOwner=" + bubbleOwner + " bubbleRadius=" + bubbleRadius.ToString("0.###")
+                      + " bubblePairs=" + bubblePairBefore
+                      + " bubbleCollisions=" + AwarenessBubbles.CollisionsObserved
+                      + " animationFiles=" + fixtureCount + " yerDownClips=" + yerDownClips
+                      + " nonMessageClips=" + nonMessageClips
+                      + " messages=" + messages.Describe());
+            Debug.Log(messages.Describe());
+            Debug.Log(messages.TraceText(80));
+            Debug.Log("UBLADE3_NATIVE_MATCH_N17_COUNTS statApplied=" + stats.AppliedEvents
+                      + " statReads=" + PlanAiMatchStats.Reads + " statBranch=" + statReadBranch
+                      + " bubbleOwner=" + bubbleOwner + " bubblePairs=" + bubblePairBefore
+                      + " bubbleCollisions=" + AwarenessBubbles.CollisionsObserved
+                      + " messagesInjected=" + messages.InjectedMessages
+                      + " yerDownInjected=" + (messages.YerDownInjected - yerDownBefore)
+                      + " nonMessageTriggers=" + (messages.NonMessageTriggers - nonMessageBefore)
+                      + " failures=" + failures);
+
+            return failures;
+        }
+
+        private static bool FindTriggerClip(MatchAnimationConsumer animation, string action,
+            out string clipName, out int clipId, out int segment)
+        {
+            clipName = string.Empty;
+            clipId = -1;
+            segment = -1;
+
+            if (animation == null || animation.Registry == null)
+            {
+                return false;
+            }
+
+            for (int id = 0; id < animation.Registry.Count; id++)
+            {
+                string name;
+                UBlade3.Assets.AnimationAssembly assembly;
+
+                if (!animation.Registry.TryResolve(id, out name, out assembly) || assembly == null
+                    || assembly.Triggers == null)
+                {
+                    continue;
+                }
+
+                for (int index = 0; index < assembly.Triggers.Length; index++)
+                {
+                    UBlade3.Assets.AnimationAssemblyTrigger trigger = assembly.Triggers[index];
+
+                    if (string.Equals(trigger.ActionName, action, StringComparison.OrdinalIgnoreCase))
+                    {
+                        clipName = name;
+                        clipId = id;
+                        segment = trigger.Segment;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
     }
 }
