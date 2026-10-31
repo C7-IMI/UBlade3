@@ -40,8 +40,11 @@ original data formats. **Current verified milestone:**
   yet pixel-identical, so this preview is not the playable release.
 - C# native match milestone: original CHIDRO + Chicago/Seattle skaters, UBlade3.Sim at 30 Hz, six posed original
   characters and a CTrack camera; headless check `ticks=150 mismatches=0`, player build 103,900,532 bytes with
-  captures in `artifacts/native-match-frame-*.png`. Fallback AI, no rok/goals/score/HUD yet; not release path.
-  See [docs/NATIVE-MATCH.md](./docs/NATIVE-MATCH.md).
+  captures in `artifacts/native-match-frame-*.png`. Fallback AI; see [docs/NATIVE-MATCH.md](./docs/NATIVE-MATCH.md).
+- C# native gameplay milestone: original Rokmix ROK (9 bones/257 tris, render-bone variants), shipped goal/score
+  rules with a deterministic 2-1 suite, original assets8 HUD art (interim font) and seven Editor/player captures
+  in `artifacts/native-gameplay-*.png`; player build 103,955,156 bytes with frame parity. PlanVM/AI, full shot
+  physics and HUD details remain gaps. See [docs/NATIVE-GAMEPLAY.md](./docs/NATIVE-GAMEPLAY.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),

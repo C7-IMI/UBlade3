@@ -85,3 +85,13 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.008
 
+## 8 - 2026-10-31
+
+- Request: continue the pure-C# engine toward playable gameplay.
+- Work: original Rokmix rok rendering, shipped goal/score rules and deterministic 2-1 scoring
+  suite, original assets8 HUD art with interim font; seven Editor/player captures.
+- Evidence: CHECK_OK mismatches=0; final score 2-1; player build 103955156 bytes with frames
+  byte-identical to Editor; no 20XX processes; N4 regression preserved.
+- Boundary: planVM/AI fallback, goal fixture, interim HUD/font/layout; not release path. Goal active.
+- Version: 2026.10.31.009
+

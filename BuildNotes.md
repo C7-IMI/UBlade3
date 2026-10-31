@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.009
+
+**C# native gameplay: original rok, goal rules, score and HUD, verified.**
+
+- Date: 2026-10-31
+- Change: added MatchGameplayRules/MatchRokView/MatchHud/MatchGameplay. The C# match now renders
+  the original Rokmix rig (9 bones, 257 triangles, render-bone plain/double/quad mapping), detects
+  goals with the shipped scoring rules (entry/value/points/side/bank/400 ms debounce), tracks score
+  and shows the original assets8 HUD art (frper/frdamgA/frdamgB/hudChi/hudsea) with an interim font.
+  Deterministic suite scores a home 2-point goal and an away 1-point goal (final 2-1).
+- Verified: headless CHECK_OK mismatches=0; Editor 7 captures 1280x720; Windows player
+  PLAYER_BUILD_OK bytes=103,955,156 and PLAYER_CAPTURES_OK frames=7 score=2-1, player frames
+  byte-identical to Editor; no20xxProcesses=0; N4 regression digest preserved.
+- Boundary: plan VM/AI fallback, goal fixture rather than full shot/plan path, no
+  face-off/restart/celebration, rok rotation stand-in, interim HUD font/simplified layout, not the
+  playable release path. Native exact release remains 2026.10.31.002.
+- Docs: docs/NATIVE-GAMEPLAY.md.
+
 ## 2026.10.31.008
 
 **C# native match scene with original drome and skaters.**

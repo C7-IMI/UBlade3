@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T07:22:07.050Z",
+  "generatedAt": "2026-10-31T07:43:21.896Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -146,6 +146,53 @@
         "not release path"
       ],
       "doc": "docs/NATIVE-MATCH.md"
+    },
+    "gameplay": {
+      "status": "N5 native C# gameplay/rok/score/HUD milestone verified",
+      "rok": {
+        "model": "Rokmix",
+        "bones": 9,
+        "triangles": 257,
+        "materials": 6,
+        "renderBonePlain": 0,
+        "renderBoneDouble": 7,
+        "renderBoneQuad": 8
+      },
+      "rules": {
+        "goalDetector": "MatchGoalDetector",
+        "scoreHome": 2,
+        "scoreAway": 1,
+        "debounceMs": 400,
+        "fixture": true
+      },
+      "hud": {
+        "originalArt": [
+          "frper",
+          "frdamgA",
+          "frdamgB",
+          "hudChi",
+          "hudsea"
+        ],
+        "font": "interim 3x5 substitute (GDI MS Sans Serif unavailable)"
+      },
+      "captures": [
+        "artifacts/native-gameplay-00-match-5s.png",
+        "artifacts/native-gameplay-01-goal-home-2.png",
+        "artifacts/native-gameplay-02-goal-away-1.png",
+        "artifacts/native-gameplay-06-scoreboard-2-1.png"
+      ],
+      "playerBuildBytes": 103955156,
+      "playerFramesIdentical": true,
+      "no20xxProcesses": 0,
+      "gaps": [
+        "planVM/AI fallback",
+        "goal fixture not full shot/plan path",
+        "no face-off/restart/celebration",
+        "rok rotation yaw stand-in",
+        "interim HUD font/simplified layout",
+        "not release path"
+      ],
+      "doc": "docs/NATIVE-GAMEPLAY.md"
     }
   }
 }
