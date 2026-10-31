@@ -29,6 +29,10 @@ namespace UBlade3.Native
         public int GoalEvents;
         public int CrowdEvents;
         public int ImpactEvents;
+        public int PickupEvents;
+        public int ShotEvents;
+        public int PassEvents;
+        public int FallbackImpacts;
         public int MenuEvents;
         public int AmbientStarts;
         public int FailedCalls;
@@ -38,6 +42,18 @@ namespace UBlade3.Native
 
         public MatchAudioDirector(AudioService service)
         {
+            // N13: the interactive player installs the default service before the scene builds; a
+            // director constructed by MatchPlay with no explicit service picks it up here so the
+            // real match events play by default. Capture/deterministic paths never install it.
+            if (service == null)
+            {
+                AudioService discovered;
+                if (MatchAudioDefaults.TryGetService(out discovered))
+                {
+                    service = discovered;
+                }
+            }
+
             Service = service;
 
             if (Service == null)
@@ -85,19 +101,64 @@ namespace UBlade3.Native
                 + " tickMs=" + tickMs);
         }
 
-        // A labelled surrogate for the physical impact events of the plan VM (no skater-hit/wall
-        // collision rules are ported yet): the ROK pickup and an arena bounce route through the
-        // original alternating hit group 0. Documented in docs/NATIVE-PLAY.md section 8.
+        // The real event routes: SNDFILES.LST group 1 catches (Sxrctha3) for a ROK pickup, group 2
+        // shoots/throws (Sxthrwc4 shot, Sxthrwc5 pass) for a release, and the original alternating
+        // hit group 0 for an arena bounce/other impact. If a named original entry is missing the
+        // event falls back to the original hit group and says so in the log.
         public void Impact(string reason, uint tickMs)
         {
             RequestedEvents++;
+            // Compatibility aggregate for the existing N6-N12 checks and the event plan: every
+            // physical event (pickup/shot/pass/bounce) remains an "impact" event, while the specific
+            // counters below identify the original sound route.
             ImpactEvents++;
 
+            string lower = string.IsNullOrEmpty(reason) ? string.Empty : reason.ToLowerInvariant();
+            string kind = "impact";
+            string audioRole = "impact-first/second";
+            string soundName = null;
             bool played = false;
+            bool fallbackUsed = false;
 
+            if (lower.Contains("pickup"))
+            {
+                kind = "pickup";
+                PickupEvents++;
+                audioRole = "catch-group-1";
+                soundName = "Sxrctha3";
+            }
+            else if (lower.Contains("shot-release"))
+            {
+                kind = "shot";
+                ShotEvents++;
+                audioRole = "shoot-group-2";
+                soundName = "Sxthrwc4";
+            }
+            else if (lower.Contains("pass-release"))
+            {
+                kind = "pass";
+                PassEvents++;
+                audioRole = "throw-group-2";
+                soundName = "Sxthrwc5";
+            }
             if (Ready)
             {
-                played = Service.PlayImpact();
+                if (soundName != null)
+                {
+                    played = Service.PlayName(soundName);
+
+                    if (!played)
+                    {
+                        FallbackImpacts++;
+                        fallbackUsed = true;
+                        played = Service.PlayImpact();
+                    }
+                }
+                else
+                {
+                    played = Service.PlayImpact();
+                }
+
                 PlayedCalls += played ? 1 : 0;
 
                 if (!played)
@@ -106,8 +167,10 @@ namespace UBlade3.Native
                 }
             }
 
-            Log(EventMarker + " kind=impact reason=" + reason
-                + " audioRole=impact-first/second played=" + (played ? "True" : "False")
+            Log(EventMarker + " kind=" + kind + " reason=" + reason
+                + " audioRole=" + (soundName == null ? audioRole : soundName + "(" + audioRole + ")")
+                + " fallbackImpact=" + (fallbackUsed ? "True" : "False")
+                + " played=" + (played ? "True" : "False")
                 + " tickMs=" + tickMs);
         }
 
@@ -178,6 +241,10 @@ namespace UBlade3.Native
             text.Append(" goal=").Append(GoalEvents);
             text.Append(" crowd=").Append(CrowdEvents);
             text.Append(" impact=").Append(ImpactEvents);
+            text.Append(" pickup=").Append(PickupEvents);
+            text.Append(" shot=").Append(ShotEvents);
+            text.Append(" pass=").Append(PassEvents);
+            text.Append(" fallbackImpacts=").Append(FallbackImpacts);
             text.Append(" menu=").Append(MenuEvents);
             text.Append(" ambient=").Append(AmbientStarts);
             text.Append(" service=").Append(Service == null ? "none" : (Service.IsReady ? "ready" : "not-ready"));

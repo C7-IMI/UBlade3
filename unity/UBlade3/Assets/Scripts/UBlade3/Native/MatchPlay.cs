@@ -277,7 +277,10 @@ namespace UBlade3.Native
 
         private void Start()
         {
-            if (!autoStartCommand || IsBuilt)
+            // N13: a normally launched interactive player must build the match by default. The
+            // capture entry points still call their deterministic suite after this build; a normal
+            // run turns the keyboard input on and leaves the default audio/HUD paths enabled.
+            if (IsBuilt)
             {
                 return;
             }

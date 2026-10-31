@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.019
+
+**PlanVM handler coverage, default match audio and HUD details; C# preview 006.**
+
+- Date: 2026-10-31
+- Change: PlanVM action 6/7/9/18/29/30/71 and decision 6/23/68 bodies registered and executed in
+  the default match (friction/location/speed-burst effects applied; sound/stat/animation/bubble
+  state recorded). MatchAudioDefaults installs the original-wave AudioService for normal
+  interactive players (capture paths excluded), with pickup/shot/pass/impact/goal/crowd/menu
+  routes. HUD adds the live speed meter and goalie roster row. Rebuilt C# preview 006.
+- Verified: N12_CHECK_OK digest=333565d513ad20e0, actions [6x6,7x1,9x1,18x4,29x7,30x7,71x2],
+  decisions [6x3,23x6,68x8]; N13 audio ready=True channels=8 48kHz requested=8 played=9 failed=0;
+  HUD speed/goalie rows and 1080p/4K captures; N4-N12 regressions green; no20XX.
+- Release 2026.10.31.006-csharp-preview: ZIP 38,986,577 bytes SHA-256
+  `f95902eef1773f3c13c7233f396a975dbfa1554100b3f2ef0233d175f4cc474b`; extracted player starts
+  with audio on, original HUD, no external process.
+- Boundary: remaining unsupported handlers/agenda/behparams; recorded-only sound/animation/stat/
+  bubble effects; no acoustic audibility measurement; preview not final parity.
+- Docs: docs/PLAN-HANDLERS.md, docs/NATIVE-AUDIO-MATCH.md.
+
 ## 2026.10.31.018
 
 **Original InfoBar HUD layout and MS Sans Serif text; C# preview 005.**

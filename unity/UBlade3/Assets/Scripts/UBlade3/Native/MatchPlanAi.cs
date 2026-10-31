@@ -157,6 +157,25 @@ namespace UBlade3.Native
 
         public int PhysicsArrivalEvents;
 
+        // N12: action bodies executed and the subset with real match effects.
+        public int PlanActionFrictionTicks;
+
+        public int PlanActionLocationTicks;
+
+        public int PlanActionAnimationEvents;
+
+        public int PlanActionSoundEvents;
+
+        public int PlanActionStatEvents;
+
+        public int PlanActionBubbleEvents;
+
+        public int PlanActionSpeedBurstEvents;
+
+        public int PlanActionLocationApplications;
+
+        public int PlanActionFrictionApplications;
+
         public float PhysicsDistanceStart = -1.0f;
 
         public float PhysicsDistanceMin = float.MaxValue;
@@ -305,6 +324,10 @@ namespace UBlade3.Native
             RosterMode = persistent;
             PlanName = string.IsNullOrEmpty(planName) ? DefaultPlanName : planName;
             image = LoadPlanImage(DataPath, PlanName);
+
+            // N12: decision/action bodies and the engine state they read from the live match.
+            PlanAiMatchDecisions.EnsureRegistered();
+            PlanAiMatchContext.TerrainZ = (x, y) => EllipsoidStatics.Arena.GetZ(x, y);
         }
 
         public static PlanFileImage LoadPlanImage(string dataPath, string planName)
@@ -436,7 +459,9 @@ namespace UBlade3.Native
                 Trace.Add("t=" + nowMs + " plan-runtime-error " + exception.GetType().Name + ": " + exception.Message);
             }
 
+            PublishMatchContext();
             DrainPlanMessages(nowMs, 256);
+            SyncPlanActionEffects();
             ScanPlanEvents(nowMs);
             TrackBehavior(nowMs);
             ProcessPlanChanges(nowMs);
@@ -688,6 +713,7 @@ namespace UBlade3.Native
 
                 try
                 {
+                    PlanAiMatchContext.CurrentMessageSender = message.Sender;
                     world.DispatchSceneMessage(message.TargetSlot, message.Message, message.Arg,
                         DecisionLog.Fresh, message.Sender, message.FromInput);
                 }
@@ -763,6 +789,147 @@ namespace UBlade3.Native
                           + " (plan SendLaunchMessage -> match shot mapping)");
                 digestDirty = true;
             }
+        }
+
+        /// <summary>Publishes the engine state the N12 decision bodies read (score, sender, speed ratios).</summary>
+        private void PublishMatchContext()
+        {
+            PlanAiMatchContext.SetScores(sim.Rules.ScoreHome, sim.Rules.ScoreAway);
+
+            for (int index = 0; index < PlanConstants.PlayerObjectCount; index++)
+            {
+                PlayerState player = sim.Players[index];
+                PlanAiMatchContext.SetSpeedRatio(index, player.Stats.SpeedRatio);
+            }
+        }
+
+        private int ResolveAimSlot(PlanBehavior behavior)
+        {
+            if (state == null || state.Behaviors == null || behavior == null)
+            {
+                return -1;
+            }
+
+            int declared = -1;
+
+            for (int index = 0; index < state.Behaviors.Length; index++)
+            {
+                PlanNode node = state.Behaviors[index];
+
+                if (node == null || node.Opcode != PlanOpcodes.OpcodeDeclareBehavior)
+                {
+                    continue;
+                }
+
+                declared++;
+
+                if (declared != behavior.SyncValue)
+                {
+                    continue;
+                }
+
+                for (int child = 0; child < node.ChildCount; child++)
+                {
+                    PlanOperand operand = node.Args[child];
+
+                    if (operand == null || operand.Kind != PlanOperandKind.Node)
+                    {
+                        continue;
+                    }
+
+                    PlanNode item = operand.Node;
+
+                    if (item.Opcode != PlanOpcodes.OpcodeSetBehaviorParam || item.ChildCount < 4)
+                    {
+                        continue;
+                    }
+
+                    if (item.Args[0].Kind != PlanOperandKind.Leaf
+                        || item.Args[0].IntValue != PlanOpcodes.BehaviorSetParamIds.ModsTweenNFacing)
+                    {
+                        continue;
+                    }
+
+                    if (item.Args[3].Kind != PlanOperandKind.Leaf || item.Args[3].Word.IsPronoun)
+                    {
+                        return -1;
+                    }
+
+                    return item.Args[3].IntValue;
+                }
+
+                return -1;
+            }
+
+            return -1;
+        }
+
+        /// <summary>Applies the plan-side action state written by the N12 bodies to the real Simulation body.</summary>
+        private void SyncPlanActionEffects()
+        {
+            if (host == null)
+            {
+                return;
+            }
+
+            PlanAiObject actor = host.Actor;
+
+            if (actor == null)
+            {
+                return;
+            }
+
+            PlanAiActionState effects = PlanAiActionStateStore.Get(actor);
+            PlayerState player = sim.Players[Slot];
+
+            if (effects.FrictionDirty)
+            {
+                player.Body.Friction = effects.Friction;
+                effects.FrictionDirty = false;
+                PlanActionFrictionApplications++;
+            }
+
+            if (effects.LocationDirty)
+            {
+                SimVec3 location = new SimVec3(effects.Location.X, effects.Location.Y, effects.Location.Z);
+                player.Body.Pos = location;
+                player.Body.PrevPos = location;
+                player.Body.Vel = SimVec3.Zero;
+                player.Body.SmoothVel = SimVec3.Zero;
+                player.Body.Axis = SimVec3.Zero;
+                player.Body.Speed = 0.0f;
+                SimVec3 normal;
+
+                if (EllipsoidStatics.Arena.NormalAtPoint(location, out normal))
+                {
+                    player.Body.SurfNormal = normal;
+                }
+
+                player.AimPosition = new SimVec3(location.x, location.y, location.z + MatchWorldData.HeadHeight);
+                effects.LocationDirty = false;
+                PlanActionLocationApplications++;
+            }
+
+            if (effects.VelocityDirty)
+            {
+                player.Body.Vel = new SimVec3(effects.Velocity.X, effects.Velocity.Y, effects.Velocity.Z);
+                player.Body.Speed = (float)Math.Sqrt(player.Body.Vel.LengthSquared());
+                effects.VelocityDirty = false;
+            }
+
+            if (Math.Abs(effects.AxisXDelta) > 1e-6f)
+            {
+                player.Body.Axis.x += effects.AxisXDelta;
+                effects.AxisXDelta = 0.0f;
+            }
+
+            PlanActionFrictionTicks = effects.FrictionEvents;
+            PlanActionLocationTicks = effects.LocationEvents;
+            PlanActionAnimationEvents = effects.AnimationEvents;
+            PlanActionSoundEvents = effects.SoundEvents;
+            PlanActionStatEvents = effects.StatEvents;
+            PlanActionBubbleEvents = effects.BubbleScaleEvents;
+            PlanActionSpeedBurstEvents = effects.SpeedBurstEvents;
         }
 
         private void RecordUnsupportedDecision(PlanAiUnportedHandlerException exception)
@@ -1017,6 +1184,12 @@ namespace UBlade3.Native
             target.Stats.Set(PlanAiConstants.RatingRokHandling, source.Stats.GetScalar(ObjectConstants.RatingRokHandling));
             target.Stats.Set(PlanAiConstants.RatingLongPassEnable, 0.0f);
             target.Stats.Set(PlanAiConstants.RatingCarryRokThrowDist, FixtureCarryRokThrowDistance);
+
+            // N12 LooseRokWhatToDo ratings (statids.h ids 33-36; ObjectDefinition rating table order).
+            target.Stats.Set(33, source.Stats.GetScalar(33));
+            target.Stats.Set(34, source.Stats.GetScalar(34));
+            target.Stats.Set(35, source.Stats.GetScalar(35));
+            target.Stats.Set(36, source.Stats.GetScalar(36));
         }
 
         private void CopyRok(PlanAiObject target)
@@ -1167,6 +1340,7 @@ namespace UBlade3.Native
             }
 
             SynchronizeCounts();
+            PlanAiMatchContext.PublishBehavior(Slot, current.Kind, ResolveAimSlot(current));
         }
 
         private void SynchronizeCounts()
@@ -1665,6 +1839,15 @@ namespace UBlade3.Native
                     .Append(F((float)(PhysicsHeadingTravelRad * 180.0 / Math.PI)));
                 text.Append(" physicsDistanceStart=").Append(F(PhysicsDistanceStart));
                 text.Append(" physicsDistanceMin=").Append(F(PhysicsDistanceMin));
+                text.Append(" effectiveActions=[friction=").Append(PlanActionFrictionTicks)
+                    .Append(",location=").Append(PlanActionLocationTicks)
+                    .Append(",speedBurst=").Append(PlanActionSpeedBurstEvents)
+                    .Append(",animation=").Append(PlanActionAnimationEvents)
+                    .Append(",sound=").Append(PlanActionSoundEvents)
+                    .Append(",stat=").Append(PlanActionStatEvents)
+                    .Append(",bubble=").Append(PlanActionBubbleEvents).Append(']');
+                text.Append(" applied=[friction=").Append(PlanActionFrictionApplications)
+                    .Append(",location=").Append(PlanActionLocationApplications).Append(']');
             }
 
             if (!string.IsNullOrEmpty(Failure))

@@ -1,0 +1,392 @@
+VBCSCompilerPreWarmer: watching VBCSCompiler (PID 16368)
+VBCSCompilerPreWarmer: pre-warm launched (dotnet PID 17680)
+VBCSCompiler prewarm took 17.80 ms
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Channel LicenseClient-StephenSimmons doesn't exist
+Built from '6000.6/staging' branch; Version is '6000.6.7f1 (b22767f04f04) revision 11675495'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26300) Professional' Language: 'en' Physical Memory: 65220 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-10-31T10:23:19Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 45716)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Unity.exe
+-batchmode
+-quit
+-nographics
+-projectPath
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+-executeMethod
+UBlade3.EditorTools.UBlade3Checks.RunAll
+-logFile
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\ublade3\all-checks-regression-n12.log
+Successfully changed project path to: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-remapper-allocator-initial-capacity=32768"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=1"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Logging is directed to a specific file, skipping project log.
+Player connection [23760]  Target information:
+
+Player connection [23760]  * "[IP] 192.168.56.1 [Port] 55504 [Flags] 2 [Guid] 414959921 [EditorId] 414959921 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [23760]  * "[IP] 172.18.176.1 [Port] 55504 [Flags] 2 [Guid] 414959921 [EditorId] 414959921 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [23760]  * "[IP] 172.29.224.1 [Port] 55504 [Flags] 2 [Guid] 414959921 [EditorId] 414959921 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [23760]  * "[IP] 172.16.4.25 [Port] 55504 [Flags] 2 [Guid] 414959921 [EditorId] 414959921 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Unable to join player connection multicast group (err: 10013).
+Player connection [23760] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Starting IPC server.
+Waiting for clients to connect on \\.\pipe\Unity-LicenseClient-StephenSimmons, press Ctrl-C to exit.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons" at "2026-10-31T10:23:20.1632661Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 45716, path: "C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              76bbb35fc15143a881e9a66f8932aa98
+  Correlation Id:          cf3dc610a9a2f6457b5b62e94f316572
+  External correlation Id: 7949210881865809658
+  Machine Id:              1Bt83mJDiMleMuAMUegGTrLHPqI=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-StephenSimmons" (connect: 0.37s, validation: 0.18s, handshake: 0.06s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons-notifications" at "2026-10-31T10:23:20.4015929Z"
+[Licensing::Module] Connected to LicensingClient (PId: 45716, launch time: 0.01, total connection time: 0.61s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 20067671438473-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.69s
+[Package Manager] Connected to IPC stream "Upm-15380" after 0.5 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+Initialising UDS system complete:
+  - System type: Client
+  - Resource namespace: d141e32e2286273497e925fa359ca53a
+  - Shared memory size: 1073741824
+  - Command buffer id: 1052576
+  - Command buffer size: 8192
+  - Hashmap size: 4194304
+  - Service connected: false
+Launching Unity Data Store - C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Tools/Unity.DataStore.exe 
+Unity Data Store artifact dir = Library/DataStore, working dir = C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3Unity Data Store running and initialised
+Refreshing native plugins compatible for Editor in 5.46 ms, found 2 plugins.
+[Physics::Module] Selected backend (deferred post-plugins).
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+[EntityIdStore] init: VM path (explicit commit), pageSize=4096, blockCount=262144, entitiesPerBlock=1024, blocksPerSlotPage=0, slots reserved=4294967296 bytes
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56380
+CodeReloadManager initialized
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+Registered in 0.007044 seconds.
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:False
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.938 seconds
+Domain Reload Profiling: 1704ms
+	BeginReloadAssembly (201ms)
+		CreateAndSetChildDomain (35ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (21ms)
+	initialDomainReloadingComplete (91ms)
+	LoadAllAssembliesAndSetupDomain (447ms)
+		LoadAssemblies (162ms)
+		TypeCache.Refresh (297ms)
+			TypeCache.ScanAssembly (277ms)
+		AnalyzeDomain (1ms)
+	FinalizeReload (939ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (12ms)
+			BeforeProcessingInitializeOnLoad (135ms)
+			ProcessInitializeOnLoadAttributes (177ms)
+			ProcessInitializeOnLoadMethodAttributes (292ms)
+			EditorAssembliesLoaded (4ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 42 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ide.rider@3.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.rider@570989d4a882)
+    com.unity.ide.visualstudio@2.0.26 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.visualstudio@a99d56dec63f)
+  Built-in packages:
+    com.unity.modules.accessibility@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.physicscore2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physicscore2d)
+    com.unity.modules.screencapture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tetgen@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tetgen)
+    com.unity.modules.tilemap@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.timelinefoundation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.timelinefoundation)
+    com.unity.modules.ui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.test-framework@1.8.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.test-framework@ee3fe9477490)
+    com.unity.ext.nunit@2.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ext.nunit@0198eae3b53e)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Starting: C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s354ms
+[211/224    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.31 seconds), 1 items updated, 224 evaluated
+AssetDatabase: script compilation time: 0.867287s
+Total cache size 50613152
+Total cache size after purge 50613152, took 00:00:00.0283972
+Begin MonoManager ReloadAssembly
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.651 seconds
+Domain Reload Profiling: 1357ms
+	BeginReloadAssembly (316ms)
+		DisableScriptedObjects (41ms)
+		CreateAndSetChildDomain (60ms)
+	RebuildCommonClasses (13ms)
+	RebuildNativeTypeToScriptingClass (19ms)
+	initialDomainReloadingComplete (66ms)
+	LoadAllAssembliesAndSetupDomain (291ms)
+		LoadAssemblies (257ms)
+		TypeCache.Refresh (26ms)
+			TypeCache.ScanAssembly (19ms)
+		AnalyzeDomain (9ms)
+			BuildScriptInfoCaches (8ms)
+	FinalizeReload (653ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (11ms)
+			BeforeProcessingInitializeOnLoad (120ms)
+			ProcessInitializeOnLoadAttributes (183ms)
+			ProcessInitializeOnLoadMethodAttributes (53ms)
+			AfterProcessingInitializeOnLoad (13ms)
+		AwakeInstancesAfterBackupRestoration (32ms)
+Starting new worker id: 0 with log in C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Logs/AssetImportWorkerHW0.log
+
+Asset Pipeline Refresh (id=4dbf36420f803d0449df1e7b3d9d111f): Total: 2.599 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=905 ms
+		Asset DB Callback time: managed=21 ms, native=18 ms
+		Scripting: domain reloads=1, domain reload time=761 ms, compile time=871 ms, other=20 ms
+		Project Asset Count: scripts=184, non-scripts=69
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 21.924ms
+	ApplyChangesToAssetFolders: 1.392ms
+	Scan: 48.036ms
+	Collect global state as custom dependencies: 16.374ms
+	CategorizeScriptCompilationAssets: 6.641ms
+	ProcessAssetsWithTransientArtifactChanges: 9.926ms
+	CategorizeAssets: 2.175ms
+	CompileScripts: 871.049ms
+	ImportOutOfDateAssets: 670.196ms (654.189ms without children)
+		UnloadImportedAssets: 1.474ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.056ms
+		ImportSchedulerStart: 14.473ms
+	PostProcessAllAssets: 21.447ms
+		MonoPostProcessAllAssets: 21.380ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 10.070ms
+			EditModeScopePostprocessor.OnPostprocessAllAssets 1.301ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.809ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.276ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.212ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.171ms
+			SyncVS.PostprocessSyncProject 0.111ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.093ms
+	UnloadStreamsBegin: 3.621ms
+	Untracked: 891.371ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 3.561ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-UBlade3
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 634 unused Assets / (0.6 MB). Loaded Objects now: 1357.
+Memory consumption went from 229.6 MB to 229.0 MB.
+Total: 5.904300 ms (FindLiveObjects: 0.264900 ms CreateObjectMapping: 0.031500 ms MarkObjects: 5.099400 ms  DeleteObjects: 0.349400 ms)
+
+UBLADE3_PLANVM_OK plans=32 instructions=9420 opcodes=16 unknowns=0 digest=141a750a3de1e083
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3Checks:RunAll () (at Assets/Editor/UBlade3Checks.cs:16)
+
+(Filename: Assets/Editor/UBlade3Checks.cs Line: 16)
+
+UBLADE3_DATA_OK teams=14 dromes=14 digest=0135846dd22b3e3d
+UBLADE3_DATA_DETAIL data=D:\Games\HyperBlade\HYB\data
+UBLADE3_DATA_COUNTS teams=14 dromes=14 teamObjects=140 dromeObjects=464 plans=32 models=26 modelsLibrary=173 animates=97 sounds=363 soundsDeclared=363 info=96 jumbo=17 anims=5x7 keyRows=40 modelRefs=552 planRefs=836
+UBLADE3_DATA_DIGEST teams=b366aac704a622b1 dromes=f4c2a1cf6b62c04e catalogs=d378eb6feaa44140 configs=e3d48b9086cc56b5 total=0135846dd22b3e3d
+UBLADE3_DATA_WARNINGS 0
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3Checks:RunAll () (at Assets/Editor/UBlade3Checks.cs:20)
+
+(Filename: Assets/Editor/UBlade3Checks.cs Line: 20)
+
+sim slice: 209/209 checks passed; arena 105/187.5/105 fric 0.01 elas 0.95; fov 85 bungee 12; tick 30 Hz
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3Checks:RunAll () (at Assets/Editor/UBlade3Checks.cs:32)
+
+(Filename: Assets/Editor/UBlade3Checks.cs Line: 32)
+
+UBLADE3_CHECKS_OK
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3Checks:RunAll () (at Assets/Editor/UBlade3Checks.cs:47)
+
+(Filename: Assets/Editor/UBlade3Checks.cs Line: 47)
+
+MonoPathRemapper: Attempts to remap: 2386; Successful remaps: 0
+Serialized file version minimum: 23, current 23
+Worker ready: AssetImportWorkerHW0 0
+Killing ADB server in 2.0862775 seconds.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons channel disconnected successfully.
+Shut down.
+Lingering sessions upon destruction of worker manager
+Shut down UDS service system complete
+Unity Data Store service was successfully shut down
+UDS shutting down local client system
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+abort_threads: Failed aborting id: 0000000000009814, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000062E8, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000009814, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000062E8, mono_thread_manage will ignore it
+
+debugger-agent: Unable to listen on 3480
+VBCSCompilerPreWarmer: requested VBCSCompiler shutdown
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1793442209497,"processId":15380,"allocatedMemory":11105697,"memoryLabels":[{"Default":176401},{"Permanent":15516},{"NewDelete":68623},{"Thread":4198064},{"Manager":35357},{"VertexData":8},{"Geometry":824},{"Texture":24},{"Shader":842829},{"Material":132},{"GfxDevice":55968},{"Animation":952},{"Audio":1272},{"FreeType":8},{"FontEngine":736},{"Physics":1970},{"Physics2D":16},{"Serialization":16704},{"Input":42840},{"JobScheduler":256},{"TextLib":280},{"Mono":48},{"ScriptingNativeRuntime":1225616},{"BaseObject":48848},{"Resource":1444},{"Renderer":2504},{"Transform":4781},{"File":4416},{"WebCam":616},{"Culling":32},{"Terrain":11442},{"Wind":24},{"STL":40},{"String":573854},{"StaticString":3808},{"Utility":2675350},{"Curl":2559},{"PoolAlloc":2168},{"AI":80},{"TypeTree":20997},{"ScriptManager":12656},{"CodeReload":448},{"RuntimeInitializeOnLoadManager":64},{"Sprites":102},{"SpriteAtlas":120},{"GI":7816},{"Director":8296},{"CloudService":7296},{"WebRequest":8445},{"VR":49650},{"SceneManager":608},{"Video":64},{"LazyScriptCache":32},{"Camera":729},{"Secure":2377},{"SerializationCache":9256},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":592},{"Hierarchy":1188},{"UIElements":40},{"CoreStats":14456},{"Identifiers":7152},{"EntityIdStore":33088},{"Gui":128},{"EditorUtility":93994},{"VersionControl":8},{"Undo":931},{"AssetDatabase":403409},{"AssetImporter":40},{"EditorGi":328},{"UnityConnect":40441},{"Upm":1912},{"UpmDiagnostics":8},{"AssetCompliance":96},{"DrivenProperties":72},{"LocalIPC":220},{"ProfilerEditor":9746},{"CoreBusinessMetrics":3626},{"Windowing":456},{"Licensing":1264},{"AssetReference":32},{"IPCStream":32}]}
+~StackAllocator(ALLOC_TEMP_MAIN) m_LastAlloc not NULL. Did you forget to call FreeAllStackAllocations()? To get more information, run app with -diag-temp-memory-leak-validation cmd line argument

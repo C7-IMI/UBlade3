@@ -82,6 +82,7 @@ namespace UBlade3.Native
         public Art HomeLogo;
         public Art AwayLogo;
         public Art SpeedFrame;
+        public Art SpeedStrip;
         public Art RadarFrame;
         public Art ShotFrame;
         public Art MessageFrame;
@@ -148,6 +149,7 @@ namespace UBlade3.Native
             HomeLogo = Load(world, world.Home.File.IdLogo);
             AwayLogo = Load(world, world.Away.File.IdLogo);
             SpeedFrame = Load(world, "frspeed");
+            SpeedStrip = Load(world, "speed01");
             RadarFrame = Load(world, "frradar");
             ShotFrame = Load(world, "frshot");
             MessageFrame = Load(world, "frmsg");
@@ -351,6 +353,29 @@ namespace UBlade3.Native
             Text(layer, lw, lh, layout.Clock.x, layout.Clock.y, model.ClockText, MatchHudFont.Large, White);
 
             // DrawScene: speed frame, logos/frames, damage bars, message, radar, head camera.
+            // Speed meter: CDDSurfaceOwner::Draw (0x0044f9b0) blits the first
+            // nUnitWidth * nFrame columns of the speed01 sprite; SetStrip(width, 1, 0, 0), so the
+            // fraction is the followed player's SpeedRatio. The frame art is drawn over it.
+            float speedRatio = hud.HudSpeedRatioOverride;
+
+            if (speedRatio < 0f && sim.ViewedSlot >= 0 && sim.ViewedSlot < sim.Players.Length)
+            {
+                speedRatio = sim.Players[sim.ViewedSlot].Stats.SpeedRatio;
+            }
+
+            speedRatio = Mathf.Clamp01(speedRatio);
+
+            if (SpeedStrip != null && speedRatio > 0f)
+            {
+                int speedWidth = Mathf.RoundToInt(SpeedStrip.Width * speedRatio);
+
+                if (speedWidth > 0)
+                {
+                    BlitClipped(layer, lw, lh, SpeedStrip, layout.SpeedFrame.x, layout.SpeedFrame.y,
+                        speedWidth, SpeedStrip.Height);
+                }
+            }
+
             Blit(layer, lw, lh, SpeedFrame, layout.SpeedFrame.x, layout.SpeedFrame.y);
             Blit(layer, lw, lh, HomeLogo, layout.TeamALogo.x, layout.TeamALogo.y);
             Blit(layer, lw, lh, TeamA, layout.TeamAFrame.x, layout.TeamAFrame.y);
@@ -442,11 +467,12 @@ namespace UBlade3.Native
         {
             int slotA = home ? 0 : 1;
             int slotB = home ? 2 : 3;
-            int[] slots = { slotA, slotB };
+            int goalie = home ? ObjectConstants.GoalieSlotA : ObjectConstants.GoalieSlotB;
+            int[] slots = { slotA, slotB, goalie };
             string code = TeamCode(team);
-            string[] labels = { "1. " + code + " F1", "2. " + code + " F2" };
+            string[] labels = { "1. " + code + " F1", "2. " + code + " F2", "G. " + code + " G" };
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3 && i < rows.Length; i++)
             {
                 Text(layer, lw, lh, rows[i].x, rows[i].y, labels[i], MatchHudFont.Timer, Green);
 
@@ -457,8 +483,9 @@ namespace UBlade3.Native
                     damage <= 0f ? Black : White);
             }
 
-            // Rows three and four are the two reserve seats in the original; this slice has no bench
-            // roster in the simulation, so those rows stay blank (documented gap).
+            // Row four remains the second reserve seat in the original; the simulation has no bench
+            // roster, so it stays blank (documented gap). Row three uses the actual goalie data that
+            // does exist, labelled G. TEAM G.
         }
 
         private static string TeamCode(string team)
@@ -940,6 +967,7 @@ namespace UBlade3.Native
             Append(text, HomeLogo);
             Append(text, AwayLogo);
             Append(text, SpeedFrame);
+            Append(text, SpeedStrip);
             Append(text, RadarFrame);
             Append(text, ShotFrame);
             Append(text, MessageFrame);

@@ -34,6 +34,15 @@ namespace UBlade3.PlanVM
             table.Add(PlanOpcodes.ActionIds.ReallySendMsg, ReallySendMsg);
             table.Add(PlanOpcodes.ActionIds.SetKnockedDownState, SetKnockedDownState);
 
+            // N12: observed action bodies reached by the default Defense/CarryRok/Goalie plans.
+            table.Add(PlanOpcodes.ActionIds.SetSpeedBurst, PlanAiMatchActions.SetSpeedBurst);
+            table.Add(PlanOpcodes.ActionIds.PlaySound, PlanAiMatchActions.PlaySound);
+            table.Add(PlanOpcodes.ActionIds.IncrementStat, PlanAiMatchActions.IncrementStat);
+            table.Add(PlanOpcodes.ActionIds.SetLocation, PlanAiMatchActions.SetLocation);
+            table.Add(PlanOpcodes.ActionIds.SetFriction, PlanAiMatchActions.SetFriction);
+            table.Add(PlanOpcodes.ActionIds.SetAnimation, PlanAiMatchActions.SetAnimation);
+            table.Add(PlanOpcodes.ActionIds.ScaleBubToRating, PlanAiMatchActions.ScaleBubToRating);
+
             return table;
         }
 

@@ -2857,5 +2857,212 @@ namespace UBlade3.EditorTools
             }
         }
 
+        // --- N13: native C# preview 006 (default audio + original HUD) -------------------
+
+        public static string Preview006PlayerPath()
+        {
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            return Path.GetFullPath(Path.Combine(projectRoot, "build", "preview-006",
+                "UBlade3NativePreview006.exe"));
+        }
+
+        public static void BuildPreview006()
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string path = BuildPlayer(Preview006PlayerPath());
+                Debug.Log("UBLADE3_NATIVE_PREVIEW_006_BUILD_OK output=" + path
+                          + " defaultAudio=interactive defaultHud=original");
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_PREVIEW_006_BUILD_FAILED " + exception);
+                Debug.LogException(exception);
+                exitCode = 1;
+            }
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
+
+        // --- N12: observed plan-handler coverage ------------------------------------------------
+
+        public static readonly int[] N12ActionIds = { 6, 7, 9, 18, 29, 30, 71 };
+
+        public static readonly int[] N12DecisionIds = { 6, 23, 68 };
+
+        public static void CheckN12()
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN12Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N12_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N12_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N12_CHECK_FAILED mismatches=" + mismatches);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN12Check()
+        {
+            int mismatches = 0;
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N12_CHECK_FAILED no default PlanVM AI");
+                return 1;
+            }
+
+            MatchPlayN11Script.Stage(play.Control);
+
+            int[] actionTotals = new int[N12ActionIds.Length];
+            int[] decisionTotals = new int[N12DecisionIds.Length];
+            int[] effectTotals = new int[8];
+            int ticks = 0;
+
+            for (int guard = 0; guard < MatchPlayN11Script.MaxTicks && ticks < 140; guard++)
+            {
+                play.Control.Advance(HeldBinding.None, held =>
+                {
+                    play.Scene.TickScene(held);
+                    MatchPlayN11Script.HoldStaged(play.Control.Sim);
+                });
+                ticks = play.Control.Ticks;
+            }
+
+            MatchPlanAiRoster roster = play.Control.PlanRoster;
+
+            for (int slotIndex = 0; slotIndex < roster.PlanSlots.Count; slotIndex++)
+            {
+                MatchPlanAi adapter = roster.Adapter(roster.PlanSlots[slotIndex]);
+
+                if (adapter == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < N12ActionIds.Length; i++)
+                {
+                    int count;
+
+                    if (adapter.PlanActionCounts.TryGetValue(N12ActionIds[i], out count))
+                    {
+                        actionTotals[i] += count;
+                    }
+                }
+
+                for (int i = 0; i < N12DecisionIds.Length; i++)
+                {
+                    int count;
+
+                    if (adapter.PlanDecisionCounts.TryGetValue(N12DecisionIds[i], out count))
+                    {
+                        decisionTotals[i] += count;
+                    }
+                }
+
+                effectTotals[0] += adapter.PlanActionFrictionApplications;
+                effectTotals[1] += adapter.PlanActionLocationApplications;
+                effectTotals[2] += adapter.PlanActionAnimationEvents;
+                effectTotals[3] += adapter.PlanActionSoundEvents;
+                effectTotals[4] += adapter.PlanActionStatEvents;
+                effectTotals[5] += adapter.PlanActionBubbleEvents;
+                effectTotals[6] += adapter.PlanActionSpeedBurstEvents;
+                effectTotals[7] += adapter.UnsupportedDecisionErrors;
+            }
+
+            string actionText = JoinIdsWithCounts(N12ActionIds, actionTotals);
+            string decisionText = JoinIdsWithCounts(N12DecisionIds, decisionTotals);
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N12_RESULT defaultPlanAi=True targetPhysics="
+                      + (roster.TargetPhysicsEnabled ? "True" : "False")
+                      + " ticks=" + ticks
+                      + " aiPickups=" + play.Control.AiPickups
+                      + " aiPasses=" + play.Control.AiPasses
+                      + " actions=[" + actionText + "]"
+                      + " decisions=[" + decisionText + "]"
+                      + " effects=[friction=" + effectTotals[0] + ",location=" + effectTotals[1]
+                      + ",animation=" + effectTotals[2] + ",sound=" + effectTotals[3]
+                      + ",stat=" + effectTotals[4] + ",bubble=" + effectTotals[5]
+                      + ",speedBurst=" + effectTotals[6] + ",unsupportedDecisionErrors=" + effectTotals[7] + "]"
+                      + " planIds=[" + roster.PlanIds() + "]"
+                      + " digest=" + roster.DigestHex());
+            Debug.Log(roster.Describe());
+            Debug.Log(roster.DescribeSlots());
+
+            for (int i = 0; i < N12ActionIds.Length; i++)
+            {
+                if (actionTotals[i] < 1)
+                {
+                    mismatches++;
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N12_MISMATCH action id=" + N12ActionIds[i] + " never executed");
+                }
+            }
+
+            for (int i = 0; i < N12DecisionIds.Length; i++)
+            {
+                if (decisionTotals[i] < 1)
+                {
+                    mismatches++;
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N12_MISMATCH decision id=" + N12DecisionIds[i] + " never executed");
+                }
+            }
+
+            for (int i = 0; i < N12ActionIds.Length; i++)
+            {
+                if (actionTotals[i] < 1 && effectTotals[0] + effectTotals[1] + effectTotals[2] + effectTotals[3]
+                    + effectTotals[4] + effectTotals[5] + effectTotals[6] < 1)
+                {
+                    mismatches++;
+                }
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N12_COUNTS ticks=" + ticks
+                      + " actions=" + actionText
+                      + " decisions=" + decisionText
+                      + " frictionApplied=" + effectTotals[0]
+                      + " locationApplied=" + effectTotals[1]
+                      + " animationEvents=" + effectTotals[2]
+                      + " soundEvents=" + effectTotals[3]
+                      + " statEvents=" + effectTotals[4]
+                      + " bubbleEvents=" + effectTotals[5]
+                      + " speedBurstEvents=" + effectTotals[6]
+                      + " unsupportedDecisionErrors=" + effectTotals[7]
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
+        }
+
+        private static string JoinIdsWithCounts(int[] ids, int[] counts)
+        {
+            string[] parts = new string[ids.Length];
+
+            for (int index = 0; index < ids.Length; index++)
+            {
+                parts[index] = ids[index] + "x" + counts[index];
+            }
+
+            return string.Join(",", parts);
+        }
+
     }
 }

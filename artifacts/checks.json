@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T10:10:57.721Z",
+  "generatedAt": "2026-10-31T10:29:06.408Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -461,18 +461,41 @@
         "probe shot-power/headcam pinned"
       ],
       "doc": "docs/NATIVE-HUD.md"
+    },
+    "planHandlers": {
+      "status": "N12 observed PlanVM handler coverage expanded",
+      "actions": "6,7,9,18,29,30,71",
+      "decisions": "6,23,68",
+      "effects": "friction=7,animation=7,sound=1,stat=1,bubble=2,speedBurst=6",
+      "match": "defaultPlanAi=True tick=140 aiPickups=1 aiPasses=1 digest=333565d513ad20e0",
+      "doc": "docs/PLAN-HANDLERS.md",
+      "gaps": [
+        "marker/pronoun SetLocation unresolved",
+        "animation/sound/stats/bubble bodies record only",
+        "decisions 51/71/120, agenda 8/15, behaviour params remain"
+      ]
+    },
+    "audioMatch": {
+      "status": "N13 default interactive audio verified",
+      "service": "ready=True channels=8 48000Hz stereo",
+      "requested": 8,
+      "played": 9,
+      "failed": 0,
+      "routes": "pickup Sxrctha3, shot Sxthrwc4, pass Sxthrwc5, impact group0, goal/crowd/menu/ambient",
+      "hud": "speed01 live meter, goalie row G, score/clock/period verified, 1080p/4K captures",
+      "doc": "docs/NATIVE-AUDIO-MATCH.md"
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.005-csharp-preview",
-    "status": "native C# playable preview with original HUD packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.005-csharp-preview-win64.zip",
-    "bytes": 38979264,
-    "sha256": "67bd36825ad27955bbd2098a9a48d996966ea6376df5458b9917610e25046cb3",
+    "version": "2026.10.31.006-csharp-preview",
+    "status": "native C# playable preview with default audio/HUD/handlers packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.006-csharp-preview-win64.zip",
+    "bytes": 38986577,
+    "sha256": "f95902eef1773f3c13c7233f396a975dbfa1554100b3f2ef0233d175f4cc474b",
     "externalProcess": false,
     "preview": true,
-    "defaultDisplay": "1280x720 windowed",
-    "verification": "extracted ZIP launched --play-autostart; original HUD font/orientation present; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
+    "audioDefault": true,
+    "verification": "extracted ZIP launched --play-autostart; audio ready=True, original HUD font/art, UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

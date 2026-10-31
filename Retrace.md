@@ -193,3 +193,13 @@ Prompt and decision log for UBlade3.
 - Boundary: roster/bench, dynamic meters/headcam inset/radar frame art remain; preview. Goal active.
 - Version: 2026.10.31.018
 
+## 18 - 2026-10-31
+
+- Request: continue PlanVM/AI and native C# audio/UI.
+- Work: implemented observed plan handlers (actions 6/7/9/18/29/30/71, decisions 6/23/68); default
+  interactive original-wave audio with event routing; live speed meter/goalie row; preview 006.
+- Evidence: N12_CHECK_OK digest=333565d513ad20e0; audio ready=True requested=8 played=9 failed=0;
+  1080p/4K HUD captures; regressions green; release 006 38986577 bytes hash f95902ee...
+- Boundary: remaining handlers/agenda/behparams; recorded-only effects; preview. Goal active.
+- Version: 2026.10.31.019
+
