@@ -45,6 +45,11 @@ original data formats. **Current verified milestone:**
   rules with a deterministic 2-1 suite, original assets8 HUD art (interim font) and seven Editor/player captures
   in `artifacts/native-gameplay-*.png`; player build 103,955,156 bytes with frame parity. PlanVM/AI, full shot
   physics and HUD details remain gaps. See [docs/NATIVE-GAMEPLAY.md](./docs/NATIVE-GAMEPLAY.md).
+- C# audio data/player: 295 original WAV files / 363 catalog entries, 9 cited roles, 8-channel AudioService behind
+  an opt-in hook; probe digest `1a8d0a92b89a6019`. See [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
+- C# PlanVM AI slice: CARRYROK TurnToMate>PassingPlay with actions 5/93/103, decisions 15/50/78/111, timers,
+  message/agenda glue; `UBLADE3_PLAN_AI_OK ... digest=73073ff095cd4e00`, 40/40 self-checks. One flow only; not
+  match AI. See [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -55,6 +60,9 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - Native engine plan: [docs/NATIVE-ENGINE-PLAN.md](./docs/NATIVE-ENGINE-PLAN.md).
 - C# Plan VM: [docs/PLAN-VM.md](./docs/PLAN-VM.md).
 - C# drome preview: [docs/DROME-PREVIEW.md](./docs/DROME-PREVIEW.md).
+- C# native gameplay: [docs/NATIVE-GAMEPLAY.md](./docs/NATIVE-GAMEPLAY.md).
+- C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
+- C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).
 
 ## Requirements

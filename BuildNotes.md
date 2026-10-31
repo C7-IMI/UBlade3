@@ -4,6 +4,27 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.010
+
+**Original audio data path and first PlanVM-driven AI flow.**
+
+- Date: 2026-10-31
+- Change: added `UBlade3.Audio` with a dependency-free RIFF/WAVE PCM reader, original
+  `SNDFILES.LST` sound catalog, nine cited gameplay roles, an 8-channel Unity AudioService behind
+  the opt-in `--ublade3-audio` hook, and AudioProbe. Added the PlanVM AI slice for
+  CARRYROK behavior 5->7->9 (TurnToMate/PassingPlay), with action ids 5/93/103, decision ids
+  15/50/78/111, timer agenda, real message/agenda glue and explicit unsupported telemetry.
+- Verified audio: `UBLADE3_AUDIO_OK files=295 entries=363 durationMs=875224 digest=1a8d0a92b89a6019`,
+  mismatches=0; 23/23 parser checks; Unity compile green.
+- Verified AI: `UBLADE3_PLAN_AI_OK plan=CARRYROK behavior=TurnToMate>PassingPlay messages=10
+  actions=5 decisions=7 timers=4 unknowns=0 unsupported=7 digest=73073ff095cd4e00`, 40/40
+  self-checks, prior PlanVM 32/32/123 checks regression green.
+- Boundary: audio is opt-in and not match-driven; 87 listed waves are absent on this install;
+  AdLib/CD music and mixer parity are out of scope. The AI slice is one behavior flow against a
+  mock world, not match AI; 132 action and 135 decision bodies remain. Native exact release
+  remains 2026.10.31.002.
+- Docs: docs/NATIVE-AUDIO.md, docs/PLAN-AI.md.
+
 ## 2026.10.31.009
 
 **C# native gameplay: original rok, goal rules, score and HUD, verified.**

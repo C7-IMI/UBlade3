@@ -95,3 +95,15 @@ Prompt and decision log for UBlade3.
 - Boundary: planVM/AI fallback, goal fixture, interim HUD/font/layout; not release path. Goal active.
 - Version: 2026.10.31.009
 
+## 9 - 2026-10-31
+
+- Request: continue the pure-C# engine with audio and AI.
+- Work: UBlade3.Audio WAV/catalog/roles/service/probe; PlanVM AI slice for CARRYROK
+  TurnToMate>PassingPlay with actions/decisions/timers and unsupported telemetry.
+- Evidence: UBLADE3_AUDIO_OK files=295 durationMs=875224 digest=1a8d0a92b89a6019 mismatches=0;
+  UBLADE3_PLAN_AI_OK messages=10 actions=5 decisions=7 timers=4 digest=73073ff095cd4e00
+  40/40; prior PlanVM checks green.
+- Boundary: audio opt-in/not match-driven; AI slice is one mock-world flow; not release path.
+  Goal active.
+- Version: 2026.10.31.010
+

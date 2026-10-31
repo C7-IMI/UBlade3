@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T07:43:21.896Z",
+  "generatedAt": "2026-10-31T07:59:41.238Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -193,6 +193,46 @@
         "not release path"
       ],
       "doc": "docs/NATIVE-GAMEPLAY.md"
+    },
+    "audio": {
+      "status": "N6 original audio data/player milestone verified",
+      "files": 295,
+      "entries": 363,
+      "resolvedEntries": 276,
+      "missingEntries": 87,
+      "durationMs": 875224,
+      "dataBytes": 35442651,
+      "digest": "1a8d0a92b89a6019",
+      "formats": "11025/8/1=6 22050/8/1=157 22050/8/2=49 22050/16/1=59 22050/16/2=23 44100/16/1=1",
+      "roles": 9,
+      "mismatches": 0,
+      "doc": "docs/NATIVE-AUDIO.md",
+      "gaps": [
+        "opt-in hook not match-driven",
+        "87 listed waves absent on install",
+        "AdLib/CD music out of scope",
+        "DirectSound mixer parity not reproduced"
+      ]
+    },
+    "planAi": {
+      "status": "N5.5 PlanVM AI slice verified",
+      "plan": "CARRYROK TurnToMate>PassingPlay",
+      "messages": 10,
+      "actions": 5,
+      "decisions": 7,
+      "timers": 4,
+      "unknowns": 0,
+      "unsupported": 7,
+      "digest": "73073ff095cd4e00",
+      "selfTest": "40/40",
+      "planDigest": "46c109accf61ea5b",
+      "doc": "docs/PLAN-AI.md",
+      "gaps": [
+        "only one behavior flow",
+        "132 action/135 decision bodies remain",
+        "mock match world",
+        "not wired into native match"
+      ]
     }
   }
 }
