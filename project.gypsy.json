@@ -1,0 +1,78 @@
+{
+  "schema": "gypsy.project/v1",
+  "name": "UBlade3",
+  "engine": {
+    "id": "unity",
+    "version": "6000.6.7f1",
+    "adapter": "unity-6"
+  },
+  "targets": [
+    "pc"
+  ],
+  "paths": {
+    "game": "unity/UBlade3",
+    "artifacts": "artifacts"
+  },
+  "created": "2026-10-30T23:01:24-05:00",
+  "hardware": {
+    "os": "Windows",
+    "arch": "AMD64",
+    "ram_gb": 63.7,
+    "gpu": {
+      "name": "NVIDIA T600 Laptop GPU",
+      "vram_gb": 4,
+      "driver": "597.30"
+    },
+    "disks": {
+      "C": {
+        "free_gb": 159.7,
+        "total_gb": 928.6
+      },
+      "D": {
+        "free_gb": 79.5,
+        "total_gb": 3815.3
+      }
+    }
+  },
+  "hardwareGate": {
+    "ok": true,
+    "reasons": [],
+    "requirements": {
+      "min_vram_gb": 2,
+      "min_free_gb": 10,
+      "disk": "C"
+    }
+  },
+  "decisions": [
+    {
+      "date": "2026-10-30T23:01:24-05:00",
+      "decision": "engine unity 6000.6.7f1 (unity-6)",
+      "reason": "operator selected the engine when creating the project"
+    },
+    {
+      "date": "2026-10-30T23:10:00-05:00",
+      "decision": "Use Gypsy's updated P1 surfaces (cache, parallel slices, quality gates, asset registry/graph, provenance/SBOM, metrics, traces) and ship the exact 20XX runtime as the playable backend while the C# renderer/plan-VM port continues",
+      "reason": "Operator requested updated Gypsy capabilities, all phases/milestones and a fully playable UBlade3. The 20XX runtime is the exact modernised HyperBlade engine from the same decompilation source; the Unity host stages it beside the user's original data."
+    }
+  ],
+  "peers": [
+    {
+      "id": "ProjectGypsy",
+      "path": "../ProjectGypsy",
+      "role": "reference",
+      "readOnly": true
+    },
+    {
+      "id": "hyperblade-decomp",
+      "path": "third_party/hyperblade-decomp",
+      "role": "source",
+      "readOnly": true
+    },
+    {
+      "id": "hyperblade-20XX",
+      "path": "third_party/hyperblade-20XX",
+      "role": "reference",
+      "readOnly": true
+    }
+  ]
+}

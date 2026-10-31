@@ -1,0 +1,39 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "engine.unity.ublade3.capture",
+  "layer": "engine",
+  "engine": "unity",
+  "kind": "capture",
+  "maturity": "stable",
+  "description": "Windowed 1280x720 capture of the UBlade3 Port Lab and exact runtime, checked for existence/size.",
+  "requires": [
+    "unity.windows.standalone"
+  ],
+  "inputs": [
+    {
+      "name": "build",
+      "type": "directory"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "frame",
+      "type": "image"
+    }
+  ],
+  "checks": [
+    "player exits",
+    "capture marker present",
+    "PNG exists"
+  ],
+  "provenance": {
+    "record": [
+      "frameHash",
+      "width",
+      "height"
+    ]
+  },
+  "notes": [
+    "scripts/ublade3_unity.ps1 -Mode capture and scripts/ublade3_exact_play.ps1."
+  ]
+}

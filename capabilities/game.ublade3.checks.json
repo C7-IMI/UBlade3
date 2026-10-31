@@ -1,0 +1,47 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "game.ublade3.checks",
+  "layer": "game",
+  "engine": "unity",
+  "kind": "validation",
+  "maturity": "stable",
+  "description": "Exact original-data probe and exact simulation-core self-check in Unity batchmode against a user-supplied HyperBlade install.",
+  "requires": [
+    "hyperblade.original-data"
+  ],
+  "inputs": [
+    {
+      "name": "gameDataRoot",
+      "type": "path"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "log",
+      "type": "file"
+    },
+    {
+      "name": "dataDigest",
+      "type": "string"
+    },
+    {
+      "name": "simChecks",
+      "type": "integer"
+    }
+  ],
+  "checks": [
+    "UBLADE3_DATA_OK teams=14 dromes=14",
+    "sim slice self-check passes",
+    "UBLADE3_CHECKS_OK"
+  ],
+  "provenance": {
+    "record": [
+      "dataDigest",
+      "simChecks",
+      "logHash"
+    ]
+  },
+  "notes": [
+    "DataProbe + SimSelfCheck via UBlade3.EditorTools.UBlade3Checks.RunAll."
+  ]
+}

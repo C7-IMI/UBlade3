@@ -26,10 +26,11 @@ and the oracle for behaviour/data checks.
 
 | Milestone | Description | Acceptance |
 | --- | --- | --- |
-| U3-M0 | Repository, pinned Unity project, legal/reference structure | Unity project opens and compiles |
-| U3-M1 | Original data model/importer | all 14 teams and 14 dromes parse with source line references |
-| U3-M2 | Exact sim core slice | arena/camera/input/tick parity notes; playable bootstrap |
-| U3-M3 | Physics + rules port | goals, multiplier, periods, collisions match decomp |
+| U3-M0 | Repository, pinned Unity project, legal/reference structure | Unity project opens and compiles - **DONE** |
+| U3-M1 | Original data model/importer | all 14 teams and 14 dromes parse with source line references - **DONE (0 warnings)** |
+| U3-M2 | Exact sim core slice | arena/camera/input/tick parity notes; playable bootstrap - **CORE DONE (209/209 checks); full C# frame/rule port remains** |
+| U3-MP | Fully playable exact runtime | exact game launches from the Unity host, release verified - **DONE via bundled LGPL-3.0 20XX engine** |
+| U3-M3 | C# physics + rules port | goals, multiplier, periods, collisions match decomp |
 | U3-M4 | AI and original assets | full match runs with original models/textures/audio |
 | U3-M5 | Complete port | port ledger shows every decomp function mapped/tested |
 

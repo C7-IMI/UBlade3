@@ -1,0 +1,37 @@
+{
+  "schema": "gypsy.slice/v1",
+  "id": "ublade3.playable",
+  "project": ".",
+  "description": "UBlade3: exact data/sim checks, Unity host build, Port Lab capture, exact runtime launch, repository checks.",
+  "artifacts": [
+    "artifacts/ublade3/checks.log",
+    "unity/UBlade3/build/UBlade3.exe",
+    "artifacts/port-lab.png",
+    "artifacts/ublade3/exact-play.png",
+    "dist/UBlade3-2026.10.31.001-win64.zip",
+    "artifacts/ublade3-release.json"
+  ],
+  "steps": [
+    {
+      "id": "toolpack",
+      "kind": "toolpack",
+      "needs": [],
+      "required": true,
+      "timeout": 2400,
+      "args": {
+        "toolpack": "ublade3.unity",
+        "path": "toolpacks/ublade3.unity.json"
+      }
+    },
+    {
+      "id": "checks",
+      "kind": "check_all",
+      "needs": [
+        "toolpack"
+      ],
+      "required": true,
+      "timeout": 180,
+      "args": {}
+    }
+  ]
+}

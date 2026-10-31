@@ -1,0 +1,156 @@
+{
+  "schema": "gypsy.sbom/v1",
+  "kind": "sbom",
+  "root": "C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3",
+  "components": [
+    {
+      "bomRef": "engine:unity:6000.6.7f1",
+      "type": "engine",
+      "name": "unity",
+      "version": "6000.6.7f1",
+      "sources": [
+        "project.gypsy.json"
+      ],
+      "properties": {
+        "adapter": "unity-6",
+        "manifestSha256": "1b55277408f1df3b0ea926a2001d941fbc64167b233b2d9911ec21af05579ede"
+      }
+    },
+    {
+      "bomRef": "project:UBlade3",
+      "type": "project",
+      "name": "UBlade3",
+      "version": null,
+      "sources": [
+        "project.gypsy.json"
+      ],
+      "properties": {
+        "schema": "gypsy.project/v1",
+        "manifestSha256": "1b55277408f1df3b0ea926a2001d941fbc64167b233b2d9911ec21af05579ede",
+        "targets": [
+          "pc"
+        ],
+        "engine": {
+          "id": "unity",
+          "version": "6000.6.7f1",
+          "adapter": "unity-6"
+        }
+      }
+    },
+    {
+      "bomRef": "target:pc",
+      "type": "target",
+      "name": "pc",
+      "version": null,
+      "sources": [
+        "project.gypsy.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "tool:HyperBlade 20XX exact runtime (LGPL-3.0)",
+      "type": "tool",
+      "name": "HyperBlade 20XX exact runtime (LGPL-3.0)",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "tool:Original HyperBlade data (user supplied)",
+      "type": "tool",
+      "name": "Original HyperBlade data (user supplied)",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "tool:Unity 6000.6.7f1",
+      "type": "tool",
+      "name": "Unity 6000.6.7f1",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "tool:Windows Standalone Build Support",
+      "type": "tool",
+      "name": "Windows Standalone Build Support",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "toolpack:ublade3.unity",
+      "type": "toolpack",
+      "name": "ublade3.unity",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {
+        "schema": "gypsy.toolpack/v1",
+        "manifestSha256": "6588c6ddc09b550ab0da8502b218e352f046ac94e2873151b2320b1647094c6f",
+        "actions": [
+          "build",
+          "capture",
+          "checks",
+          "exact-play",
+          "release"
+        ],
+        "license": "UBlade3 C# code and ported decompilation: LGPL-3.0. Original game data is proprietary and never committed. The bundled 20XX runtime is LGPL-3.0."
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "project:UBlade3",
+      "type": "targets",
+      "to": "target:pc"
+    },
+    {
+      "from": "project:UBlade3",
+      "type": "uses",
+      "to": "engine:unity:6000.6.7f1"
+    },
+    {
+      "from": "toolpack:ublade3.unity",
+      "type": "uses",
+      "to": "tool:HyperBlade 20XX exact runtime (LGPL-3.0)"
+    },
+    {
+      "from": "toolpack:ublade3.unity",
+      "type": "uses",
+      "to": "tool:Original HyperBlade data (user supplied)"
+    },
+    {
+      "from": "toolpack:ublade3.unity",
+      "type": "uses",
+      "to": "tool:Unity 6000.6.7f1"
+    },
+    {
+      "from": "toolpack:ublade3.unity",
+      "type": "uses",
+      "to": "tool:Windows Standalone Build Support"
+    }
+  ],
+  "counts": {
+    "components": 8,
+    "relationships": 6,
+    "byType": {
+      "engine": 1,
+      "project": 1,
+      "target": 1,
+      "tool": 4,
+      "toolpack": 1
+    }
+  },
+  "problems": []
+}

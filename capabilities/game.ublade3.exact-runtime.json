@@ -1,0 +1,45 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "game.ublade3.exact-runtime",
+  "layer": "game",
+  "engine": "unity",
+  "kind": "runtime",
+  "maturity": "stable",
+  "description": "Fully playable exact HyperBlade through the bundled LGPL-3.0 20XX runtime, staged from the user's original game data and launched by the Unity host.",
+  "requires": [
+    "hyperblade.original-data",
+    "hyperblade.20xx.runtime"
+  ],
+  "inputs": [
+    {
+      "name": "gameDataRoot",
+      "type": "path"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "gameWindow",
+      "type": "window"
+    },
+    {
+      "name": "capture",
+      "type": "image"
+    }
+  ],
+  "checks": [
+    "exact game process starts",
+    "game window exists and has usable size",
+    "window capture written"
+  ],
+  "provenance": {
+    "record": [
+      "runtimeVersion",
+      "gameDataRoot",
+      "windowSize",
+      "captureHash"
+    ]
+  },
+  "notes": [
+    "Playable path while the C# renderer/plan-VM port continues; it runs the exact HyperBlade engine, not a reskin."
+  ]
+}

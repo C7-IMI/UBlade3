@@ -34,6 +34,13 @@ Thumbs.db
 
 # Local evidence/logs that are not source
 tools/tmp/
-artifacts/ublade3/*.log
+artifacts/ublade3/unity.log
+artifacts/ublade3/player.log
+artifacts/ublade3/checks-copy.log
+artifacts/ublade3/exact-play-player.log
 artifacts/rea/full-desktop.json
 artifacts/rea/hyb-entropy.json
+
+# Local Gypsy/state and staged exact runtime
+workstream/state/
+runtime/play/

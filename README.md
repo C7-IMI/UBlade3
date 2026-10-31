@@ -11,6 +11,19 @@ local HyperBlade installation (for example `D:\Games\HyperBlade`) through `HYPER
 
 ## Status
 
+**Fully playable now:** the Unity host launches the exact HyperBlade engine through the bundled LGPL-3.0 20XX runtime,
+staged beside your own original game data. Press **PLAY EXACT HYPERBLADE** in the Port Lab; the exact game opens in
+its own window and quitting returns to UBlade3. Release: `dist/UBlade3-2026.10.31.001-win64.zip` (38,514,377 bytes,
+SHA-256 `fabbad4b1be3afa1e19b8e022cff14139b245cbea4972d00ff6d4598e0b4a9fe`), verified by extracting it and starting a
+game window.
+
+The C# exact-port track is editable alongside it: 14/14 teams and 14/14 dromes parse from the original data, the
+simulation core passes 209/209 checks, and the port ledger is 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the
+3,054 game functions. The remaining C# renderer, ADLIB plan VM, animation, audio and asset import are not complete;
+the exact native runtime is the playable engine until they are.
+
+## Port status
+
 This is a fresh port, not a reskin of UBlade2. It is deliberately being built from the decompiled source and the
 original data formats. **Current verified milestone:**
 - Unity 6000.6.7f1 project compiles and builds; Port Lab capture passes.

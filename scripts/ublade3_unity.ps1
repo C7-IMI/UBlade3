@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("inspect","build","capture")]
+  [ValidateSet("inspect","build","capture","checks")]
   [string]$Mode = "build",
   [string]$Capture = "artifacts/port-lab.png"
 )
@@ -12,6 +12,16 @@ $logDir = Join-Path $repo "artifacts/ublade3"
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $log = Join-Path $logDir "unity.log"
 Remove-Item (Join-Path $project "Temp/UnityLockfile") -Force -ErrorAction SilentlyContinue
+if ($Mode -eq "checks") {
+  $checkLog = Join-Path $logDir "checks.log"
+  Remove-Item $checkLog -Force -ErrorAction SilentlyContinue
+  $env:HYPERBLADE_GAME_DATA = "D:\Games\HyperBlade\HYB"
+  & $unity -batchmode -quit -nographics -projectPath $project -executeMethod UBlade3.EditorTools.UBlade3Checks.RunAll -logFile $checkLog 2>&1 | Select-Object -Last 5
+  if (-not (Select-String -Path $checkLog -Pattern "UBLADE3_CHECKS_OK" -Quiet)) { Write-Error "UBlade3 checks failed"; exit 1 }
+  Copy-Item $checkLog (Join-Path $logDir "checks-copy.log") -Force -ErrorAction SilentlyContinue
+  Write-Output "UBLADE3_GAME_CHECKS_OK log=artifacts/ublade3/checks.log"
+  exit 0
+}
 if ($Mode -eq "inspect" -or $Mode -eq "build") {
   $method = if ($Mode -eq "build") { "UBlade3.EditorTools.UBlade3Build.BuildWindows" } else { "UBlade3.EditorTools.UBlade3Build.Inspect" }
   & $unity -batchmode -quit -nographics -projectPath $project -executeMethod $method -logFile $log 2>&1 | Select-Object -Last 8

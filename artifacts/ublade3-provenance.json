@@ -1,0 +1,33 @@
+{
+  "schema": "gypsy.provenance/v1",
+  "kind": "artifact-provenance",
+  "canonicalization": "json-canonical/v1",
+  "createdAt": "2026-10-31T04:23:54+00:00",
+  "subject": {
+    "artifacts": [
+      {
+        "path": "artifacts/ublade3-release.json",
+        "sha256": "1bd95aef3fe1340fa020fabd3521c08c087cf55aca74c5bd07518c268816ebe8",
+        "bytes": 839
+      },
+      {
+        "path": "artifacts/ublade3/exact-play.png",
+        "sha256": "75f8182d6f5cb48ba88f2f30ec5a3ead9caa35195fbd94eb295a1091b2dedbbb",
+        "bytes": 411576
+      },
+      {
+        "path": "unity/UBlade3/build/UBlade3.exe",
+        "sha256": "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
+        "bytes": 667136
+      }
+    ],
+    "project": null,
+    "engine": null,
+    "tools": null
+  },
+  "signer": {
+    "algorithm": "hmac-sha256",
+    "keyFingerprint": "sha256:124fe6ba65b157592ecd09d3876554ee175d10de20f880d25697634580d15701"
+  },
+  "signature": "fb15b1a6782540ca5f98c83632c60aef356fdf3655c3e0a1e477ed18758b75a3"
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "game.ublade3.release",
+  "layer": "game",
+  "engine": "unity",
+  "kind": "release",
+  "maturity": "stable",
+  "description": "Packaged Windows UBlade3 host plus bundled exact 20XX runtime; original HyperBlade data is not distributed.",
+  "requires": [
+    "unity.windows.standalone",
+    "hyperblade.20xx.runtime"
+  ],
+  "inputs": [
+    {
+      "name": "build",
+      "type": "directory"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "zip",
+      "type": "file"
+    },
+    {
+      "name": "releaseJson",
+      "type": "file"
+    }
+  ],
+  "checks": [
+    "zip exists",
+    "release JSON passed=true",
+    "hash recorded"
+  ],
+  "provenance": {
+    "record": [
+      "version",
+      "zipSha256",
+      "bytes",
+      "gitHead"
+    ]
+  },
+  "notes": [
+    "dist/UBlade3-2026.10.31.001-win64.zip; PLAY-README explains the required user-supplied game data."
+  ]
+}

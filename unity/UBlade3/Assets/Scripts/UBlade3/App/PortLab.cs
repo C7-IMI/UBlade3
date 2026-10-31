@@ -14,14 +14,27 @@ namespace UBlade3.App
         private string detail = string.Empty;
         private int frames;
         private string capturePath;
+        private ExactPlayBridge exactPlay;
+        private bool autoPlayExact;
 
         private void Awake()
         {
             capturePath = Arg("--port-lab-capture=");
+            autoPlayExact = HasArg("--play-exact");
             gameDataPath = ResolveDataPath();
             TryLoadPort();
+            exactPlay = FindObjectOfType<ExactPlayBridge>();
+            if (exactPlay == null) exactPlay = gameObject.AddComponent<ExactPlayBridge>();
+            if (autoPlayExact) exactPlay.Launch();
             Debug.Log("UBLADE3_START unity=" + Application.unityVersion + " data=" + gameDataPath + " capture=" + (capturePath ?? "none"));
         }
+
+        public static void LogExact(string message)
+        {
+            Debug.Log("UBLADE3_EXACT " + message);
+        }
+
+        private static bool HasArg(string value) { return Array.IndexOf(Environment.GetCommandLineArgs(), value) >= 0; }
 
         private static string Arg(string prefix)
         {
@@ -120,6 +133,25 @@ namespace UBlade3.App
             GUILayout.Space(16);
             GUILayout.Label("This build is the port foundation: Unity project + original data/probe + simulation self-check.", style);
             GUILayout.Label("Original HyperBlade code is being ported from third_party/hyperblade-decomp; no original assets are committed.", style);
+            GUILayout.Space(18);
+            if (exactPlay == null) exactPlay = FindObjectOfType<ExactPlayBridge>();
+            if (exactPlay == null) exactPlay = gameObject.AddComponent<ExactPlayBridge>();
+            GUILayout.Label("EXACT RUNTIME: " + exactPlay.CurrentState + " - " + exactPlay.LastMessage, style);
+            if (!exactPlay.IsRunning)
+            {
+                if (GUILayout.Button("PLAY EXACT HYPERBLADE (native 20XX runtime)", GUILayout.Height(52f)))
+                {
+                    exactPlay.Launch();
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("FOCUS EXACT GAME WINDOW", GUILayout.Height(44f)))
+                {
+                    exactPlay.FocusChild();
+                }
+            }
+            GUILayout.Label("Exact play uses the bundled LGPL-3.0 20XX runtime and your local original game data. The C# Unity port remains the editable code path.", style);
             GUILayout.EndArea();
         }
     }

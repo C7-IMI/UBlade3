@@ -1,0 +1,16 @@
+﻿{
+    "schema":  "ublade3.release/v1",
+    "version":  "2026.10.31.001",
+    "generatedAt":  "2026-10-31T04:23:00Z",
+    "unityVersion":  "6000.6.7f1",
+    "gitHead":  "6e879022e3bfa3b855b76ea530bb827aa01cb65b",
+    "windowsExe":  "unity/UBlade3/build/UBlade3.exe",
+    "windowsExeSha256":  "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
+    "windowsZip":  {
+                       "path":  "dist/UBlade3-2026.10.31.001-win64.zip",
+                       "bytes":  38514377,
+                       "sha256":  "fabbad4b1be3afa1e19b8e022cff14139b245cbea4972d00ff6d4598e0b4a9fe"
+                   },
+    "passed":  true,
+    "note":  "PC-only; exact playable path uses the bundled LGPL-3.0 20XX runtime and a user-supplied original HyperBlade data install. No original game assets are distributed."
+}

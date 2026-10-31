@@ -1,0 +1,52 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "engine.unity.ublade3.build",
+  "layer": "engine",
+  "engine": "unity",
+  "kind": "build",
+  "maturity": "stable",
+  "description": "Unity 6000.6.7f1 batchmode Windows build of the UBlade3 host, verified on this machine.",
+  "requires": [
+    "unity.installed",
+    "unity.licence",
+    "unity.windows.standalone"
+  ],
+  "inputs": [
+    {
+      "name": "project",
+      "type": "path"
+    },
+    {
+      "name": "target",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "build",
+      "type": "directory"
+    },
+    {
+      "name": "log",
+      "type": "file"
+    }
+  ],
+  "checks": [
+    "batchmode exits 0",
+    "UBLADE3_BUILD_OK marker",
+    "unity/UBlade3/build/UBlade3.exe exists"
+  ],
+  "provenance": {
+    "record": [
+      "unity.version",
+      "target",
+      "command",
+      "exitCode",
+      "logHash",
+      "exeHash"
+    ]
+  },
+  "notes": [
+    "BuildUBlade3.BuildWindows -> unity/UBlade3/build/UBlade3.exe."
+  ]
+}
