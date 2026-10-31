@@ -2667,5 +2667,195 @@ namespace UBlade3.EditorTools
             return failures;
         }
 
+        // --- N12: original InfoBar layout / GDI text HUD --------------------------------
+
+        public static readonly string[] HudCaptureFiles =
+        {
+            "artifacts/native-hud-720p.png",
+            "artifacts/native-hud-1080p.png",
+            "artifacts/native-hud-4k.png",
+            "artifacts/native-hud-design-640x480.png",
+        };
+
+        public static void CheckHud()
+        {
+            int mismatches = 0;
+
+            try
+            {
+                MatchWorldData world = MatchWorldData.Load(MatchScene.ResolveRoot());
+                MatchHudData baseData = MatchHudData.Load(world);
+                Debug.Log("UBLADE3_NATIVE_HUD_BASE " + baseData.Describe());
+
+                string detail;
+                mismatches += MatchHudProbe.Check(world, out detail);
+                Debug.Log(detail);
+
+                if (!MatchHudFont.Available)
+                {
+                    mismatches++;
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_HUD_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_HUD_CHECK_OK"
+                : "UBLADE3_NATIVE_HUD_CHECK_FAILED mismatches=" + mismatches);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        public static void CaptureHud()
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += CaptureHudFrames();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_HUD_CAPTURE_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_HUD_CAPTURES_OK frames=" + HudCaptureFiles.Length
+                : "UBLADE3_NATIVE_HUD_CAPTURES_FAILED failures=" + failures);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int CaptureHudFrames()
+        {
+            int failures = 0;
+
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject root = new GameObject("UBlade3 Native HUD Capture");
+            MatchScene scene = root.AddComponent<MatchScene>();
+            MatchGameplay gameplay = root.AddComponent<MatchGameplay>();
+
+            scene.Build();
+            gameplay.Build(scene);
+
+            MatchHud hud = gameplay.HUD;
+
+            if (hud == null || !hud.Built)
+            {
+                throw new InvalidOperationException("The HUD did not build.");
+            }
+
+            hud.SetOriginalLayout(true);
+
+            if (hud.OriginalHud == null || !hud.OriginalHud.IsBuilt)
+            {
+                throw new InvalidOperationException("The original HUD renderer did not build.");
+            }
+
+            // A deterministic HUD state that exercises the shot-power/head-camera art without needing
+            // a live MatchPlay shot in this capture. The HUD probe logs this as a pinned probe state.
+            hud.SetOriginalProbeState(72, true, true, 0.62f, 0.5f, 0.65f, "MATCH LIVE");
+
+            for (int tick = 0; tick < 60; tick++)
+            {
+                scene.TickScene(HeldBinding.None);
+            }
+
+            gameplay.Sync();
+            Debug.Log("UBLADE3_NATIVE_HUD_CAPTURE_STATE " + hud.OriginalHud.Describe());
+            Debug.Log("UBLADE3_NATIVE_HUD_CAPTURE_PROBE_STATE shotPower=72 headCam=True reticle=True"
+                      + " reticleFrac=(0.62,0.5) speedRatio=0.65 status=\"MATCH LIVE\""
+                      + " simTick=" + scene.TickCount);
+
+            int[,] sizes = { { 1280, 720 }, { 1920, 1080 }, { 3840, 2160 }, { 640, 480 } };
+
+            for (int i = 0; i < sizes.GetLength(0); i++)
+            {
+                int width = sizes[i, 0];
+                int height = sizes[i, 1];
+                string path = ResolveArtifactPath(HudCaptureFiles[i]);
+
+                if (CaptureHudFrame(scene, gameplay, hud, path, width, height))
+                {
+                    FileInfo info = new FileInfo(path);
+                    Debug.Log("UBLADE3_NATIVE_HUD_CAPTURE path=" + path + " size=" + width + "x"
+                              + height + " bytes=" + info.Length);
+                }
+                else
+                {
+                    failures++;
+                }
+            }
+
+            return failures;
+        }
+
+        private static bool CaptureHudFrame(MatchScene scene, MatchGameplay gameplay, MatchHud hud,
+            string path, int width, int height)
+        {
+            RenderTexture target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
+            target.name = "UBlade3 HUD Capture";
+            target.Create();
+
+            RenderTexture savedActive = RenderTexture.active;
+            RenderTexture savedTarget = scene.MatchCamera.targetTexture;
+            Texture2D image = new Texture2D(width, height, TextureFormat.RGB24, false);
+
+            try
+            {
+                scene.ApplyRender(1.0f);
+                scene.MatchCamera.targetTexture = target;
+                scene.MatchCamera.aspect = (float)width / height;
+                scene.MatchCamera.Render();
+
+                RenderTexture.active = target;
+                image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+                image.Apply(false, false);
+
+                Color32[] pixels = image.GetPixels32();
+                hud.Composite(pixels, width, height, gameplay.HudModel);
+                image.SetPixels32(pixels);
+                image.Apply(false, false);
+
+                byte[] png = image.EncodeToPNG();
+                string directory = Path.GetDirectoryName(Path.GetFullPath(path));
+
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                File.WriteAllBytes(path, png);
+                return png.Length > 1024;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_HUD_CAPTURE_FRAME_FAILED " + path + " "
+                               + exception.GetType().Name + ": " + exception.Message);
+                return false;
+            }
+            finally
+            {
+                scene.MatchCamera.targetTexture = savedTarget;
+                RenderTexture.active = savedActive;
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+                UnityEngine.Object.DestroyImmediate(image);
+            }
+        }
+
     }
 }

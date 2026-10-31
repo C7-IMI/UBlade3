@@ -164,6 +164,73 @@ namespace UBlade3.Native
         // N5/N6 capture byte-identical; MatchDisplayController sets it in the runtime player.
         public float UiScale = 1f;
 
+        // N12: the original InfoBar layout renderer. It is opt-in so every N4-N11 capture path keeps
+        // the legacy layout and its byte-identical frames; the interactive player enables it by
+        // default and the N12 HUD probe/capture enables it explicitly.
+        public bool OriginalLayout;
+
+        public MatchHudOriginal OriginalHud { get; private set; }
+
+        public int HudShotPowerOverride = -1;
+
+        public bool HudHeadCamOverride;
+
+        public bool HudReticleOverride;
+
+        public float HudReticleX = 0.5f;
+
+        public float HudReticleY = 0.5f;
+
+        public float HudSpeedRatioOverride = -1f;
+
+        public void SetOriginalLayout(bool enabled)
+        {
+            OriginalLayout = enabled;
+
+            if (enabled && !EnsureOriginal())
+            {
+                OriginalLayout = false;
+                Debug.LogWarning("UBLADE3_NATIVE_HUD_ORIGINAL unavailable; keeping legacy HUD");
+            }
+        }
+
+        public void SetOriginalProbeState(int shotPower, bool headCam, bool reticle, float reticleX,
+            float reticleY, float speedRatio, string status)
+        {
+            HudShotPowerOverride = shotPower;
+            HudHeadCamOverride = headCam;
+            HudReticleOverride = reticle;
+            HudReticleX = reticleX;
+            HudReticleY = reticleY;
+            HudSpeedRatioOverride = speedRatio;
+            StatusLine = status;
+        }
+
+        private bool EnsureOriginal()
+        {
+            if (OriginalHud != null && OriginalHud.IsBuilt)
+            {
+                return true;
+            }
+
+            if (Scene == null || Scene.World == null)
+            {
+                return false;
+            }
+
+            MatchHudOriginal original = new MatchHudOriginal();
+            original.Build(Scene.World);
+
+            if (original.Missing.Count != 0)
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_HUD_ORIGINAL_MISSING " + original.Describe());
+                return false;
+            }
+
+            OriginalHud = original;
+            return true;
+        }
+
         public bool GuiDrawn { get; private set; }
 
         private sealed class HudArt
@@ -245,6 +312,11 @@ namespace UBlade3.Native
             BuildGlyphTextures();
 
             Built = true;
+
+            if (MatchHudOriginal.ShouldUseByDefault())
+            {
+                SetOriginalLayout(true);
+            }
 
             Debug.Log("UBLADE3_NATIVE_GAMEPLAY_HUD_BUILT art=" + data.Describe()
                       + " frameScale=" + FrameScale.ToString("0.##", CultureInfo.InvariantCulture)
@@ -471,6 +543,15 @@ namespace UBlade3.Native
                 model = MatchHudModel.From(Scene.World, Scene.Sim.Sim);
             }
 
+            if (OriginalLayout && EnsureOriginal())
+            {
+                OriginalHud.DrawGui(this);
+                LastModelText = model.Describe();
+                GuiDrawn = true;
+                FramesDrawn++;
+                return;
+            }
+
             float ui = UiScale > 0.01f ? UiScale : 1f;
             List<HudSprite> sprites = new List<HudSprite>();
             List<HudText> texts = new List<HudText>();
@@ -538,6 +619,14 @@ namespace UBlade3.Native
         {
             if (!Built || model == null || pixels == null)
             {
+                return;
+            }
+
+            if (OriginalLayout && EnsureOriginal())
+            {
+                OriginalHud.Composite(this, pixels, width, height, model);
+                LastModelText = model.Describe();
+                FramesDrawn++;
                 return;
             }
 

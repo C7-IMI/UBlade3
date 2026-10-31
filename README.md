@@ -25,8 +25,8 @@ fully playable exact engine.
 
 - **Exact parity build (native embedded engine):** `dist/UBlade3-2026.10.31.002-win64.zip` —
   exactly the original engine inside Unity, no external process.
-- **Native C# playable preview:** `dist/UBlade3-CSharpPreview-2026.10.31.004-csharp-preview-win64.zip`
-  (38,969,894 bytes, SHA-256 `07d9782cf69adb9f273cae902345c42a111a6c2ed61923a4c1bcdb725c06721c`) —
+- **Native C# playable preview:** `dist/UBlade3-CSharpPreview-2026.10.31.005-csharp-preview-win64.zip`
+  (38,979,264 bytes, SHA-256 `67bd36825ad27955bbd2098a9a48d996966ea6376df5458b9917610e25046cb3`) —
   original assets, C# simulation, default PlanVM AI, scoring/HUD/audio, display presets 720p/1080p/1440p/4K.
   Playable preview, not final parity; run `Play-UBlade3-CSharp.bat` or the exe with `--play-autostart`.
 
@@ -91,6 +91,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - C# N10 default PlanVM AI: [docs/NATIVE-MATCH-N10.md](./docs/NATIVE-MATCH-N10.md).
 - Plan motion physics: [docs/PLAN-MOTION.md](./docs/PLAN-MOTION.md).
 - C# display options: [docs/NATIVE-DISPLAY.md](./docs/NATIVE-DISPLAY.md).
+- C# original HUD: [docs/NATIVE-HUD.md](./docs/NATIVE-HUD.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

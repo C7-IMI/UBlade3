@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.018
+
+**Original InfoBar HUD layout and MS Sans Serif text; C# preview 005.**
+
+- Date: 2026-10-31
+- Change: added MatchHudFont/MatchHudOriginal/MatchHudProbe. The interactive native C# player
+  now draws the original InfoBar layout (period/clock/lamps, speed frame, team frames/logos,
+  damage bars, scores/ROK, message/status, radar, shot camera/power/reticle, rosters) with the
+  installed Windows GDI "MS Sans Serif" face via the original CreateFontA call, plus HUD scaling
+  at 720p/1080p/1440p/4K.
+- Verified: CheckHud `mismatches=0 missing=0 fontAvailable=True`, exact 640x480 design rects and
+  layer scales, captures at 720p/1080p/4K plus a 640x480 design frame. Fixed the interactive GUI
+  upload orientation (HUD was vertically flipped) before packaging.
+- Release 2026.10.31.005-csharp-preview: ZIP 38,979,221 bytes SHA-256
+  `67bd36825ad27955bbd2098a9a48d996966ea6376df5458b9917610e25046cb3`; extracted player launches
+  with --play-autostart, original HUD upright, UBLADE3_NATIVE_PLAY_READY, no external process.
+- Boundary: roster names/bench seats, dynamic speed/FPS/network/headcam inset, radar frame art and
+  host GDI height mapping remain gaps; existing N4-N11 deterministic captures keep the legacy HUD.
+- Docs: docs/NATIVE-HUD.md.
+
 ## 2026.10.31.017
 
 **Plan-target steering physics and display/resolution options; C# preview 004.**

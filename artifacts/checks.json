@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T09:55:11.111Z",
+  "generatedAt": "2026-10-31T10:10:57.721Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -440,18 +440,39 @@
       "hudScale": "1/1.5/2/3",
       "hotkeys": "F10/F11/F12",
       "doc": "docs/NATIVE-DISPLAY.md"
+    },
+    "hud": {
+      "status": "N12 original InfoBar layout + GDI MS Sans Serif HUD verified",
+      "layout": "exact 640x480 rects from LayoutSurfaces 0x00450e60/HudLayer; 720/1080/1440/4K scaling",
+      "art": "frper/frdamgA/B/hudChi/hudsea/frspeed/frradar/frshot/frmsg/network/nhshotp/reticl2; missing=0",
+      "font": "GDI MS Sans Serif available=True, original CreateFontA quality/weight/pitch",
+      "probe": "mismatches=0 missing=0",
+      "captures": [
+        "artifacts/native-hud-720p.png",
+        "artifacts/native-hud-1080p.png",
+        "artifacts/native-hud-4k.png",
+        "artifacts/native-hud-design-640x480.png"
+      ],
+      "gaps": [
+        "roster names/bench seats missing",
+        "dynamic speed meter/FPS/network/headcam inset not drawn",
+        "radar marker triangle not frames 7/8",
+        "host GDI collapses 9/10/11/15 to 13px",
+        "probe shot-power/headcam pinned"
+      ],
+      "doc": "docs/NATIVE-HUD.md"
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.004-csharp-preview",
-    "status": "native C# playable preview with display options packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.004-csharp-preview-win64.zip",
-    "bytes": 38969894,
-    "sha256": "07d9782cf69adb9f273cae902345c42a111a6c2ed61923a4c1bcdb725c06721c",
+    "version": "2026.10.31.005-csharp-preview",
+    "status": "native C# playable preview with original HUD packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.005-csharp-preview-win64.zip",
+    "bytes": 38979264,
+    "sha256": "67bd36825ad27955bbd2098a9a48d996966ea6376df5458b9917610e25046cb3",
     "externalProcess": false,
     "preview": true,
     "defaultDisplay": "1280x720 windowed",
-    "verification": "extracted ZIP launched --play-autostart; display requested/applied 1280x720; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
+    "verification": "extracted ZIP launched --play-autostart; original HUD font/orientation present; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

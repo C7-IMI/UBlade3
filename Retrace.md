@@ -183,3 +183,13 @@ Prompt and decision log for UBlade3.
 - Boundary: only GlideToObject kind 0 exact; preview not parity. Goal active.
 - Version: 2026.10.31.017
 
+## 17 - 2026-10-31
+
+- Request: bring the native C# HUD closer to the original.
+- Work: original InfoBar layout/font/art, HUD probe/captures, fixed interactive GUI Y flip;
+  rebuilt and repackaged C# preview 005.
+- Evidence: CheckHud mismatches=0 missing=0 fontAvailable=True; captures 720p/1080p/4K + design
+  640x480; extracted player shows upright original HUD, no20XX; release hash 67bd3682...
+- Boundary: roster/bench, dynamic meters/headcam inset/radar frame art remain; preview. Goal active.
+- Version: 2026.10.31.018
+
