@@ -2,13 +2,13 @@
   "schema": "gypsy.provenance/v1",
   "kind": "artifact-provenance",
   "canonicalization": "json-canonical/v1",
-  "createdAt": "2026-10-31T04:23:54+00:00",
+  "createdAt": "2026-10-31T10:30:13+00:00",
   "subject": {
     "artifacts": [
       {
         "path": "artifacts/ublade3-release.json",
-        "sha256": "1bd95aef3fe1340fa020fabd3521c08c087cf55aca74c5bd07518c268816ebe8",
-        "bytes": 839
+        "sha256": "817fd7c9875ef61efe937f333a090e9e1afede9b688d8ef0774dc7da86d1e1e1",
+        "bytes": 927
       },
       {
         "path": "artifacts/ublade3/exact-play.png",
@@ -29,5 +29,5 @@
     "algorithm": "hmac-sha256",
     "keyFingerprint": "sha256:124fe6ba65b157592ecd09d3876554ee175d10de20f880d25697634580d15701"
   },
-  "signature": "fb15b1a6782540ca5f98c83632c60aef356fdf3655c3e0a1e477ed18758b75a3"
+  "signature": "a43567813b73b8093ce486857e2a66b5aaf1d0cf27c2f7c17de13d9b77ded6ec"
 }

@@ -1,0 +1,47 @@
+{
+  "schema": "gypsy.capability/v1",
+  "id": "game.ublade3.csharp-preview",
+  "layer": "game",
+  "engine": "unity",
+  "kind": "release",
+  "maturity": "partial",
+  "description": "Packaged Windows native C# UBlade3 match preview: original user data, C# simulation/renderer/PlanVM AI, no external runtime; parity gaps remain.",
+  "requires": [
+    "unity.windows.standalone",
+    "native.csharp.engine",
+    "user.original.data"
+  ],
+  "inputs": [
+    {
+      "name": "build",
+      "type": "directory"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "zip",
+      "type": "file"
+    },
+    {
+      "name": "releaseJson",
+      "type": "file"
+    }
+  ],
+  "checks": [
+    "extracted player starts with --play-autostart",
+    "audio on and original HUD",
+    "release JSON passed=true",
+    "no external process"
+  ],
+  "provenance": {
+    "record": [
+      "version",
+      "zipSha256",
+      "bytes",
+      "gitHead"
+    ]
+  },
+  "notes": [
+    "dist/UBlade3-CSharpPreview-2026.10.31.006-csharp-preview-win64.zip; PLAY-README explains data requirements and preview limits."
+  ]
+}

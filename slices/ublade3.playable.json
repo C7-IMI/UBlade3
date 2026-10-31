@@ -2,13 +2,17 @@
   "schema": "gypsy.slice/v1",
   "id": "ublade3.playable",
   "project": ".",
-  "description": "UBlade3: exact data/sim/asset checks, native Unity player build, embedded-engine match capture, release and repository checks.",
+  "description": "UBlade3: exact data/sim/asset checks, native embedded-engine build, native C# match build/capture, exact and C# preview releases, repository checks.",
   "artifacts": [
     "artifacts/ublade3/checks.log",
     "unity/UBlade3/build-native/UBlade3Native.exe",
     "artifacts/native-release-match.png",
     "dist/UBlade3-2026.10.31.002-win64.zip",
-    "artifacts/ublade3-release.json"
+    "artifacts/ublade3-release.json",
+    "unity/UBlade3/build-match/UBlade3NativeMatchPlay.exe",
+    "artifacts/native-csharp-preview-006.png",
+    "dist/UBlade3-CSharpPreview-2026.10.31.006-csharp-preview-win64.zip",
+    "artifacts/ublade3-csharp-release.json"
   ],
   "steps": [
     {

@@ -4,6 +4,20 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.020
+
+**Gypsy integration extended to the native C# preview.**
+
+- Date: 2026-10-31
+- Change: added the C# preview capability `game.ublade3.csharp-preview` (partial maturity), C#
+  build/capture/release actions and validators in the `ublade3.unity` toolpack, and the C# build,
+  frame and release artifacts to the `ublade3.playable` slice. Gypsy provenance and SBOM were
+  regenerated for the current tree.
+- Verification: `gypsy check` PASS; capabilities 6/6 valid; toolpacks 1/1 valid; provenance
+  passed with SBOM 9 components; assets files=3249.
+- Boundary: the C# release remains a partial preview; the exact native release is still the parity
+  build. No GYPSY_HOME modifications.
+
 ## 2026.10.31.019
 
 **PlanVM handler coverage, default match audio and HUD details; C# preview 006.**

@@ -48,9 +48,19 @@
       "properties": {}
     },
     {
-      "bomRef": "tool:HyperBlade 20XX exact runtime (LGPL-3.0)",
+      "bomRef": "tool:Embedded ublade3_native exact engine (LGPL-3.0)",
       "type": "tool",
-      "name": "HyperBlade 20XX exact runtime (LGPL-3.0)",
+      "name": "Embedded ublade3_native exact engine (LGPL-3.0)",
+      "version": null,
+      "sources": [
+        "toolpacks/ublade3.unity.json"
+      ],
+      "properties": {}
+    },
+    {
+      "bomRef": "tool:Native C# match preview (no external runtime)",
+      "type": "tool",
+      "name": "Native C# match preview (no external runtime)",
       "version": null,
       "sources": [
         "toolpacks/ublade3.unity.json"
@@ -97,15 +107,18 @@
       ],
       "properties": {
         "schema": "gypsy.toolpack/v1",
-        "manifestSha256": "6588c6ddc09b550ab0da8502b218e352f046ac94e2873151b2320b1647094c6f",
+        "manifestSha256": "67106326fafba071d2fa10c153eff802acc765f645dccff69bbf51972e3398c2",
         "actions": [
           "build",
           "capture",
           "checks",
-          "exact-play",
+          "csharp-build",
+          "csharp-capture",
+          "native-build",
+          "native-capture",
           "release"
         ],
-        "license": "UBlade3 C# code and ported decompilation: LGPL-3.0. Original game data is proprietary and never committed. The bundled 20XX runtime is LGPL-3.0."
+        "license": "UBlade3 code and embedded decompilation: LGPL-3.0. Original game data is proprietary and never committed."
       }
     }
   ],
@@ -123,7 +136,12 @@
     {
       "from": "toolpack:ublade3.unity",
       "type": "uses",
-      "to": "tool:HyperBlade 20XX exact runtime (LGPL-3.0)"
+      "to": "tool:Embedded ublade3_native exact engine (LGPL-3.0)"
+    },
+    {
+      "from": "toolpack:ublade3.unity",
+      "type": "uses",
+      "to": "tool:Native C# match preview (no external runtime)"
     },
     {
       "from": "toolpack:ublade3.unity",
@@ -142,13 +160,13 @@
     }
   ],
   "counts": {
-    "components": 8,
-    "relationships": 6,
+    "components": 9,
+    "relationships": 7,
     "byType": {
       "engine": 1,
       "project": 1,
       "target": 1,
-      "tool": 4,
+      "tool": 5,
       "toolpack": 1
     }
   },

@@ -203,3 +203,12 @@ Prompt and decision log for UBlade3.
 - Boundary: remaining handlers/agenda/behparams; recorded-only effects; preview. Goal active.
 - Version: 2026.10.31.019
 
+## 19 - 2026-10-31
+
+- Request: keep Gypsy capabilities integrated with the native C# preview.
+- Work: C# preview capability, toolpack C# build/capture/release actions and validators, slice
+  artifacts, provenance/SBOM refresh.
+- Evidence: gypsy check PASS; capabilities 6/6; toolpacks 1/1; provenance passed/SBOM 9.
+- Boundary: C# release partial; exact native release remains parity build. Goal active.
+- Version: 2026.10.31.020
+
