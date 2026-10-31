@@ -162,3 +162,13 @@ Prompt and decision log for UBlade3.
 - Boundary: most plan handler bodies/steering remain; not parity/release. Goal active.
 - Version: 2026.10.31.015
 
+## 15 - 2026-10-31
+
+- Request: package and verify a native C# playable build.
+- Work: standalone C# match player build, release script, PLAY-README/bat and docs; extracted
+  release launched with --play-autostart and rendered the C# match.
+- Evidence: UBLADE3_CSHARP_RELEASE_OK ZIP 38,957,710 bytes SHA-256 0c0acc42...623f049; no external
+  process; native-csharp-preview.png.
+- Boundary: playable preview, not final parity; exact native release remains 2026.10.31.002.
+  Goal active.
+

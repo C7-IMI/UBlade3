@@ -21,6 +21,15 @@ readers (`UBlade3.Assets`) parse 344 models, 3,528 materials, 4,182 bones, 333 t
 The C# renderer, ADLIB plan VM, animation and audio integration remain in progress; the native build above is the
 fully playable exact engine.
 
+## Releases
+
+- **Exact parity build (native embedded engine):** `dist/UBlade3-2026.10.31.002-win64.zip` —
+  exactly the original engine inside Unity, no external process.
+- **Native C# playable preview:** `dist/UBlade3-CSharpPreview-2026.10.31.003-csharp-preview-win64.zip`
+  (38,957,710 bytes, SHA-256 `0c0acc42d1bb6a6b9fcfcfc285c1030b09883b728d8a3c8964a6f3009623f049`) —
+  original assets, C# simulation, default PlanVM AI, scoring/HUD/audio. Playable preview, not final
+  parity; run `Play-UBlade3-CSharp.bat` or the exe with `--play-autostart`.
+
 ## Port status
 
 This is a fresh port, not a reskin of UBlade2. It is deliberately being built from the decompiled source and the

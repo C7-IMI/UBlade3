@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T09:33:43.831Z",
+  "generatedAt": "2026-10-31T09:37:25.729Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -413,5 +413,24 @@
       ],
       "doc": "docs/NATIVE-MATCH-N10.md"
     }
+  },
+  "csharpRelease": {
+    "version": "2026.10.31.003-csharp-preview",
+    "status": "native C# playable preview packaged and verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.003-csharp-preview-win64.zip",
+    "bytes": 38957710,
+    "sha256": "0c0acc42d1bb6a6b9fcfcfc285c1030b09883b728d8a3c8964a6f3009623f049",
+    "externalProcess": false,
+    "preview": true,
+    "verification": "extracted ZIP launched player with --play-autostart; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX process; capture artifacts/native-csharp-preview.png",
+    "controls": "Up/Down accelerate/brake, Left/Right steer, D/S strafe, Space hold/release shoot, C pass, Escape pause",
+    "gaps": [
+      "many plan handler bodies",
+      "exact steering/collision physics",
+      "retail celebration/goalie plans",
+      "some HUD text/details",
+      "pixel parity",
+      "window/res resolution defaults"
+    ]
   }
 }

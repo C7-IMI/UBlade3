@@ -1,0 +1,19 @@
+{
+    "schema":  "ublade3.release/v3",
+    "version":  "2026.10.31.003-csharp-preview",
+    "generatedAt":  "2026-10-31T09:36:54Z",
+    "unityVersion":  "6000.6.7f1",
+    "gitHead":  "6709926a2c869faa5e6f47d4b24452452716af4a",
+    "nativeCSharp":  true,
+    "externalProcess":  false,
+    "preview":  true,
+    "windowsExe":  "unity/UBlade3/build-match/UBlade3NativeMatchPlay.exe",
+    "windowsExeSha256":  "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
+    "windowsZip":  {
+                       "path":  "dist/UBlade3-CSharpPreview-2026.10.31.003-csharp-preview-win64.zip",
+                       "bytes":  38957710,
+                       "sha256":  "0c0acc42d1bb6a6b9fcfcfc285c1030b09883b728d8a3c8964a6f3009623f049"
+                   },
+    "passed":  true,
+    "note":  "Native C# playable preview: original assets from the user install, no external runtime. PlanVM AI default on non-human slots; parity gaps remain."
+}

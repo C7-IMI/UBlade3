@@ -4,6 +4,23 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.016
+
+**Native C# playable preview release packaged and verified.**
+
+- Date: 2026-10-31
+- Change: added scripts/ublade3_csharp_release.ps1 and packaged the standalone C# match player
+  (UBlade3NativeMatchPlay.exe) with the player data, docs, PLAY-README, data-path instructions and
+  Play-UBlade3-CSharp.bat. No external runtime.
+- Verified: UBLADE3_CSHARP_RELEASE_OK; ZIP 38,957,710 bytes SHA-256
+  `0c0acc42d1bb6a6b9fcfcfc285c1030b09883b728d8a3c8964a6f3009623f049`; extracted ZIP launched
+  with --play-autostart reaches UBLADE3_NATIVE_PLAY_READY and renders the native C# match
+  (artifacts/native-csharp-preview.png); no hyperblade_20XX process.
+- Boundary: playable preview, not final parity. PlanVM AI default on non-human slots, but many plan
+  handler bodies, exact steering/collision physics, retail celebration/goalie plans, HUD details
+  and pixel parity remain. The exact native release 2026.10.31.002 remains the parity build.
+- Docs: PLAY-README in the ZIP; NATIVE-MATCH-N10/NATIVE-PLAY docs.
+
 ## 2026.10.31.015
 
 **Default interactive native C# match now runs PlanVM AI; plan shot path added.**
