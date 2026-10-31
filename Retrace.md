@@ -233,3 +233,14 @@ Prompt and decision log for UBlade3.
 - Boundary: animation/stat/bubble consumers, audio headless, approximations. Goal active.
 - Version: 2026.10.31.022
 
+## 22 - 2026-10-31
+
+- Request: make PlanVM animation ids drive the real match skaters.
+- Work: AnimAssm/WBA registry+player+consumer wired to plan action 30/behparams 9/11/12;
+  differentiated pose captures; preview 009.
+- Evidence: N15_CHECK_OK clipChanges=20 events=114 unsupported=0; natural skate/goalie clips and
+  labelled fixture clips; N4-N14 regressions; release 009 39001428 bytes fb521107...
+- Boundary: segment 0 only, rate/blend, triggers logged, stat/bubble absent, staged captures.
+  Goal active.
+- Version: 2026.10.31.023
+

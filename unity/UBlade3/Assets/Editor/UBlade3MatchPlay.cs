@@ -3506,5 +3506,299 @@ namespace UBlade3.EditorTools
             return counts;
         }
 
+        // --- N15: plan-animation consumer trace and visible pose captures -----------------
+
+        public static readonly string[] AnimationCaptureFiles =
+        {
+            "artifacts/native-animation-frame-00.png",
+            "artifacts/native-animation-frame-01.png",
+            "artifacts/native-animation-frame-02.png",
+            "artifacts/native-animation-frame-03.png",
+            "artifacts/native-animation-frame-04.png",
+            "artifacts/native-animation-frame-05.png",
+        };
+
+        public static void CheckAnimation()
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += RunAnimationCheck();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_ANIMATION_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_ANIMATION_CHECK_OK"
+                : "UBLADE3_NATIVE_ANIMATION_CHECK_FAILED failures=" + failures);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        // Stages the captured character at a known point in the drome and renders it against the
+        // real drome. The long plan trace can leave a live view transform outside the arena (and the
+        // chase camera is not a portrait camera), so this evidence frame is explicitly a staged pose
+        // capture: other skater views are hidden, the captured view is placed at the centre ice point
+        // and the match camera is put on a fixed three-quarter angle. It is labelled as such in the
+        // log; it does not claim to be a gameplay camera frame.
+        private static void PlaceAnimationCaptureCamera(MatchScene scene, int slot)
+        {
+            if (scene == null || scene.MatchCamera == null || scene.Views == null
+                || slot < 0 || slot >= scene.Views.Length || scene.Views[slot] == null)
+            {
+                return;
+            }
+
+            Vector3 stage = new Vector3(0.0f, 0.0f, 0.0f);
+
+            for (int i = 0; i < scene.Views.Length; i++)
+            {
+                MatchSkaterView view = scene.Views[i];
+
+                if (view == null || view.Root == null)
+                {
+                    continue;
+                }
+
+                view.Root.SetActive(i == slot);
+            }
+
+            scene.Views[slot].Root.transform.position = stage;
+            Vector3 target = stage + (Vector3.up * 10.0f);
+            scene.MatchCamera.transform.position = stage + new Vector3(0.0f, 11.0f, -32.0f);
+            scene.MatchCamera.transform.LookAt(target);
+            scene.MatchCamera.fieldOfView = 48.0f;
+            scene.MatchCamera.aspect = (float)MatchScene.CaptureWidth / MatchScene.CaptureHeight;
+        }
+
+        private static int RunAnimationCheck()
+        {
+            int failures = 0;
+            MatchAnimationConsumer.ForceEnabled = true;
+
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject root = new GameObject("UBlade3 Native Animation Trace");
+            MatchScene scene = root.AddComponent<MatchScene>();
+            MatchGameplay gameplay = root.AddComponent<MatchGameplay>();
+            MatchPlay play = root.AddComponent<MatchPlay>();
+
+            scene.Build();
+            gameplay.Build(scene);
+            play.Build(scene, gameplay);
+
+            MatchAnimationConsumer consumer = scene.Animation;
+
+            if (consumer == null)
+            {
+                consumer = scene.EnableAnimationConsumer();
+            }
+
+            if (consumer == null)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_ANIMATION_MISMATCH consumer=missing");
+                return failures;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_ANIMATION_REGISTRY " + consumer.Registry.Describe());
+
+            if (consumer.Registry.Count < 240 || consumer.Registry.Count != 249)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH registry=" + consumer.Registry.Count
+                          + " expected=249");
+            }
+
+            int captures = 0;
+            int lastClipChanges = -1;
+            int lastEvents = -1;
+            int lastRequests = -1;
+
+            for (int tick = 0; tick < 360; tick++)
+            {
+                HeldBinding input = MatchScene.DeterministicInput(scene.TickCount);
+                play.TickPlay(input);
+
+                consumer.RefreshCounters();
+
+                if (consumer.ClipChanges != lastClipChanges)
+                {
+                    lastClipChanges = consumer.ClipChanges;
+                    Debug.Log("UBLADE3_NATIVE_ANIMATION_CHANGE tick=" + scene.TickCount
+                              + " clipChanges=" + consumer.ClipChanges
+                              + " snapshot=\"" + consumer.Snapshot() + "\"");
+                }
+
+                if (consumer.EventCount != lastEvents)
+                {
+                    lastEvents = consumer.EventCount;
+                    Debug.Log("UBLADE3_NATIVE_ANIMATION_EVENT tick=" + scene.TickCount
+                              + " count=" + consumer.EventCount + " events=\""
+                              + string.Join(" | ", consumer.EventLines.ToArray()) + "\"");
+                }
+
+                if (consumer.PlanAnimationRequests != lastRequests)
+                {
+                    lastRequests = consumer.PlanAnimationRequests;
+                    Debug.Log("UBLADE3_NATIVE_ANIMATION_PLAN_REQUEST tick=" + scene.TickCount
+                              + " requests=" + lastRequests + " applied="
+                              + consumer.PlanAnimationApplied);
+                }
+            }
+
+            // The natural plan trace above resolves action 30 and behaviour 9. These shipped
+            // animation ids exercise the other categories through the same consumer path:
+            // celebration id 0 AA_CelbAjdn, throw id 49 AA_OvhndThrw, launch id 225 AA_TorsoLaunch,
+            // fall/knockdown id 11 AA_Fall, idle id 151 AA_idle1, goalie idle id 183 AA_Goalidle.
+            int[] fixtureSlots = { 1, 2, 3, 4, 0, 5 };
+            int[] fixtureIds = { 0, 49, 225, 11, 151, 183 };
+            string[] fixtureSources =
+            {
+                "behparam11-celebration", "behparam11-throw", "action30-launch",
+                "action30-fall", "behparam11-idle", "behparam9-goalie-idle",
+            };
+
+            for (int i = 0; i < fixtureIds.Length; i++)
+            {
+                int before = consumer.ClipChanges;
+                bool changed = consumer.PlayFixture(fixtureSlots[i], fixtureIds[i], 1.0f, 0,
+                    fixtureSources[i]);
+
+                for (int tick = 0; tick < 12; tick++)
+                {
+                    play.TickPlay(HeldBinding.None);
+                }
+
+                consumer.RefreshCounters();
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_FIXTURE index=" + i
+                          + " slot=" + fixtureSlots[i] + " id=" + fixtureIds[i]
+                          + " source=" + fixtureSources[i] + " changed=" + (changed ? "True" : "False")
+                          + " clipChangesBefore=" + before
+                          + " clipChangesAfter=" + consumer.ClipChanges
+                          + " events=" + consumer.EventCount
+                          + " snapshot=\"" + consumer.Snapshot() + "\"");
+
+                if (captures < AnimationCaptureFiles.Length && consumer.ClipChanges > before)
+                {
+                    scene.ApplyRender(1.0f);
+                    PlaceAnimationCaptureCamera(scene, fixtureSlots[i]);
+                    string path = ResolveArtifactPath(AnimationCaptureFiles[captures]);
+                    Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path)));
+
+                    DromePreviewCapture.Result result = DromePreviewCapture.Capture(
+                        scene.MatchCamera, path, MatchScene.CaptureWidth, MatchScene.CaptureHeight);
+
+                    Debug.Log("UBLADE3_NATIVE_ANIMATION_CAPTURE index=" + captures
+                              + " tick=" + scene.TickCount + " path=" + result.Path
+                              + " frame=" + result.Width + "x" + result.Height
+                              + " bytes=" + result.Bytes
+                              + " clipChanges=" + consumer.ClipChanges
+                              + " snapshot=\"" + consumer.Snapshot() + "\"");
+                    captures++;
+                }
+            }
+
+            consumer.RefreshCounters();
+            Debug.Log("UBLADE3_NATIVE_ANIMATION_STATE " + consumer.Describe());
+            Debug.Log(consumer.TraceText(160));
+
+            if (consumer.PlanSlots <= 0 || consumer.Roster == null)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH plan-roster");
+            }
+
+            if (consumer.PlanAnimationRequests <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH plan-animation-requests");
+            }
+
+            if (consumer.PlanAnimationApplied <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH plan-animation-applied");
+            }
+
+            if (consumer.ClipChanges < 2)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH clip-changes=" + consumer.ClipChanges);
+            }
+
+            if (consumer.ResolvedPlanIds.Count <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH resolved-ids");
+            }
+
+            if (consumer.EventCount <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH animation-events=0");
+            }
+
+            if (captures < 2)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_ANIMATION_MISMATCH captures=" + captures);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_ANIMATION_CHECK_COUNTS planSlots=" + consumer.PlanSlots
+                      + " planRequests=" + consumer.PlanAnimationRequests
+                      + " planApplied=" + consumer.PlanAnimationApplied
+                      + " behaviorChanges=" + consumer.BehaviorChanges
+                      + " persistentChanges=" + consumer.PersistentChanges
+                      + " clipChanges=" + consumer.ClipChanges
+                      + " events=" + consumer.EventCount
+                      + " resolvedIds=" + consumer.ResolvedPlanIds.Count
+                      + " unsupported=" + consumer.UnsupportedCount
+                      + " captures=" + captures
+                      + " unresolvedPlanUnsupported=" + consumer.Unsupported.Count);
+
+            return failures;
+        }
+
+        // --- N15: native C# preview 009 (default plan-animation consumer) ---------------
+
+        public static string Preview009PlayerPath()
+        {
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            return Path.GetFullPath(Path.Combine(projectRoot, "build", "preview-009",
+                "UBlade3NativePreview009.exe"));
+        }
+
+        public static void BuildPreview009()
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string path = BuildPlayer(Preview009PlayerPath());
+                Debug.Log("UBLADE3_NATIVE_PREVIEW_009_BUILD_OK output=" + path
+                          + " defaultAnimation=interactive defaultAudio=interactive defaultHud=original");
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_PREVIEW_009_BUILD_FAILED " + exception);
+                Debug.LogException(exception);
+                exitCode = 1;
+            }
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
     }
 }

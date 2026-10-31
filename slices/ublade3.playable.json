@@ -10,8 +10,8 @@
     "dist/UBlade3-2026.10.31.002-win64.zip",
     "artifacts/ublade3-release.json",
     "unity/UBlade3/build-match/UBlade3NativeMatchPlay.exe",
-    "artifacts/native-csharp-preview-008.png",
-    "dist/UBlade3-CSharpPreview-2026.10.31.008-csharp-preview-win64.zip",
+    "artifacts/native-preview-009-animation.png",
+    "dist/UBlade3-CSharpPreview-2026.10.31.009-csharp-preview-win64.zip",
     "artifacts/ublade3-csharp-release.json"
   ],
   "steps": [

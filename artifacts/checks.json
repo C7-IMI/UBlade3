@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T10:55:42.178Z",
+  "generatedAt": "2026-10-31T11:16:10.177Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -510,18 +510,48 @@
       "match": "ticks=240 defaultPlanAi=True unsupportedHandlers=0 effects=[release=478,netTarget=478,cameraBias=956,avoidDetach=105,agendaPos=478] digest=90ee53431fc98757",
       "remainingTelemetry": "animation/stat/bubble apply absent; audio action headless record-only; action139 human headcam unaimed",
       "doc": "docs/PLAN-HANDLERS-N14.md"
+    },
+    "animationMatch": {
+      "status": "N15 plan animation consumer verified",
+      "registry": "AnimAssm 249 entries",
+      "planSlots": 5,
+      "planRequests": 3,
+      "planApplied": 9,
+      "behaviorChanges": 5,
+      "persistentChanges": 5,
+      "clipChanges": 20,
+      "events": 114,
+      "resolvedIds": 7,
+      "unsupported": 0,
+      "captures": 5,
+      "fixtureClips": [
+        "AA_CelbAjdn",
+        "AA_OvhndThrw",
+        "AA_TorsoLaunch",
+        "AA_Fall",
+        "AA_idle1",
+        "AA_Goalidle"
+      ],
+      "doc": "docs/NATIVE-ANIMATION-MATCH.md",
+      "gaps": [
+        "segment 0 only",
+        "rate is blend telemetry",
+        "triggers not re-injected",
+        "natural trace lacks temporary clip/beh11/12",
+        "stat/bubble consumers absent"
+      ]
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.008-csharp-preview",
-    "status": "native C# preview with default PlanVM plan set unsupported=0 packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.008-csharp-preview-win64.zip",
-    "bytes": 38994372,
-    "sha256": "e2d902497cdd5c8a46159919e78dc55fa642a1e8842068eab07bb16552264352",
+    "version": "2026.10.31.009-csharp-preview",
+    "status": "native C# preview with plan-animation consumer packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.009-csharp-preview-win64.zip",
+    "bytes": 39001428,
+    "sha256": "fb521107f961569d909044c52b18caeba859043da4f6fdb4e98034bc63d8c241",
     "externalProcess": false,
     "preview": true,
     "audioDefault": true,
-    "verification": "extracted ZIP launched --play-autostart; UBLADE3_MATCH_AUDIO_DEFAULT ready=True; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
+    "verification": "extracted ZIP launched --play-autostart; audio ready=True, UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

@@ -260,6 +260,37 @@ namespace UBlade3.Native
 
         public bool Enabled = true;
 
+        // N15: read-only accessors for the match animation consumer. The plan bodies still own these
+        // objects; the consumer only reads the latest action/behaviour animation state and never
+        // synthesizes a plan result.
+        public PlanAiActionState AnimationActionState
+        {
+            get { return host == null || host.Actor == null ? null : PlanAiActionStateStore.Get(host.Actor); }
+        }
+
+        public PlanBehavior CurrentBehavior
+        {
+            get { return state == null ? null : state.Current; }
+        }
+
+        public PlanAiBehaviorState CurrentBehaviorState
+        {
+            get
+            {
+                PlanBehavior behavior = CurrentBehavior;
+                return behavior == null ? null : PlanAiBehaviorStateStore.Get(behavior);
+            }
+        }
+
+        public string CurrentBehaviorName
+        {
+            get
+            {
+                PlanBehavior behavior = CurrentBehavior;
+                return behavior == null ? string.Empty : behavior.Name;
+            }
+        }
+
         public bool Bound;
 
         public string Failure = string.Empty;

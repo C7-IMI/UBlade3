@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.023
+
+**Plan-driven animation consumer and C# preview 009.**
+
+- Date: 2026-10-31
+- Change: added MatchAnimationRegistry/Player/Consumer. Plan action 30 and behaviour 9/11/12 ids
+  resolve through the shipped 249-entry AnimAssm registry, load segment-0 WBA clips through the
+  existing skater rig and drive the real MatchSkaterView mesh with StandardFps, loop, deferred,
+  persistent and frame-event semantics.
+- Verified: UBLADE3_NATIVE_ANIMATION_CHECK_OK planSlots=5 planRequests=3 planApplied=9
+  behaviorChanges=5 persistentChanges=5 clipChanges=20 events=114 resolvedIds=7 unsupported=0
+  captures=5; natural AA_Skate_Std/AA_Goalidle and labelled celebration/throw/launch/fall/idle
+  fixture clips produce differentiated visible poses; N4-N14 batch green.
+- Release 2026.10.31.009-csharp-preview: ZIP 39,001,428 bytes SHA-256
+  `fb521107f961569d909044c52b18caeba859043da4f6fdb4e98034bc63d8c241`; extracted player starts
+  with audio on, no external process.
+- Boundary: only segment 0 plays, plan rate is blend telemetry, triggers are logged not re-injected,
+  stat/bubble consumers absent, pose captures staged. Preview, not parity.
+- Docs: docs/NATIVE-ANIMATION-MATCH.md.
+
 ## 2026.10.31.022
 
 **Default PlanVM plan set has zero unsupported handlers; C# preview 008.**

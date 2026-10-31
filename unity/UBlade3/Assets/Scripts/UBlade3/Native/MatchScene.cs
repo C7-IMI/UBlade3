@@ -67,6 +67,10 @@ namespace UBlade3.Native
         // Simulation slot -> view; slot 0 is the human-controlled home skater.
         public MatchSkaterView[] Views { get; private set; }
 
+        // N15: plan-animation consumer (interactive default / N15 trace only). Null in every
+        // deterministic N4-N14 capture path so those frames keep their own clip clock.
+        public MatchAnimationConsumer Animation { get; private set; }
+
         public MatchSimulation Sim { get; private set; }
 
         public DromePreviewScene DromeScene { get; private set; }
@@ -236,6 +240,21 @@ namespace UBlade3.Native
             ConfigureCamera(matchCamera);
 
             SyncViewsFromSimulation();
+
+            if (MatchAnimationConsumer.ShouldEnableByDefault())
+            {
+                try
+                {
+                    Animation = new MatchAnimationConsumer(World, Sim.Sim, Views);
+                    Animation.Tick(0.0);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogWarning("UBLADE3_NATIVE_ANIMATION_CONSUMER_FAILED "
+                                     + exception.GetType().Name + ": " + exception.Message);
+                }
+            }
+
             cameraCurrentPosition = MatchSkaterView.ToUnity(Sim.Sim.MainCamera.Body.Pos);
             cameraPreviousPosition = cameraCurrentPosition;
             cameraCurrentDirection = MatchSkaterView.ToUnityDirection(Sim.Sim.MainCamera.Body.VelDir);
@@ -544,6 +563,11 @@ namespace UBlade3.Native
                 view.Tick(MatchWorldData.FixedTickSeconds, position, yaw);
             }
 
+            if (Animation != null)
+            {
+                Animation.Tick(MatchWorldData.FixedTickSeconds);
+            }
+
             cameraCurrentPosition = MatchSkaterView.ToUnity(Sim.Sim.MainCamera.Body.Pos);
             cameraCurrentDirection = MatchSkaterView.ToUnityDirection(Sim.Sim.MainCamera.Body.VelDir);
         }
@@ -585,6 +609,11 @@ namespace UBlade3.Native
                 }
             }
 
+            if (Animation != null)
+            {
+                Animation.ApplyRender();
+            }
+
             if (matchCamera != null)
             {
                 Vector3 position = Vector3.Lerp(cameraPreviousPosition, cameraCurrentPosition, Mathf.Clamp01(alpha));
@@ -601,6 +630,43 @@ namespace UBlade3.Native
                     matchCamera.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
                 }
             }
+        }
+
+        public MatchAnimationConsumer EnableAnimationConsumer()
+        {
+            if (Animation != null)
+            {
+                return Animation;
+            }
+
+            if (World == null || Sim == null || Views == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                Animation = new MatchAnimationConsumer(World, Sim.Sim, Views);
+                Animation.Tick(0.0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_ANIMATION_CONSUMER_FAILED "
+                                 + exception.GetType().Name + ": " + exception.Message);
+                Animation = null;
+            }
+
+            return Animation;
+        }
+
+        public void AttachPlanAnimation(MatchPlanAiRoster roster)
+        {
+            if (Animation == null)
+            {
+                return;
+            }
+
+            Animation.AttachRoster(roster);
         }
 
         public string DescribeViews()

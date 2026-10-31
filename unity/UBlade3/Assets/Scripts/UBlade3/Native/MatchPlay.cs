@@ -499,6 +499,11 @@ namespace UBlade3.Native
 
                 Control.AttachDefaultPlanAi(scene.World, planDataPath);
                 defaultPlanAi = true;
+
+                if (Control.PlanRoster != null)
+                {
+                    scene.AttachPlanAnimation(Control.PlanRoster);
+                }
             }
             catch (Exception exception)
             {
