@@ -209,6 +209,19 @@ namespace UBlade3.Native
 
         public int AgendaAddsRelaxToPosition;
 
+        // N14: release/netTarget, camera bias and default-slot handler completeness.
+        public int AgendaReleaseEvents;
+
+        public int AgendaNetTargetApplications;
+
+        public int AgendaCameraBiasUses;
+
+        public int AgendaAvoidDetaches;
+
+        public int AgendaRelaxDetaches;
+
+        public int UnsupportedHandlerCount;
+
         public float PhysicsDistanceStart = -1.0f;
 
         public float PhysicsDistanceMin = float.MaxValue;
@@ -361,6 +374,7 @@ namespace UBlade3.Native
             // N12: decision/action bodies and the engine state they read from the live match.
             PlanAiMatchDecisions.EnsureRegistered();
             PlanAiMatchDecisionsN13.EnsureRegistered();
+            PlanAiMatchDecisionsN14.EnsureRegistered();
             PlanAiMatchContext.TerrainZ = (x, y) => EllipsoidStatics.Arena.GetZ(x, y);
             PlanAiMatchContext.MarkerResolver = index => index == 8 || index == 9;
             PlanAiMatchContext.MarkerPosition = index => index == 8
@@ -455,6 +469,7 @@ namespace UBlade3.Native
             SyncMirror(nowMs);
             world.ClockMs = (int)nowMs;
             world.TickAgenda();
+            PlanAiMatchAgendaItems.ReleaseAll(host);
             SyncAgendaEffects();
             world.DrainPendingMessages(256);
             SyncBehaviorEffects();
@@ -487,6 +502,7 @@ namespace UBlade3.Native
             try
             {
                 world.TickAgenda();
+                PlanAiMatchAgendaItems.ReleaseAll(host);
                 SyncAgendaEffects();
             }
             catch (PlanAiUnportedHandlerException exception)
@@ -838,6 +854,8 @@ namespace UBlade3.Native
         {
             PlanAiMatchContext.SetScores(sim.Rules.ScoreHome, sim.Rules.ScoreAway);
             PlanAiMatchContext.SetClock(sim.Rules.Clock.InvDelta, sim.Rules.Clock.DeltaSquared);
+            PlanAiMatchContext.SetHeadCamViewFracX(Control != null && Control.HeadCam != null
+                ? Control.HeadCam.ViewFracX : 0.5f);
 
             for (int index = 0; index < PlanConstants.PlayerObjectCount; index++)
             {
@@ -1005,6 +1023,7 @@ namespace UBlade3.Native
                 return;
             }
 
+            UnsupportedHandlerCount = host.UnsupportedHandlers.Count;
             PlanAiAgendaState agenda = PlanAiAgendaStateStore.Get(host.Actor);
             PlayerState player = sim.Players[Slot];
 
@@ -1064,6 +1083,30 @@ namespace UBlade3.Native
                 AgendaSmoothVelApplications++;
             }
 
+            if (agenda.NetTargetDirty)
+            {
+                PlanAiVec3 netTarget = agenda.NetTarget;
+                SimVec3 point = new SimVec3(netTarget.X, netTarget.Y, netTarget.Z);
+                player.Body.NetTarget = point;
+                player.Body.NetTargetPending = true;
+                player.Body.Pos = point;
+                player.Body.PrevPos = point;
+                player.AimPosition = new SimVec3(point.x, point.y, point.z + MatchWorldData.HeadHeight);
+                SimVec3 normal;
+
+                if (EllipsoidStatics.Arena.NormalAtPoint(point, out normal))
+                {
+                    player.Body.SurfNormal = normal;
+                }
+
+                agenda.NetTargetDirty = false;
+                AgendaNetTargetApplications++;
+            }
+
+            AgendaReleaseEvents = Math.Max(AgendaReleaseEvents, agenda.ReleaseEvents);
+            AgendaCameraBiasUses = Math.Max(AgendaCameraBiasUses, agenda.CameraBiasEvents);
+            AgendaAvoidDetaches = Math.Max(AgendaAvoidDetaches, PlanAiMatchAgendaItems.AvoidDetachEvents);
+            AgendaRelaxDetaches = Math.Max(AgendaRelaxDetaches, PlanAiMatchAgendaItems.RelaxDetachEvents);
             AgendaBlockedEvents = Math.Max(AgendaBlockedEvents, agenda.BlockedEvents);
             AgendaBreakawayEvents = Math.Max(AgendaBreakawayEvents, agenda.BreakawayEvents);
             AgendaRelaxAdvanceEvents = Math.Max(AgendaRelaxAdvanceEvents, agenda.RelaxAdvanceEvents);
@@ -1340,7 +1383,11 @@ namespace UBlade3.Native
             target.DesiredSubstitute = source.DesiredSubstitute;
             target.Stats.Set(PlanAiConstants.RatingDamage, source.Stats.GetScalar(ObjectConstants.RatingDamage));
             target.Stats.Set(PlanAiConstants.RatingRokHandling, source.Stats.GetScalar(ObjectConstants.RatingRokHandling));
-            target.Stats.Set(PlanAiConstants.RatingLongPassEnable, 0.0f);
+            // ObjectDefinition rating ids 11 (LongPassEnable) and 2 (Checking); the Sim stats table
+            // uses the same id space (ObjectDefinition ratings 0..).
+            target.Stats.Set(PlanAiConstants.RatingLongPassEnable,
+                PlanAiMatchDecisionsN14.Enabled ? source.Stats.GetScalar(11) : 0.0f);
+            target.Stats.Set(2, source.Stats.GetScalar(2));
             target.Stats.Set(PlanAiConstants.RatingCarryRokThrowDist, FixtureCarryRokThrowDistance);
 
             // N12 LooseRokWhatToDo ratings (statids.h ids 33-36; ObjectDefinition rating table order).
@@ -2023,6 +2070,12 @@ namespace UBlade3.Native
                     .Append(",agendaBlocked=").Append(AgendaBlockedEvents)
                     .Append(",agendaBreakaway=").Append(AgendaBreakawayEvents)
                     .Append(",agendaRelax=").Append(AgendaRelaxAdvanceEvents).Append(']');
+                text.Append(" n14=[release=").Append(AgendaReleaseEvents)
+                    .Append(",netTarget=").Append(AgendaNetTargetApplications)
+                    .Append(",cameraBias=").Append(AgendaCameraBiasUses)
+                    .Append(",avoidDetach=").Append(AgendaAvoidDetaches)
+                    .Append(",relaxDetach=").Append(AgendaRelaxDetaches)
+                    .Append(",unsupportedHandlers=").Append(UnsupportedHandlerCount).Append(']');
             }
 
             if (!string.IsNullOrEmpty(Failure))

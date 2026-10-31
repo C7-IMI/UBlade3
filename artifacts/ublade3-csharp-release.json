@@ -1,18 +1,18 @@
 {
     "schema":  "ublade3.release/v3",
-    "version":  "2026.10.31.007-csharp-preview",
-    "generatedAt":  "2026-10-31T10:45:46Z",
+    "version":  "2026.10.31.008-csharp-preview",
+    "generatedAt":  "2026-10-31T10:55:18Z",
     "unityVersion":  "6000.6.7f1",
-    "gitHead":  "2d1a98d01b2a8956a7fa5216ee0712f475d717ad",
+    "gitHead":  "035ab7bf711e83a43b20a32784f213044e428de8",
     "nativeCSharp":  true,
     "externalProcess":  false,
     "preview":  true,
     "windowsExe":  "unity/UBlade3/build-match/UBlade3NativeMatchPlay.exe",
     "windowsExeSha256":  "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
     "windowsZip":  {
-                       "path":  "dist/UBlade3-CSharpPreview-2026.10.31.007-csharp-preview-win64.zip",
-                       "bytes":  38992989,
-                       "sha256":  "977d49f336a2a47df9a8b3ad9b71974c6402e4b89df8607a59ba61ff77ae632e"
+                       "path":  "dist/UBlade3-CSharpPreview-2026.10.31.008-csharp-preview-win64.zip",
+                       "bytes":  38994372,
+                       "sha256":  "e2d902497cdd5c8a46159919e78dc55fa642a1e8842068eab07bb16552264352"
                    },
     "passed":  true,
     "note":  "Native C# playable preview: original assets from the user install, no external runtime. PlanVM AI default on non-human slots; parity gaps remain."

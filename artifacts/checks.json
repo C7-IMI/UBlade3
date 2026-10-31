@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T10:46:15.500Z",
+  "generatedAt": "2026-10-31T10:55:42.178Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -502,18 +502,26 @@
         "only goal markers 8/9",
         "decisions 31/57/123 remain"
       ]
+    },
+    "planHandlersN14": {
+      "status": "N14 last observed PlanVM default-match gaps closed; unsupported=0",
+      "decisions": "31,57,123",
+      "agenda": "Release/netTarget + CRelax camera bias + CAvoid purge/global wrong-side",
+      "match": "ticks=240 defaultPlanAi=True unsupportedHandlers=0 effects=[release=478,netTarget=478,cameraBias=956,avoidDetach=105,agendaPos=478] digest=90ee53431fc98757",
+      "remainingTelemetry": "animation/stat/bubble apply absent; audio action headless record-only; action139 human headcam unaimed",
+      "doc": "docs/PLAN-HANDLERS-N14.md"
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.007-csharp-preview",
-    "status": "native C# playable preview with N13 PlanVM handlers packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.007-csharp-preview-win64.zip",
-    "bytes": 38992989,
-    "sha256": "977d49f336a2a47df9a8b3ad9b71974c6402e4b89df8607a59ba61ff77ae632e",
+    "version": "2026.10.31.008-csharp-preview",
+    "status": "native C# preview with default PlanVM plan set unsupported=0 packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.008-csharp-preview-win64.zip",
+    "bytes": 38994372,
+    "sha256": "e2d902497cdd5c8a46159919e78dc55fa642a1e8842068eab07bb16552264352",
     "externalProcess": false,
     "preview": true,
     "audioDefault": true,
-    "verification": "extracted ZIP launched --play-autostart; audio ready=True, UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX process",
+    "verification": "extracted ZIP launched --play-autostart; UBLADE3_MATCH_AUDIO_DEFAULT ready=True; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

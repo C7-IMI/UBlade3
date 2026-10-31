@@ -15,9 +15,47 @@ namespace UBlade3.PlanVM
         /// <summary>Off for pinned legacy regression suites; enabled by the N13/default roster.</summary>
         public static bool Enabled;
 
+        public static int WrongSideFrames;
+
+        public static int AvoidDetachEvents;
+
+        public static int RelaxDetachEvents;
+
+        public static int AvoidReleaseEvents;
+
+        public static int RelaxReleaseEvents;
+
+        public static int CameraBiasEvents;
+
+        public static void Reset()
+        {
+            WrongSideFrames = 0;
+            AvoidDetachEvents = 0;
+            RelaxDetachEvents = 0;
+            AvoidReleaseEvents = 0;
+            RelaxReleaseEvents = 0;
+            CameraBiasEvents = 0;
+        }
+
         public static int[] ImplementedIds()
         {
             return new int[] { 8, 15 };
+        }
+
+        /// <summary>PhysicsBody phase three: the original calls Release on the observer head after Process.</summary>
+        public static void ReleaseAll(PlanAiHost host)
+        {
+            if (!PlanAiMatchDecisionsN14.Enabled || host == null || host.Actor == null)
+            {
+                return;
+            }
+
+            PlanAiAgendaItem head = host.Actor.Observers;
+
+            if (head != null)
+            {
+                head.Release(0);
+            }
         }
 
         public static bool TryAdd(PlanAiHost host, int agendaItemId, PlanNode node, PlanBehavior behavior, int nArg)
@@ -122,7 +160,7 @@ namespace UBlade3.PlanVM
             base.Bind(host, behavior);
             this.host = host;
             Kind = 8;
-            Persistent = true;
+            Persistent = !PlanAiMatchDecisionsN14.Enabled;
             Ready = true;
             SwerveSlot = -1;
             DrawSlot = -1;
@@ -251,13 +289,27 @@ namespace UBlade3.PlanVM
 
             if (wrongSide && sign * deltaY < 0.0f)
             {
-                state.WrongSideFrames++;
-
-                if (state.WrongSideFrames > WrongSideLimit)
+                if (PlanAiMatchDecisionsN14.Enabled)
                 {
-                    host.World.PostSceneEvent(Owner.Slot, 55, 0);
-                    state.WrongSideFrames = 0;
-                    state.BreakawayEvents++;
+                    PlanAiMatchAgendaItems.WrongSideFrames++;
+
+                    if (PlanAiMatchAgendaItems.WrongSideFrames > WrongSideLimit)
+                    {
+                        host.World.PostSceneEvent(Owner.Slot, 55, 0);
+                        PlanAiMatchAgendaItems.WrongSideFrames = 0;
+                        state.BreakawayEvents++;
+                    }
+                }
+                else
+                {
+                    state.WrongSideFrames++;
+
+                    if (state.WrongSideFrames > WrongSideLimit)
+                    {
+                        host.World.PostSceneEvent(Owner.Slot, 55, 0);
+                        state.WrongSideFrames = 0;
+                        state.BreakawayEvents++;
+                    }
                 }
             }
 
@@ -275,6 +327,36 @@ namespace UBlade3.PlanVM
             if (Next != null)
             {
                 Next.Process(nArg);
+            }
+        }
+
+        public override bool IsReplaceable()
+        {
+            return PlanAiMatchDecisionsN14.Enabled;
+        }
+
+        public override void Detach()
+        {
+            base.Detach();
+
+            if (PlanAiMatchDecisionsN14.Enabled)
+            {
+                PlanAiMatchAgendaItems.AvoidDetachEvents++;
+            }
+        }
+
+        public override void Release(int nArg)
+        {
+            if (!PlanAiMatchDecisionsN14.Enabled)
+            {
+                return;
+            }
+
+            PlanAiMatchAgendaItems.AvoidReleaseEvents++;
+
+            if (Next != null)
+            {
+                Next.Release(nArg);
             }
         }
 
@@ -314,8 +396,10 @@ namespace UBlade3.PlanVM
         {
             base.Bind(host, behavior);
             this.host = host;
+            PlanAiAgendaState initial = PlanAiAgendaStateStore.Get(Owner);
+            initial.NetTarget = Owner.Body.Position;
             Kind = 15;
-            Persistent = true;
+            Persistent = !PlanAiMatchDecisionsN14.Enabled;
             Ready = true;
             TargetSlot = -1;
             Dest = new PlanAiVec3(0.0f, 0.0f, 0.0f);
@@ -390,15 +474,25 @@ namespace UBlade3.PlanVM
             }
 
             float rate = RelaxRateByFrameRate[clamped];
+            PlanAiVec3 target = Dest;
 
             if (CameraBias)
             {
-                // The original applies the head camera's view fraction and the Checking rating here.
-                // This mock has no head camera, so the camera-bias term is omitted and recorded.
-                host.World.Log("agenda.CRelaxToPosition cameraBias omitted (no head camera)");
+                if (PlanAiMatchDecisionsN14.Enabled)
+                {
+                    float biasSign = Dest.Y < 0.0f ? -16.0f : 16.0f;
+                    target.X = (PlanAiMatchContext.HeadCamViewFracX - 0.5f) * biasSign + target.X;
+                    rate = Owner.Stats.GetScalar(2) * rate * 0.2f;
+                    state.CameraBiasEvents++;
+                    PlanAiMatchAgendaItems.CameraBiasEvents++;
+                }
+                else
+                {
+                    host.World.Log("agenda.CRelaxToPosition cameraBias omitted (N13 handler set)");
+                }
             }
 
-            PlanAiVec3 gap = Dest - Owner.Body.Position;
+            PlanAiVec3 gap = target - Owner.Body.Position;
             PlanAiVec3 step = gap * rate;
             float forward = PlanAiMatchContext.GetForwardSpeedDt(Owner.Slot);
             float stepLength = (float)Math.Sqrt(PlanAiVec3.Dot(step, step));
@@ -415,11 +509,11 @@ namespace UBlade3.PlanVM
 
             if (TargetSlot >= 0)
             {
-                PlanAiObject target = host.World.GetObject(TargetSlot);
+                PlanAiObject headingTarget = host.World.GetObject(TargetSlot);
 
-                if (target != null)
+                if (headingTarget != null)
                 {
-                    PlanAiVec3 heading = target.Body.Position - Owner.Body.Position;
+                    PlanAiVec3 heading = headingTarget.Body.Position - Owner.Body.Position;
                     float headingLength = (float)Math.Sqrt(PlanAiVec3.Dot(heading, heading));
 
                     if (headingLength > 1e-7f)
@@ -433,6 +527,96 @@ namespace UBlade3.PlanVM
             if (Next != null)
             {
                 Next.Process(nArg);
+            }
+        }
+
+        public override bool GetReadyFlag()
+        {
+            return PlanAiMatchDecisionsN14.Enabled;
+        }
+
+        public override void Detach()
+        {
+            base.Detach();
+
+            if (PlanAiMatchDecisionsN14.Enabled)
+            {
+                PlanAiMatchAgendaItems.RelaxDetachEvents++;
+            }
+        }
+
+        /// <summary>CRelaxToPosition::Release (crelaxtoposition.cpp HYPERX 0x00412050): netTarget phase.</summary>
+        public override void Release(int nArg)
+        {
+            if (!PlanAiMatchDecisionsN14.Enabled || !Valid || Owner == null || Owner.Body == null)
+            {
+                return;
+            }
+
+            PlanAiAgendaState state = PlanAiAgendaStateStore.Get(Owner);
+            int bucket = (int)PlanAiMatchContext.EngineInvDelta;
+            int clamped = Math.Min(0x34, bucket);
+            clamped >>= 2;
+
+            if (clamped < 0)
+            {
+                clamped = 0;
+            }
+
+            if (clamped >= RelaxRateByFrameRate.Length)
+            {
+                clamped = RelaxRateByFrameRate.Length - 1;
+            }
+
+            float rate = RelaxRateByFrameRate[clamped];
+            PlanAiVec3 target = Dest;
+
+            if (CameraBias)
+            {
+                float biasSign = Dest.Y < 0.0f ? -16.0f : 16.0f;
+                target.X = (PlanAiMatchContext.HeadCamViewFracX - 0.5f) * biasSign + target.X;
+                rate = Owner.Stats.GetScalar(2) * rate * 0.2f;
+                state.CameraBiasEvents++;
+                PlanAiMatchAgendaItems.CameraBiasEvents++;
+            }
+
+            PlanAiVec3 point = state.NetTarget;
+            PlanAiVec3 gap = target - point;
+            PlanAiVec3 step = gap * rate;
+            float forward = PlanAiMatchContext.GetForwardSpeedDt(Owner.Slot);
+            float stepLength = (float)Math.Sqrt(PlanAiVec3.Dot(step, step));
+
+            if (forward > 0.0f && forward < stepLength)
+            {
+                step = step * (forward / stepLength);
+            }
+
+            point += step;
+            state.NetTarget = point;
+            state.NetTargetDirty = true;
+            state.ReleaseEvents++;
+            PlanAiMatchAgendaItems.RelaxReleaseEvents++;
+
+            if (TargetSlot >= 0)
+            {
+                PlanAiObject headingTarget = host.World.GetObject(TargetSlot);
+
+                if (headingTarget != null)
+                {
+                    PlanAiVec3 heading = headingTarget.Body.Position - point;
+                    float headingLength = (float)Math.Sqrt(PlanAiVec3.Dot(heading, heading));
+
+                    if (headingLength > 1e-7f)
+                    {
+                        state.Heading = heading * (1.0f / headingLength);
+                        state.HeadingDirty = true;
+                    }
+                }
+            }
+
+            if (Next != null)
+            {
+                Next.Release(nArg);
             }
         }
 

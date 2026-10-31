@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.022
+
+**Default PlanVM plan set has zero unsupported handlers; C# preview 008.**
+
+- Date: 2026-10-31
+- Change: decisions 31/57/123; CRelaxToPosition Release with real NetTarget/position; live
+  head-camera CRelax bias from the Checking rating; CAvoid purge/global wrong-side semantics.
+  The default Defense/CarryRok/OffWing/Goalie plan set now reports unsupportedHandlers=0.
+- Verified: N14_CHECK_OK ticks=240 aiPickups=1 aiPasses=1 decisions=[31x1,57x1,123x2]
+  release=478 netTarget=478 cameraBias=956 avoidDetach=105 unsupportedHandlers=0
+  digest=90ee53431fc98757 (two runs); N4-N13 regressions green; 204 text files PASS.
+- Release 2026.10.31.008-csharp-preview: ZIP 38,994,372 bytes SHA-256
+  `e2d902497cdd5c8a46159919e78dc55fa642a1e8842068eab07bb16552264352`; extracted player starts
+  with audio on, no external process.
+- Boundary: animation/stat/bubble consumers remain telemetry; audio action headless only; CRelax
+  Release phase ordering/relaxDetach and per-slot mock worlds are approximations. Preview.
+- Docs: docs/PLAN-HANDLERS-N14.md.
+
 ## 2026.10.31.021
 
 **Remaining observed PlanVM handlers and agenda classes; C# preview 007.**

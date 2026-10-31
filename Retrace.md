@@ -223,3 +223,13 @@ Prompt and decision log for UBlade3.
   31/57/123. Goal active.
 - Version: 2026.10.31.021
 
+## 21 - 2026-10-31
+
+- Request: close the last observed PlanVM default gaps.
+- Work: decisions 31/57/123, CRelax Release/NetTarget, camera bias, CAvoid purge/global counter;
+  default plan set unsupportedHandlers=0; preview 008.
+- Evidence: N14_CHECK_OK digest=90ee53431fc98757 release=478 netTarget=478 cameraBias=956
+  avoidDetach=105 unsupported=0; N4-N13 regressions green; release 008 38994372 bytes e2d90249...
+- Boundary: animation/stat/bubble consumers, audio headless, approximations. Goal active.
+- Version: 2026.10.31.022
+

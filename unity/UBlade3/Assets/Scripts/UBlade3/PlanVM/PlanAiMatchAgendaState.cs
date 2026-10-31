@@ -72,6 +72,14 @@ namespace UBlade3.PlanVM
         public int BreakawayEvents;
 
         public short WrongSideFrames;
+
+        public PlanAiVec3 NetTarget;
+
+        public bool NetTargetDirty;
+
+        public int ReleaseEvents;
+
+        public int CameraBiasEvents;
     }
 
     public static class PlanAiAgendaStateStore

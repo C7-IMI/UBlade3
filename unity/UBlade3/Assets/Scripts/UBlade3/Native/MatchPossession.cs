@@ -937,12 +937,15 @@ namespace UBlade3.Native
             // behaviour-parameter pass runs during instantiation/initial activation.
             UBlade3.PlanVM.PlanAiMatchBehaviorParams.Enabled = true;
             UBlade3.PlanVM.PlanAiMatchAgendaItems.Enabled = true;
+            UBlade3.PlanVM.PlanAiMatchDecisionsN14.Enabled = true;
+            UBlade3.PlanVM.PlanAiMatchAgendaItems.Reset();
             PlanRoster = new MatchPlanAiRoster(this, Sim, Config, dataPath, world, true,
                 ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3,
                 ObjectConstants.GoalieSlotA, ObjectConstants.GoalieSlotB);
             PlanRoster.EnableAnimationBridge(true);
             PlanRoster.EnableTargetPhysics(true);
             PlanRoster.EnableN13Handlers(true);
+            PlanRoster.EnableN14Handlers(true);
             DefaultPlanAi = true;
             AiEnabled = true;
 

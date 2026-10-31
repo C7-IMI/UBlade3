@@ -44,6 +44,13 @@ namespace UBlade3.PlanVM
 
         private static readonly int[] targetGoalSlot = new int[PlayerObjectCount];
 
+        public static float HeadCamViewFracX = 0.5f;
+
+        public static void SetHeadCamViewFracX(float value)
+        {
+            HeadCamViewFracX = value;
+        }
+
         public static void SetClock(float invDelta, float deltaSquared)
         {
             EngineInvDelta = invDelta;

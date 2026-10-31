@@ -2012,6 +2012,7 @@ namespace UBlade3.EditorTools
                 // N13 handlers change plan semantics; the pinned N4-N12 deterministic evidence keeps
                 // the N12 handler set and the legacy bridge exactly as recorded.
                 play.Control.PlanRoster.EnableN13Handlers(false);
+                PlanAiMatchDecisionsN14.Enabled = false;
             }
         }
 
@@ -3115,6 +3116,7 @@ namespace UBlade3.EditorTools
         {
             int mismatches = 0;
             MatchPlay play = CreateDefaultPlayScene();
+            PlanAiMatchDecisionsN14.Enabled = false;
 
             if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
             {
@@ -3319,6 +3321,189 @@ namespace UBlade3.EditorTools
                       + " mismatches=" + mismatches);
 
             return mismatches;
+        }
+
+
+        // --- N14: last observed default-match handler coverage --------------------------------
+
+        public static readonly int[] N14DecisionIds = { 31, 57, 123 };
+
+        public static void CheckN14()
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN14Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N14_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N14_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N14_CHECK_FAILED mismatches=" + mismatches);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN14Check()
+        {
+            int[] first = RunN14Scenario(out string firstDigest, out int firstTicks, out int firstPickups,
+                out int firstPasses, out int firstShots);
+            int[] second = RunN14Scenario(out string secondDigest, out int secondTicks, out int secondPickups,
+                out int secondPasses, out int secondShots);
+            int mismatches = 0;
+
+            string decisionText = JoinIdsWithCounts(N14DecisionIds, new int[] { first[0], first[1], first[2] });
+            Debug.Log("UBLADE3_NATIVE_MATCH_N14_RESULT defaultPlanAi=True targetPhysics=True ticks=" + firstTicks
+                      + " aiPickups=" + firstPickups + " aiPasses=" + firstPasses + " aiShots=" + firstShots
+                      + " decisions=[" + decisionText + "]"
+                      + " effects=[behParams=" + first[3] + ",targetGoal=" + first[4]
+                      + ",agendaAdds8=" + first[5] + ",agendaAdds15=" + first[6]
+                      + ",agendaSmoothVel=" + first[7] + ",agendaPos=" + first[8]
+                      + ",agendaRelax=" + first[9] + ",release=" + first[10]
+                      + ",netTarget=" + first[11] + ",cameraBias=" + first[12]
+                      + ",avoidDetach=" + first[13] + ",relaxDetach=" + first[14]
+                      + ",soundEvents=" + first[15] + ",soundApplied=" + first[16]
+                      + ",soundUnavailable=" + first[17]
+                      + ",animationEvents=" + first[18] + ",animationApplied=" + first[19]
+                      + ",statEvents=" + first[20] + ",statApplied=" + first[21]
+                      + ",bubbleEvents=" + first[22] + ",bubbleApplied=" + first[23]
+                      + ",unsupportedHandlers=" + first[24] + "]"
+                      + " digest=" + firstDigest);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N14_COUNTS decisions=[" + decisionText + "]"
+                      + " unsupportedHandlers=" + first[24]
+                      + " release=" + first[10] + " netTarget=" + first[11]
+                      + " cameraBias=" + first[12] + " avoidDetach=" + first[13]
+                      + " relaxDetach=" + first[14] + " mismatches=" + mismatches);
+
+            if (first[0] < 1 || first[1] < 1 || first[2] < 1)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N14_MISMATCH a decision body did not execute");
+            }
+
+            if (first[24] != 0)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N14_MISMATCH default slots still have unsupported handlers=" + first[24]);
+            }
+
+            if (first[10] < 1 || first[11] < 1 || first[12] < 1 || first[13] < 1)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N14_MISMATCH agenda release/purge/camera effects missing"
+                          + " (relaxDetach=" + first[14] + " is reported, not required: the goalie stays in"
+                          + " one behaviour in this window)");
+            }
+
+            bool deterministic = string.Equals(firstDigest, secondDigest, StringComparison.Ordinal)
+                                 && firstTicks == secondTicks && firstPickups == secondPickups
+                                 && firstPasses == secondPasses && firstShots == secondShots;
+
+            for (int index = 0; index < first.Length && deterministic; index++)
+            {
+                if (first[index] != second[index])
+                {
+                    deterministic = false;
+                }
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N14_DETERMINISM ok=" + (deterministic ? "True" : "False")
+                      + " digest1=" + firstDigest + " digest2=" + secondDigest);
+
+            if (!deterministic)
+            {
+                mismatches++;
+            }
+
+            return mismatches;
+        }
+
+        private static int[] RunN14Scenario(out string digest, out int ticks, out int pickups,
+            out int passes, out int shots)
+        {
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi
+                || !PlanAiMatchDecisionsN14.Enabled)
+            {
+                throw new InvalidOperationException("N14 scenario did not get the default N14-enabled PlanVM roster");
+            }
+
+            MatchPlayN10Script.Stage(play.Control);
+            int[] counts = new int[25];
+
+            for (int guard = 0; guard < 300 && play.Control.Ticks < 240; guard++)
+            {
+                play.Control.Advance(HeldBinding.None, held =>
+                {
+                    play.Scene.TickScene(held);
+                    MatchPlayN10Script.HoldStaged(play.Control.Sim);
+                });
+            }
+
+            MatchPlanAiRoster roster = play.Control.PlanRoster;
+
+            for (int slotIndex = 0; slotIndex < roster.PlanSlots.Count; slotIndex++)
+            {
+                MatchPlanAi adapter = roster.Adapter(roster.PlanSlots[slotIndex]);
+
+                if (adapter == null)
+                {
+                    continue;
+                }
+
+                for (int index = 0; index < N14DecisionIds.Length; index++)
+                {
+                    int count;
+
+                    if (adapter.PlanDecisionCounts.TryGetValue(N14DecisionIds[index], out count))
+                    {
+                        counts[index] += count;
+                    }
+                }
+
+                counts[3] += adapter.BehaviorParamApplications;
+                counts[4] += adapter.TargetGoalApplications;
+                counts[5] += adapter.AgendaAddsAvoidObjects;
+                counts[6] += adapter.AgendaAddsRelaxToPosition;
+                counts[7] += adapter.AgendaSmoothVelApplications;
+                counts[8] += adapter.AgendaPositionApplications;
+                counts[9] += adapter.AgendaRelaxAdvanceEvents;
+                counts[10] += adapter.AgendaReleaseEvents;
+                counts[11] += adapter.AgendaNetTargetApplications;
+                counts[12] += adapter.AgendaCameraBiasUses;
+                counts[13] += adapter.AgendaAvoidDetaches;
+                counts[14] += adapter.AgendaRelaxDetaches;
+                counts[15] += adapter.PlanActionSoundEvents;
+                counts[16] += adapter.PlanActionSoundApplied;
+                counts[17] += adapter.PlanActionSoundUnavailable;
+                counts[18] += adapter.PlanActionAnimationEvents;
+                counts[19] += adapter.PlanActionAnimationApplied;
+                counts[20] += adapter.PlanActionStatEvents;
+                counts[21] += adapter.PlanActionStatApplied;
+                counts[22] += adapter.PlanActionBubbleEvents;
+                counts[23] += adapter.PlanActionBubbleApplied;
+                counts[24] += adapter.UnsupportedHandlerCount;
+            }
+
+            ticks = play.Control.Ticks;
+            pickups = play.Control.AiPickups;
+            passes = play.Control.AiPasses;
+            shots = play.Control.AiShots;
+            digest = roster.DigestHex();
+            Debug.Log(roster.Describe());
+            Debug.Log(roster.DescribeSlots());
+
+            return counts;
         }
 
     }
