@@ -618,5 +618,412 @@ namespace UBlade3.EditorTools
                 EditorApplication.Exit(exitCode);
             }
         }
+        // --- N7: playability follow-up ------------------------------------------------------
+        // Post-goal celebration + face-off restart, the head-camera aim/shot path and fallback AI
+        // possession. The N6 entry points above stay intact.
+
+        public static readonly string[] N7CaptureFiles =
+        {
+            "artifacts/native-match-n7-00-start.png",
+            "artifacts/native-match-n7-01-pickup.png",
+            "artifacts/native-match-n7-02-charge.png",
+            "artifacts/native-match-n7-03-headcam.png",
+            "artifacts/native-match-n7-04-shot.png",
+            "artifacts/native-match-n7-05-goal.png",
+            "artifacts/native-match-n7-06-celebration.png",
+            "artifacts/native-match-n7-07-faceoff.png",
+            "artifacts/native-match-n7-08-restart.png",
+            "artifacts/native-match-n7-09-ai-pickup.png",
+            "artifacts/native-match-n7-10-ai-shot.png",
+            "artifacts/native-match-n7-11-score.png",
+        };
+
+        public static void CheckN7()
+        {
+            CheckN7(true);
+        }
+
+        public static void CaptureAllN7()
+        {
+            CaptureAllN7(true);
+        }
+
+        public static void BuildAndRunWindowsN7()
+        {
+            BuildAndRunWindowsN7(true);
+        }
+
+        private static void CheckN7(bool exitWhenBatch)
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN7Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N7_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N7_CHECK_FAILED mismatches=" + mismatches);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN7Check()
+        {
+            int mismatches = 0;
+            MatchWorldData world = MatchWorldData.Load(MatchScene.ResolveRoot());
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_CHECK root=" + MatchScene.ResolveRoot().DataPath
+                      + " unity=" + Application.unityVersion + " no20xx=True");
+
+            MatchRokData rokData = MatchRokData.Load(world);
+            MatchHudData hudData = MatchHudData.Load(world);
+
+            if (rokData.Object.Definition.Model != "Rokmix" || rokData.MissingTextures.Count != 0
+                || hudData.Missing.Count != 0)
+            {
+                mismatches++;
+            }
+
+            int audioProbe = RunAudioProbe();
+            mismatches += audioProbe;
+
+            MatchPlayN7ScriptResult first;
+            MatchPlayControl firstControl;
+            MatchSimulation firstSim;
+            RunN7Script(world, out first, out firstControl, out firstSim);
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_CHECK_RESULT " + first.Steps[0]
+                      + " failures=" + first.Failures + " reason=" + first.FailureText);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_FACE_OFF " + MatchFaceOff.Describe());
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_CONTROL " + firstControl.Describe());
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_AUDIO " + firstControl.Audio.Describe());
+
+            if (first.Failures != 0 || first.HumanPickups < 1 || first.HumanShots < 1
+                || first.HumanGoals < 1 || first.AiPickups < 1 || first.AiShots < 1
+                || first.FaceOffSetupTick == 0 || first.FaceOffResumeTick <= first.FaceOffSetupTick)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N7_MISMATCH played result "
+                          + first.FailureText);
+            }
+
+            MatchPlayN7ScriptResult second;
+            MatchPlayControl secondControl;
+            MatchSimulation secondSim;
+            RunN7Script(world, out second, out secondControl, out secondSim);
+
+            if (second.Failures != 0)
+            {
+                mismatches++;
+            }
+
+            bool deterministic = first.HumanPickups == second.HumanPickups
+                                 && first.HumanShots == second.HumanShots
+                                 && first.HumanGoals == second.HumanGoals
+                                 && first.AiPickups == second.AiPickups
+                                 && first.AiShots == second.AiShots
+                                 && first.AiPasses == second.AiPasses
+                                 && first.ScoreHome == second.ScoreHome
+                                 && first.ScoreAway == second.ScoreAway
+                                 && Math.Abs(first.FaceOffResumeTick - second.FaceOffResumeTick) == 0;
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_DETERMINISM ok=" + (deterministic ? "True" : "False")
+                      + " run1=" + first.Steps[0] + " run2=" + second.Steps[0]);
+
+            if (!deterministic)
+            {
+                mismatches++;
+            }
+
+            string aimDetail;
+            bool aimOk = MatchPlayN7Script.HeadCamAimCheck(world, out aimDetail);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_HEAD_CAM_AIM ok=" + (aimOk ? "True" : "False")
+                      + " " + aimDetail);
+
+            if (!aimOk)
+            {
+                mismatches++;
+            }
+
+            string passDetail;
+            bool passOk = MatchPlayN7Script.AiPassCheck(world, out passDetail);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_AI_PASS ok=" + (passOk ? "True" : "False")
+                      + " " + passDetail);
+
+            if (!passOk)
+            {
+                mismatches++;
+            }
+
+            MusicCheck(firstControl);
+
+            int processes = CountTwentyXxProcesses();
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_NO_20XX running20xxProcesses=" + processes + " no20xx=True");
+
+            if (processes != 0)
+            {
+                mismatches++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_COUNTS humanPickups=" + first.HumanPickups
+                      + " humanShots=" + first.HumanShots + " humanGoals=" + first.HumanGoals
+                      + " aiPickups=" + first.AiPickups + " aiShots=" + first.AiShots
+                      + " aiPasses=" + first.AiPasses + " goals=" + first.Goals
+                      + " score=" + first.ScoreHome + "-" + first.ScoreAway
+                      + " headCamFovDegrees=" + first.HeadCamFovDegrees
+                      + " faceOffSetupTick=" + first.FaceOffSetupTick
+                      + " faceOffResumeTick=" + first.FaceOffResumeTick
+                      + " audioProbeMismatches=" + audioProbe
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
+        }
+
+        private static void MusicCheck(MatchPlayControl control)
+        {
+            // Silence-aware evidence that the goal/crowd/impact routing still ran through the real
+            // event path; the Editor and player runs opt into actual playback separately.
+            if (control.Audio.GoalEvents < 1 || control.Audio.CrowdEvents < 1
+                || control.Audio.ImpactEvents < 3)
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N7_AUDIO_MISMATCH " + control.Audio.Describe());
+            }
+        }
+
+        private static void RunN7Script(MatchWorldData world, out MatchPlayN7ScriptResult result,
+            out MatchPlayControl control, out MatchSimulation sim)
+        {
+            sim = MatchSimulation.Create(world);
+
+            for (int slot = 0; slot < sim.Sim.Players.Length; slot++)
+            {
+                sim.Sim.Players[slot].TargetGoalSlot = (short)((slot & 1) == 0
+                    ? ObjectConstants.SlotSGoal
+                    : ObjectConstants.SlotNGoal);
+            }
+
+            sim.Sim.Rules.SetHomeScore(0);
+            sim.Sim.Rules.SetAwayScore(0);
+
+            MatchPlayConfig config = MatchPlayConfig.FromWorld(world, MatchSimulation.HumanSlot);
+            MatchAudioDirector audio = new MatchAudioDirector(null);
+            MatchPlayControl localControl = new MatchPlayControl(sim.Sim, config, audio);
+            localControl.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2);
+            sim.Sim.InputForSlot = slot => localControl.InputForSlot(slot);
+
+            MatchScoreFixture.PlaceRokAtSpawn(sim.Sim);
+            localControl.ResetRokToSpawn();
+            control = localControl;
+
+            MatchSimulation localSim = sim;
+            result = MatchPlayN7Script.Run(localControl, null, held => localSim.Step());
+            sim = localSim;
+        }
+
+        private static void CaptureAllN7(bool exitWhenBatch)
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += CaptureSceneN7();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N7_CAPTURES_OK frames=" + N7CaptureFiles.Length
+                  + " width=" + MatchPlay.CaptureWidth + " height=" + MatchPlay.CaptureHeight
+                : "UBLADE3_NATIVE_MATCH_N7_CAPTURES_FAILED failures=" + failures);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int CaptureSceneN7()
+        {
+            int failures = 0;
+
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject rootObject = new GameObject("UBlade3 Native N7 Match");
+            MatchScene scene = rootObject.AddComponent<MatchScene>();
+            MatchGameplay gameplay = rootObject.AddComponent<MatchGameplay>();
+            MatchPlay play = rootObject.AddComponent<MatchPlay>();
+
+            scene.Build();
+            gameplay.Build(scene);
+            play.Build(scene, gameplay);
+
+            string[] paths = new string[N7CaptureFiles.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = ResolveArtifactPath(N7CaptureFiles[i]);
+
+                if (File.Exists(paths[i]))
+                {
+                    File.Delete(paths[i]);
+                }
+            }
+
+            MatchPlayN7ScriptResult result;
+            failures += play.RunDeterministicCaptureN7(paths, out result);
+
+            Debug.Log(MatchProbe.DescribeScene(scene));
+            Debug.Log(play.Describe());
+
+            for (int i = 0; i < play.Captures.Count; i++)
+            {
+                MatchPlayCapture capture = play.Captures[i];
+
+                if (!File.Exists(capture.Path))
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED missing " + capture.Path);
+                    continue;
+                }
+
+                FileInfo info = new FileInfo(capture.Path);
+
+                if (info.Length != capture.Bytes || info.Length < 1024)
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED " + capture.Path + " bytes "
+                                   + info.Length + " != " + capture.Bytes);
+                }
+            }
+
+            if (play.Captures.Count != N7CaptureFiles.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED captured " + play.Captures.Count
+                               + " of " + N7CaptureFiles.Length);
+            }
+
+            if (result.Failures != 0 || result.HumanShots < 1 || result.HumanGoals < 1
+                || result.AiPickups < 1 || result.AiShots < 1)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED script " + result.Steps[0]
+                               + " reason=" + result.FailureText);
+            }
+
+            if (play.Audio.GoalEvents < 1 || play.Audio.CrowdEvents < 1 || play.Audio.ImpactEvents < 3)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED audio " + play.Audio.Describe());
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_CAPTURE_EVIDENCE frames=" + play.Captures.Count
+                      + " humanPickups=" + result.HumanPickups + " humanShots=" + result.HumanShots
+                      + " humanGoals=" + result.HumanGoals + " aiPickups=" + result.AiPickups
+                      + " aiShots=" + result.AiShots + " aiPasses=" + result.AiPasses
+                      + " score=" + play.HomeScore + "-" + play.AwayScore
+                      + " headCamFovDegrees=" + result.HeadCamFovDegrees
+                      + " audio=\"" + play.Audio.Describe() + "\"");
+
+            return failures;
+        }
+
+        private static void BuildAndRunWindowsN7(bool exitWhenBatch)
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string playerPath = BuildPlayer();
+                string captureBase = ResolveArtifactPath(Path.Combine("artifacts", "native-match-n7-player.png"));
+                string logPath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "ublade3-native-match-n7-player.log"));
+                string directory = Path.GetDirectoryName(captureBase);
+
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                string stem = Path.GetFileNameWithoutExtension(captureBase);
+                string[] expected = new string[MatchPlay.N7CaptureLabels.Length];
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    expected[i] = Path.Combine(directory, stem + "-" + MatchPlay.N7CaptureLabels[i] + ".png");
+
+                    if (File.Exists(expected[i]))
+                    {
+                        File.Delete(expected[i]);
+                    }
+                }
+
+                ProcessStartInfo start = new ProcessStartInfo();
+                start.FileName = playerPath;
+                start.Arguments = "-batchmode -screen-width " + MatchPlay.CaptureWidth
+                                  + " -screen-height " + MatchPlay.CaptureHeight
+                                  + " -screen-fullscreen 0 --n7-capture=\"" + captureBase + "\""
+                                  + " --ublade3-audio -logFile \"" + logPath + "\"";
+                start.WorkingDirectory = Path.GetDirectoryName(playerPath);
+                start.UseShellExecute = false;
+                start.CreateNoWindow = true;
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N7_PLAYER_START " + start.Arguments);
+
+                using (Process process = Process.Start(start))
+                {
+                    if (!process.WaitForExit(300000))
+                    {
+                        process.Kill();
+                        throw new TimeoutException("The Windows N7 player did not finish in 300 s.");
+                    }
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new InvalidOperationException("The Windows N7 player exited "
+                                                            + process.ExitCode + "; log " + logPath);
+                    }
+                }
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    if (!File.Exists(expected[i]))
+                    {
+                        throw new FileNotFoundException("The Windows N7 player did not write " + expected[i], expected[i]);
+                    }
+
+                    FileInfo info = new FileInfo(expected[i]);
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N7_PLAYER_CAPTURE path=" + expected[i] + " bytes=" + info.Length);
+                }
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N7_PLAYER_CAPTURES_OK frames=" + expected.Length
+                          + " output=" + playerPath + " log=" + logPath);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_PLAYER_CAPTURE_FAILED " + exception);
+                exitCode = 1;
+            }
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
     }
 }

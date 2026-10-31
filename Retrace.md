@@ -118,3 +118,14 @@ Prompt and decision log for UBlade3.
   path. Goal active.
 - Version: 2026.10.31.011
 
+## 11 - 2026-10-31
+
+- Request: close post-goal/camera/AI gaps in the playable C# match.
+- Work: face-off/restart/celebration flow, head-camera aim and bounded fallback AI possession/shots;
+  12 Editor/player capture beats.
+- Evidence: N7_CHECK_OK mismatches=0, score 1-0, aiPickups=1 aiShots=1, faceOff ticks 179/200,
+  headcam fov=85, 12 player frames byte-identical, audio played=8, N4/N5/N6 regressions green.
+- Boundary: PlanVM AI not wired; celebration/goalie/ROK fallbacks; interim HUD; not release path.
+  Goal active.
+- Version: 2026.10.31.012
+

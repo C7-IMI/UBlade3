@@ -50,8 +50,11 @@ original data formats. **Current verified milestone:**
 - C# playable match loop: human skater picks up the ROK (shipped RokInRange/Attach), carries, charges/shoots
   (PlanAction::Launch), passes (Throw), and a real shot enters the goal -> shipped score rules/HUD/audio. Headless
   `approachTicks=42 pickups=2 shots=1 goals=1 score=1-0 realFlightGoal=True`; seven Editor/player captures with
-  byte-identical player output and 7 audio plays. AI skaters remain fallback; no face-off/parity. See
-  [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
+  byte-identical player output and 7 audio plays. See [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
+- C# N7 playable follow-up: post-goal celebration/face-off drag/restart, 85-degree head-camera aim and fallback-AI
+  ROK pursuit/shots; `N7_CHECK_OK mismatches=0 score=1-0 aiPickups=1 aiShots=1`, 12 Editor/player capture beats with
+  byte-identical player frames and 8 audio plays. PlanVM AI remains the main gap. See
+  [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -64,6 +67,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - C# drome preview: [docs/DROME-PREVIEW.md](./docs/DROME-PREVIEW.md).
 - C# native gameplay: [docs/NATIVE-GAMEPLAY.md](./docs/NATIVE-GAMEPLAY.md).
 - C# playable loop: [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
+- C# N7 playable follow-up: [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

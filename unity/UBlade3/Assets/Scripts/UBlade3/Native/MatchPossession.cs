@@ -95,10 +95,18 @@ namespace UBlade3.Native
         // The shipped engine's OkToGetRok carrier-history quirk (initial carrier slot 0 and
         // "the carrier cannot pick up again") would block the single viewed home slot 0; the scene
         // uses the same condition's free-ROK answer (attach == null) plus the exact RokInRange gate.
-        public static bool CanPickup(Simulation sim, int humanSlot, bool cooldownReady, out float limitSquared)
+        // It is actor-generic for the N7 fallback AI possession: the same gate decides an AI pickup.
+        public static bool CanPickup(Simulation sim, int actorSlot, bool cooldownReady, out float limitSquared)
         {
             RokState rok = sim.Rok;
-            PlayerState actor = sim.Players[humanSlot];
+
+            if (actorSlot < 0 || actorSlot >= sim.Players.Length)
+            {
+                limitSquared = 0.0f;
+                return false;
+            }
+
+            PlayerState actor = sim.Players[actorSlot];
 
             limitSquared = 0.0f;
 
@@ -184,32 +192,27 @@ namespace UBlade3.Native
             return dot > FacingDot;
         }
 
-        // PlanAction::Launch's ROK carrier branch (0x00403290). The human path packs the shot word
-        // from the head camera; this scene has no head cam, so the aim is the screen centre
-        // (viewFrac 0.5/0.5) and the power is the CUpdateShotPower meter value the caller measured.
-        public static bool LaunchShot(Simulation sim, MatchPlayConfig config, int shotPowerLevel, out string note)
+        // PlanAction::Launch's ROK carrier branch (0x00403290). The shot word is the real human
+        // head-camera word: PlanAction::SendLaunchMessage (0x004031e0) packs
+        // PackShotWord(viewFracX, shotPower, viewFracY) from cameraobject slot 25, and the caller
+        // supplies the MatchHeadCamera fractions. The viewed-slot gate of the plan/network path does
+        // not apply to this player-controlled call (the scene has one human view).
+        public static bool LaunchShot(Simulation sim, MatchPlayConfig config, int carrierSlot,
+            float shotFracX, float shotFracY, int shotPowerLevel, out string note)
         {
             note = string.Empty;
 
             RokState rok = sim.Rok;
 
-            if (rok.Body.Attach == null)
+            if (rok.Body.Attach == null || rok.Body.Attach.Slot != carrierSlot)
             {
-                note = "no carrier";
+                note = "carrier is not slot " + carrierSlot;
                 return false;
             }
-
-            int carrierSlot = rok.Body.Attach.Slot;
 
             if (carrierSlot < 0 || carrierSlot >= sim.Players.Length)
             {
                 note = "carrier slot " + carrierSlot;
-                return false;
-            }
-
-            if (carrierSlot != sim.ViewedSlot)
-            {
-                note = "carrier is not the viewed slot";
                 return false;
             }
 
@@ -280,7 +283,7 @@ namespace UBlade3.Native
                 return true;
             }
 
-            uint shotWord = RokState.PackShotWord(0.5f, shotPowerLevel, 0.5f, out int resetShotPower);
+            uint shotWord = RokState.PackShotWord(shotFracX, shotPowerLevel, shotFracY, out int resetShotPower);
             int range = RokState.ShotWordPower(shotWord);
             float spin = RokState.ShotWordAimX(shotWord) * ThrowConstants.AimFraction;
             float aimY = RokState.ShotWordAimY(shotWord);
@@ -357,29 +360,76 @@ namespace UBlade3.Native
             note = "aimed launch goalSlot=" + carrier.TargetGoalSlot
                    + " power=" + shotPowerLevel
                    + " rangeByte=" + range
+                   + " aimX=" + shotFracX.ToString("0.###", CultureInfo.InvariantCulture)
+                   + " aimY=" + shotFracY.ToString("0.###", CultureInfo.InvariantCulture)
                    + " speed=" + speed.ToString("0.###", CultureInfo.InvariantCulture);
             return true;
         }
 
-        // The existing exact PlanAction::Throw port (RokState.Throw) plus Unset_AttachPak.
-        public static bool Pass(Simulation sim, int humanSlot, out float speed, out string note)
+        // PlanAction::Launch's other shipped branch: SendLaunchMessage sends SHOT_UNAIMED
+        // (0xffff0000) for every non-Human plan, and PlanAction::Launch then runs the unaimed branch
+        // already ported as RokLaunch.LaunchUnaimed. The fallback AI has no head camera, so this is
+        // its exact shot path. rand() is replaced by the fixed 0.5/0.5 pair and labelled as such.
+        public static bool LaunchAiShot(Simulation sim, int carrierSlot, out float speed, out string note)
         {
             speed = 0.0f;
             note = string.Empty;
 
             RokState rok = sim.Rok;
 
-            if (rok.Body.Attach == null || rok.Body.Attach.Slot != humanSlot)
+            if (rok.Body.Attach == null || rok.Body.Attach.Slot != carrierSlot)
             {
-                note = "not carried by the human";
+                note = "carrier is not slot " + carrierSlot;
                 return false;
             }
 
-            PlayerState carrier = sim.Players[humanSlot];
+            if (carrierSlot < 0 || carrierSlot >= sim.Players.Length)
+            {
+                note = "carrier slot " + carrierSlot;
+                return false;
+            }
+
+            PlayerState carrier = sim.Players[carrierSlot];
+            EngineClock clock = sim.Rules.Clock;
+
+            rok.Body.GravDeltaVel = clock.GetDeltaSquared() * PhysicsConstants.Gravity;
+            rok.Body.ForwardSpeedDt = clock.GetDelta() * rok.Body.BaseForwardSpeed;
+
+            RokLaunch.UnaimedLaunch launch = RokLaunch.LaunchUnaimed(rok, carrier.Stats,
+                carrier.TargetGoalSlot, clock, EllipsoidStatics.Arena, sim.SessionActive, 0.5f, 0.5f);
+
+            speed = launch.Speed;
+            rok.Body.Speed = speed;
+            rok.Body.VelDir = launch.Dir;
+            rok.Detach();
+            rok.SetRenderSlotFlags();
+            note = "unaimed launch goalSlot=" + carrier.TargetGoalSlot
+                   + " speed=" + speed.ToString("0.###", CultureInfo.InvariantCulture)
+                   + " deterministicRand=0.5/0.5";
+            return true;
+        }
+
+        // The existing exact PlanAction::Throw port (RokState.Throw) plus Unset_AttachPak. The Throw
+        // gate's viewed-slot argument names the carrier itself for the AI fallback (the AI plan route
+        // is the plan VM's own, not the human CHeadTrack view); documented in NATIVE-MATCH-N7.md.
+        public static bool Pass(Simulation sim, int carrierSlot, out float speed, out string note)
+        {
+            speed = 0.0f;
+            note = string.Empty;
+
+            RokState rok = sim.Rok;
+
+            if (rok.Body.Attach == null || rok.Body.Attach.Slot != carrierSlot)
+            {
+                note = "not carried by slot " + carrierSlot;
+                return false;
+            }
+
+            PlayerState carrier = sim.Players[carrierSlot];
             float weightedShotPower = carrier.Stats.GetWeightedStat(ObjectConstants.RatingShotPower);
 
             bool thrown = rok.Throw(sim.Rules.Clock, carrier.Stats, weightedShotPower,
-                carrier.Body.VelDir, humanSlot, sim.ViewedSlot);
+                carrier.Body.VelDir, carrierSlot, carrierSlot);
 
             if (!thrown)
             {
@@ -719,10 +769,11 @@ namespace UBlade3.Native
         }
     }
 
-    // The playable match control: pickup, carry, shot power meter, shot, pass, free-ROK flight, goal
-    // detection/scoring, post-goal reset and audio routing. It is Unity-free so the headless gate,
-    // the Editor capture and the Windows player run exactly the same state machine; a scene only
-    // supplies the held-key mask, a sim tick callback and the presentation sync.
+    // The playable match control: pickup, carry, the head-camera shot meter/aim, shot, pass, free-ROK
+    // flight, goal detection/scoring, the N7 goal celebration + face-off restart, fallback AI
+    // possession and audio routing. It is Unity-free so the headless gate, the Editor capture and the
+    // Windows player run exactly the same state machine; a scene only supplies the held-key mask and
+    // a sim tick callback.
     public sealed class MatchPlayControl
     {
         public const int PickupCooldownTicks = 9; // 300 ms at 30 Hz, scene-level catch cooldown
@@ -737,11 +788,25 @@ namespace UBlade3.Native
 
         public readonly MatchGoalDetector Detector = new MatchGoalDetector();
 
+        public readonly MatchHeadCamera HeadCam = new MatchHeadCamera();
+
         public readonly List<string> Notes = new List<string>();
+
+        public MatchAiController Ai;
+
+        public bool AiEnabled;
+
+        public bool HumanPickupEnabled = true;
+
+        public MatchFlowPhase Phase = MatchFlowPhase.Live;
+
+        public int PhaseEndTick = -1;
 
         public int Ticks;
 
         public HeldBinding PreviousHeld;
+
+        public HeldBinding CurrentHeld;
 
         public bool Carrying;
 
@@ -751,30 +816,57 @@ namespace UBlade3.Native
 
         public int Pickups;
 
+        public int HumanPickups;
+
+        public int AiPickups;
+
         public int Shots;
+
+        public int HumanShots;
+
+        public int AiShots;
 
         public int Passes;
 
+        public int HumanPasses;
+
+        public int AiPasses;
+
         public int Goals;
 
+        public int HumanGoals;
+
+        public int AiGoals;
+
         public int Bounces;
+
+        public int LastCarrierSlot = ObjectConstants.SlotNone;
+
+        public uint LastHumanShotWord;
+
+        public SimVec3 LastHumanShotVelocity;
+
+        public SimVec3 LastHumanShotPosition;
+
+        public SimVec3 LastAiShotVelocity;
+
+        public bool LastShotWasAi;
 
         public MatchGoalEvent LastGoal;
 
         public string Status = string.Empty;
 
-        // A goal stops the scoring/pickup path until the post-goal reset; the plan VM's own goal
-        // behavior/agenda chain is the piece that would do this in the retail game.
         public bool GoalLocked;
 
-        // Test-only trajectory trace (the headless gate turns it on to prove the shot path).
         public bool TraceFlight;
 
         private int traceTicks;
 
-        private int pendingResetTick = -1;
-
         private int pickupCooldownUntilTick = -1;
+
+        private readonly List<int> pendingAiShots = new List<int>();
+
+        private readonly List<int> pendingAiPasses = new List<int>();
 
         public MatchPlayControl(Simulation sim, MatchPlayConfig config, MatchAudioDirector audio)
         {
@@ -785,12 +877,66 @@ namespace UBlade3.Native
 
         public bool PendingReset
         {
-            get { return pendingResetTick >= 0; }
+            get { return Phase != MatchFlowPhase.Live; }
         }
 
-        // The two-phase tick the engine's object pass gives the plans: BeforeTick is the plan/action
-        // side (shot wind-up/release, pass, pause), then the caller runs the simulation tick, then
-        // AfterTick integrates the free ROK, detects goals and attempts pickup.
+        public bool SimPaused
+        {
+            get { return Sim.Rules.RunState == ClockConstants.RunPaused; }
+        }
+
+        public void AttachAi(params int[] slots)
+        {
+            Ai = new MatchAiController();
+            Ai.Enabled = true;
+
+            if (slots != null)
+            {
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    Ai.Slots.Add(slots[i]);
+                }
+            }
+
+            AiEnabled = true;
+        }
+
+        public HeldBinding InputForSlot(int slot)
+        {
+            if (slot == Config.HumanSlot)
+            {
+                return CurrentHeld;
+            }
+
+            if (AiEnabled && Ai != null && Ai.Slots.Contains(slot))
+            {
+                return Ai.GetInput(Sim, slot);
+            }
+
+            if (slot == ObjectConstants.GoalieSlotA || slot == ObjectConstants.GoalieSlotB)
+            {
+                return HeldBinding.None;
+            }
+
+            return HeldBinding.Forward;
+        }
+
+        public void RequestAiShot(int slot)
+        {
+            if (!pendingAiShots.Contains(slot))
+            {
+                pendingAiShots.Add(slot);
+            }
+        }
+
+        public void RequestAiPass(int slot)
+        {
+            if (!pendingAiPasses.Contains(slot))
+            {
+                pendingAiPasses.Add(slot);
+            }
+        }
+
         public void Advance(HeldBinding held, Action tickAction)
         {
             BeforeTick(held);
@@ -803,7 +949,6 @@ namespace UBlade3.Native
             AfterTick(held);
         }
 
-        // The scene passes the held mask to its own tick so the skater views/camera see it.
         public void Advance(HeldBinding held, Action<HeldBinding> tickAction)
         {
             BeforeTick(held);
@@ -819,15 +964,25 @@ namespace UBlade3.Native
         private void BeforeTick(HeldBinding held)
         {
             Ticks++;
+            CurrentHeld = held;
             uint now = Sim.Rules.Clock.TickMs;
             Carrying = Sim.Rok.IsCarried;
+
+            if (Phase != MatchFlowPhase.Live)
+            {
+                PreviousHeld = held;
+                return;
+            }
 
             bool shootHeld = (held & HeldBinding.Shoot) != 0;
             bool passHeld = (held & HeldBinding.Pass) != 0;
             bool passEdge = passHeld && (PreviousHeld & HeldBinding.Pass) == 0;
+            bool humanCarrying = Carrying && Sim.Rok.AttachedSlot == Config.HumanSlot;
 
-            if (Carrying && Sim.Rok.Body.Attach != null && Sim.Rok.Body.Attach.Slot == Config.HumanSlot)
+            if (humanCarrying)
             {
+                HeadCam.TickAim(Sim, held, Config.HumanSlot);
+
                 if (shootHeld)
                 {
                     if (ChargeStartMs < 0)
@@ -842,25 +997,39 @@ namespace UBlade3.Native
                 {
                     int level = Math.Max(1, ShotPowerLevel);
                     string note;
+                    uint shotWord = HeadCam.PackShotWord(level, out int resetShotPower);
+                    SimVec3 position = Sim.Rok.Body.Pos;
 
-                    if (MatchPossessionRules.LaunchShot(Sim, Config, level, out note))
+                    if (MatchPossessionRules.LaunchShot(Sim, Config, Config.HumanSlot,
+                            HeadCam.ViewFracX, HeadCam.ViewFracY, level, out note))
                     {
+                        HumanShots++;
                         Shots++;
+                        LastHumanShotWord = shotWord;
+                        LastHumanShotPosition = position;
+                        LastHumanShotVelocity = Sim.Rok.Body.Vel;
+                        LastShotWasAi = false;
                         Flight.Begin();
                         pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
                         Audio.Impact("shot-release", now);
-                        Notes.Add("UBLADE3_MATCH_PLAY_SHOT level=" + level + " note=" + note);
+                        Notes.Add("UBLADE3_NATIVE_MATCH_N7_HUMAN_SHOT level=" + level
+                                  + " shotWord=0x" + shotWord.ToString("x8", CultureInfo.InvariantCulture)
+                                  + " aimX=" + F(HeadCam.ViewFracX)
+                                  + " aimY=" + F(HeadCam.ViewFracY)
+                                  + " note=" + note);
 
                         if (TraceFlight)
                         {
-                            SimVec3 rokPosition = Sim.Rok.Body.Pos;
                             SimVec3 velocity = Sim.Rok.Body.Vel;
                             Debug.Log("UBLADE3_NATIVE_PLAY_SHOT_TRACE tick=" + Ticks
                                       + " level=" + level
-                                      + " pos=(" + F(rokPosition.x) + "," + F(rokPosition.y) + "," + F(rokPosition.z) + ")"
+                                      + " aimX=" + F(HeadCam.ViewFracX)
+                                      + " aimY=" + F(HeadCam.ViewFracY)
+                                      + " pos=(" + F(position.x) + "," + F(position.y) + "," + F(position.z) + ")"
                                       + " vel=(" + F(velocity.x) + "," + F(velocity.y) + "," + F(velocity.z) + ")"
                                       + " speed=" + F(Sim.Rok.Body.Speed));
                         }
+
                         Status = "SHOT RELEASED";
                     }
                     else
@@ -879,11 +1048,12 @@ namespace UBlade3.Native
 
                     if (MatchPossessionRules.Pass(Sim, Config.HumanSlot, out speed, out note))
                     {
+                        HumanPasses++;
                         Passes++;
                         Flight.Begin();
                         pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
                         Audio.Impact("pass-release", now);
-                        Notes.Add("UBLADE3_MATCH_PLAY_PASS speed=" + speed.ToString("0.###", CultureInfo.InvariantCulture) + " note=" + note);
+                        Notes.Add("UBLADE3_MATCH_PLAY_PASS speed=" + F(speed) + " note=" + note);
                         Status = "PASSED";
                     }
                 }
@@ -894,15 +1064,98 @@ namespace UBlade3.Native
                 ShotPowerLevel = 0;
             }
 
+            if (AiEnabled && Ai != null)
+            {
+                Ai.Update(Sim, this);
+            }
+
+            ProcessAiRequests(now);
             PreviousHeld = held;
+        }
+
+        private void ProcessAiRequests(uint now)
+        {
+            for (int i = pendingAiShots.Count - 1; i >= 0; i--)
+            {
+                int slot = pendingAiShots[i];
+                pendingAiShots.RemoveAt(i);
+
+                if (Sim.Rok.AttachedSlot != slot)
+                {
+                    continue;
+                }
+
+                float speed;
+                string note;
+
+                if (MatchPossessionRules.LaunchAiShot(Sim, slot, out speed, out note))
+                {
+                    AiShots++;
+                    Shots++;
+                    LastAiShotVelocity = Sim.Rok.Body.Vel;
+                    LastShotWasAi = true;
+                    Flight.Begin();
+                    pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
+                    Audio.Impact("ai-shot-release", now);
+                    Notes.Add("UBLADE3_NATIVE_MATCH_N7_AI_SHOT slot=" + slot + " speed=" + F(speed) + " note=" + note);
+                    Status = "AI SHOT";
+                }
+            }
+
+            for (int i = pendingAiPasses.Count - 1; i >= 0; i--)
+            {
+                int slot = pendingAiPasses[i];
+                pendingAiPasses.RemoveAt(i);
+
+                if (Sim.Rok.AttachedSlot != slot)
+                {
+                    continue;
+                }
+
+                float speed;
+                string note;
+
+                if (MatchPossessionRules.Pass(Sim, slot, out speed, out note))
+                {
+                    AiPasses++;
+                    Passes++;
+                    Flight.Begin();
+                    pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
+                    Audio.Impact("ai-pass-release", now);
+                    Notes.Add("UBLADE3_NATIVE_MATCH_N7_AI_PASS slot=" + slot + " speed=" + F(speed) + " note=" + note);
+                    Status = "AI PASS";
+                }
+            }
         }
 
         private void AfterTick(HeldBinding held)
         {
             uint now = Sim.Rules.Clock.TickMs;
+
+            if (Phase == MatchFlowPhase.GoalCelebration)
+            {
+                if (Ticks >= PhaseEndTick)
+                {
+                    BeginFaceOffDrag();
+                }
+
+                UpdateStatus();
+                return;
+            }
+
+            if (Phase == MatchFlowPhase.FaceOffDrag)
+            {
+                if (Ticks >= PhaseEndTick)
+                {
+                    FinishFaceOffDrag();
+                }
+
+                UpdateStatus();
+                return;
+            }
+
             bool scoredThisTick = false;
 
-            // 1. Free-ROK flight (the real moving ROK after a shot/pass).
             if (!Sim.Rok.IsCarried && Flight.Active)
             {
                 bool bounced;
@@ -934,17 +1187,6 @@ namespace UBlade3.Native
                     SimVec3 current = Flight.LastStepEnd;
                     SimVec3 point;
 
-                    if (TraceFlight && Math.Abs(previous.y) > 175.0f)
-                    {
-                        bool southSample = MatchGoalDetector.InsideGoalMouth(Sim.Arena.SouthGoal, previous);
-                        bool southCurrent = MatchGoalDetector.InsideGoalMouth(Sim.Arena.SouthGoal, current);
-                        Debug.Log("UBLADE3_NATIVE_PLAY_SWEEP_TRACE tick=" + Ticks
-                                  + " prev=(" + F(previous.x) + "," + F(previous.y) + "," + F(previous.z) + ")"
-                                  + " cur=(" + F(current.x) + "," + F(current.y) + "," + F(current.z) + ")"
-                                  + " prevInMouth=" + (southSample ? "True" : "False")
-                                  + " curInMouth=" + (southCurrent ? "True" : "False"));
-                    }
-
                     if (MatchPossessionRules.SegmentEntersGoal(Sim.Arena.NorthGoal, previous, current, out point)
                         || MatchPossessionRules.SegmentEntersGoal(Sim.Arena.SouthGoal, previous, current, out point))
                     {
@@ -960,7 +1202,6 @@ namespace UBlade3.Native
                 }
             }
 
-            // 2. The point goal test (carried/slow ROK).
             if (!scoredThisTick && !GoalLocked)
             {
                 MatchGoalEvent gameEvent = Detector.TryScore(Sim, Sim.Rok.Body.Pos);
@@ -972,69 +1213,177 @@ namespace UBlade3.Native
                 }
             }
 
-            // 3. Post-goal reset (the plan VM's goal/face-off restart is not ported; the scene drops
-            // the ROK back on the arena floor after a short pause and keeps the clock running).
-            if (pendingResetTick >= 0 && Ticks >= pendingResetTick)
+            if (!scoredThisTick && !Sim.Rok.IsCarried && !GoalLocked)
             {
-                MatchScoreFixture.PlaceRokAtSpawn(Sim);
-                Flight.Stop();
-                Detector.ResetDebounce();
-                pendingResetTick = -1;
-                GoalLocked = false;
-                Carrying = false;
-                ChargeStartMs = -1;
-                ShotPowerLevel = 0;
-                Notes.Add("UBLADE3_MATCH_PLAY_GOAL_RESET tick=" + Ticks);
-            }
-
-            // 4. Pickup (the exact RokInRange/Attach path; skipped while the ROK is still in the
-            // goal's deny/reset window).
-            if (!Sim.Rok.IsCarried && pendingResetTick < 0 && !GoalLocked)
-            {
-                bool cooldownReady = pickupCooldownUntilTick < 0 || Ticks >= pickupCooldownUntilTick;
-                float limit;
-                string note;
-
-                if (MatchPossessionRules.CanPickup(Sim, Config.HumanSlot, cooldownReady, out limit))
-                {
-                    AttachPak pak = new AttachPak();
-                    pak.Slot = (short)Config.HumanSlot;
-                    pak.Offset = new SimVec3(0.0f, 0.0f, MatchPossessionRules.CarryOffsetZ);
-                    pak.LinkId = 0;
-
-                    Sim.Rok.Attach(pak, OnRokMessage);
-                    Pickups++;
-                    Carrying = true;
-                    Flight.Stop();
-                    pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
-                    ChargeStartMs = -1;
-                    ShotPowerLevel = 0;
-                    Audio.Impact("rok-pickup", now);
-                    Notes.Add("UBLADE3_MATCH_PLAY_PICKUP slot=" + Config.HumanSlot
-                              + " tick=" + Ticks
-                              + " limitSquared=" + limit.ToString("0.###", CultureInfo.InvariantCulture));
-                }
+                TryPickup(now);
             }
 
             UpdateStatus();
         }
 
+        private void TryPickup(uint now)
+        {
+            bool cooldownReady = pickupCooldownUntilTick < 0 || Ticks >= pickupCooldownUntilTick;
+
+            if (!cooldownReady)
+            {
+                return;
+            }
+
+            int bestSlot = ObjectConstants.SlotNone;
+            float bestDistance = float.MaxValue;
+            float bestLimit = 0.0f;
+
+            if (HumanPickupEnabled)
+            {
+                float limit;
+
+                if (MatchPossessionRules.CanPickup(Sim, Config.HumanSlot, true, out limit))
+                {
+                    float distance = DistanceSquared(Sim.Players[Config.HumanSlot].Body.Pos, Sim.Rok.Body.Pos);
+
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestSlot = Config.HumanSlot;
+                        bestLimit = limit;
+                    }
+                }
+            }
+
+            if (AiEnabled && Ai != null)
+            {
+                for (int i = 0; i < Ai.Slots.Count; i++)
+                {
+                    int slot = Ai.Slots[i];
+                    float limit;
+
+                    if (!MatchPossessionRules.CanPickup(Sim, slot, true, out limit))
+                    {
+                        continue;
+                    }
+
+                    float distance = DistanceSquared(Sim.Players[slot].Body.Pos, Sim.Rok.Body.Pos);
+
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestSlot = slot;
+                        bestLimit = limit;
+                    }
+                }
+            }
+
+            if (bestSlot == ObjectConstants.SlotNone)
+            {
+                return;
+            }
+
+            AttachPak pak = new AttachPak();
+            pak.Slot = (short)bestSlot;
+            pak.Offset = new SimVec3(0.0f, 0.0f, MatchPossessionRules.CarryOffsetZ);
+            pak.LinkId = 0;
+
+            Sim.Rok.Attach(pak, OnRokMessage);
+            Pickups++;
+            LastCarrierSlot = bestSlot;
+            Carrying = true;
+            Flight.Stop();
+            pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
+            ChargeStartMs = -1;
+            ShotPowerLevel = 0;
+
+            if (bestSlot == Config.HumanSlot)
+            {
+                HumanPickups++;
+                HeadCam.ResetAim();
+                Audio.Impact("rok-pickup", now);
+                Notes.Add("UBLADE3_NATIVE_MATCH_PLAY_PICKUP slot=" + bestSlot + " tick=" + Ticks
+                          + " limitSquared=" + F(bestLimit));
+            }
+            else
+            {
+                AiPickups++;
+                Audio.Impact("ai-rok-pickup", now);
+                Notes.Add("UBLADE3_NATIVE_MATCH_N7_AI_PICKUP slot=" + bestSlot + " tick=" + Ticks
+                          + " limitSquared=" + F(bestLimit));
+            }
+        }
+
+        private static float DistanceSquared(SimVec3 a, SimVec3 b)
+        {
+            float dx = a.x - b.x;
+            float dy = a.y - b.y;
+            float dz = a.z - b.z;
+            return (dx * dx) + (dy * dy) + (dz * dz);
+        }
+
         private void CountGoal(MatchGoalEvent gameEvent, uint now)
         {
             Goals++;
+
+            if (LastCarrierSlot == Config.HumanSlot)
+            {
+                HumanGoals++;
+            }
+            else if (LastCarrierSlot >= 0 && AiEnabled && Ai != null && Ai.Slots.Contains(LastCarrierSlot))
+            {
+                AiGoals++;
+            }
+
             LastGoal = gameEvent;
             GoalLocked = true;
-            pendingResetTick = Ticks + Config.PostGoalResetTicks;
+            Phase = MatchFlowPhase.GoalCelebration;
+            PhaseEndTick = Ticks + MatchFaceOff.GoalCelebrationTicks;
             Flight.Stop();
             Carrying = false;
+            ChargeStartMs = -1;
+            ShotPowerLevel = 0;
+            HeadCam.ResetAim();
+            MatchFaceOff.StopPlay(Sim);
+
             Audio.Goal(gameEvent.Points, gameEvent.GoalSlot == ObjectConstants.SlotSGoal,
                 gameEvent.HomeScore, gameEvent.AwayScore, now);
-            Notes.Add("UBLADE3_MATCH_PLAY_GOAL side=" + (gameEvent.ScoringSide == 0 ? "home" : "away")
+
+            Notes.Add("UBLADE3_NATIVE_MATCH_N7_GOAL_FLOW side=" + (gameEvent.ScoringSide == 0 ? "home" : "away")
                       + " points=" + gameEvent.Points
                       + " goalSlot=" + gameEvent.GoalSlot
                       + " scoreCode=" + gameEvent.ScoreCode
                       + " homeScore=" + gameEvent.HomeScore
-                      + " awayScore=" + gameEvent.AwayScore);
+                      + " awayScore=" + gameEvent.AwayScore
+                      + " scorerSlot=" + LastCarrierSlot
+                      + " celebrationTicks=" + MatchFaceOff.GoalCelebrationTicks);
+        }
+
+        private void BeginFaceOffDrag()
+        {
+            MatchFaceOff.ApplyPlayerFaceOff(Sim);
+            MatchFaceOff.ApplyRokFaceOff(Sim);
+            Phase = MatchFlowPhase.FaceOffDrag;
+            PhaseEndTick = Ticks + MatchFaceOff.DragTicks;
+            GoalLocked = true;
+            Flight.Stop();
+            Carrying = false;
+            ChargeStartMs = -1;
+            ShotPowerLevel = 0;
+            LastCarrierSlot = ObjectConstants.SlotNone;
+            Notes.Add("UBLADE3_NATIVE_MATCH_N7_FACE_OFF_SETUP tick=" + Ticks
+                      + " players=human+ai corners=" + F(MatchFaceOff.PlayerCorner)
+                      + " rokDragHeight=" + F(MatchFaceOff.RokDragHeight)
+                      + " dragTicks=" + MatchFaceOff.DragTicks);
+        }
+
+        private void FinishFaceOffDrag()
+        {
+            MatchFaceOff.DropRokForNextPossession(Sim);
+            Detector.ResetDebounce();
+            Phase = MatchFlowPhase.Live;
+            GoalLocked = false;
+            pickupCooldownUntilTick = Ticks + PickupCooldownTicks;
+            HeadCam.ResetAim();
+            MatchFaceOff.ResumePlay(Sim);
+            Notes.Add("UBLADE3_NATIVE_MATCH_N7_FACE_OFF_RESUMED tick=" + Ticks
+                      + " fallbackDrop=center-floor retailPlanAutoLaunchNotPorted");
         }
 
         private static string F(float value)
@@ -1052,24 +1401,40 @@ namespace UBlade3.Native
             MatchScoreFixture.PlaceRokAtSpawn(Sim);
             Flight.Stop();
             Detector.ResetDebounce();
-            pendingResetTick = -1;
+            Phase = MatchFlowPhase.Live;
+            PhaseEndTick = -1;
             GoalLocked = false;
             Carrying = false;
             ChargeStartMs = -1;
             ShotPowerLevel = 0;
             pickupCooldownUntilTick = Ticks;
+            HeadCam.ResetAim();
         }
 
         private void UpdateStatus()
         {
-            if (GoalLocked)
+            if (Phase == MatchFlowPhase.GoalCelebration)
             {
-                Status = "GOAL - " + Sim.Rules.ScoreHome + "-" + Sim.Rules.ScoreAway + " - resetting";
+                Status = "GOAL! " + Sim.Rules.ScoreHome + "-" + Sim.Rules.ScoreAway
+                         + " - CELEBRATION - FACE-OFF NEXT";
+            }
+            else if (Phase == MatchFlowPhase.FaceOffDrag)
+            {
+                Status = "FACE-OFF - CENTRE - ROK DROPS AT THE DRAG END";
+            }
+            else if (GoalLocked)
+            {
+                Status = "GOAL - " + Sim.Rules.ScoreHome + "-" + Sim.Rules.ScoreAway;
+            }
+            else if (Sim.Rok.IsCarried && Sim.Rok.AttachedSlot == Config.HumanSlot)
+            {
+                Status = "ROK CARRIED - POWER " + ShotPowerLevel.ToString(CultureInfo.InvariantCulture)
+                         + "% - AIM " + F(HeadCam.ViewFracX) + "/" + F(HeadCam.ViewFracY)
+                         + " - RELEASE SPACE SHOOT - C PASS";
             }
             else if (Sim.Rok.IsCarried)
             {
-                Status = "ROK CARRIED - POWER " + ShotPowerLevel.ToString(CultureInfo.InvariantCulture)
-                         + "% - RELEASE SPACE TO SHOOT - C PASS";
+                Status = "ROK CARRIED BY AI SLOT " + Sim.Rok.AttachedSlot;
             }
             else if (Flight.Active)
             {
@@ -1077,7 +1442,7 @@ namespace UBlade3.Native
             }
             else
             {
-                Status = "ROK FREE - SKATE INTO IT - HOLD SPACE TO SHOOT - C PASS";
+                Status = "ROK FREE - SKATE IT DOWN - HOLD SPACE TO SHOOT - C PASS";
             }
         }
 
@@ -1086,16 +1451,33 @@ namespace UBlade3.Native
             StringBuilder text = new StringBuilder();
             text.Append("UBLADE3_NATIVE_PLAY_COUNTS");
             text.Append(" ticks=").Append(Ticks);
+            text.Append(" phase=").Append(Phase);
             text.Append(" pickups=").Append(Pickups);
+            text.Append(" humanPickups=").Append(HumanPickups);
+            text.Append(" aiPickups=").Append(AiPickups);
             text.Append(" shots=").Append(Shots);
+            text.Append(" humanShots=").Append(HumanShots);
+            text.Append(" aiShots=").Append(AiShots);
             text.Append(" passes=").Append(Passes);
+            text.Append(" humanPasses=").Append(HumanPasses);
+            text.Append(" aiPasses=").Append(AiPasses);
             text.Append(" goals=").Append(Goals);
+            text.Append(" humanGoals=").Append(HumanGoals);
+            text.Append(" aiGoals=").Append(AiGoals);
             text.Append(" bounces=").Append(Bounces);
             text.Append(" scoreHome=").Append(Sim.Rules.ScoreHome);
             text.Append(" scoreAway=").Append(Sim.Rules.ScoreAway);
             text.Append(" carrying=").Append(Sim.Rok.IsCarried ? "True" : "False");
             text.Append(" flight=").Append(Flight.Active ? "True" : "False");
             text.Append(" shotPower=").Append(ShotPowerLevel);
+            text.Append(" headCam=\"").Append(HeadCam.Describe()).Append('"');
+            text.Append(" lastHumanShotWord=0x").Append(LastHumanShotWord.ToString("x8", CultureInfo.InvariantCulture));
+            text.Append(" lastHumanShotVel=(").Append(F(LastHumanShotVelocity.x)).Append(',')
+                .Append(F(LastHumanShotVelocity.y)).Append(',')
+                .Append(F(LastHumanShotVelocity.z)).Append(')');
+            text.Append(" lastAiShotVel=(").Append(F(LastAiShotVelocity.x)).Append(',')
+                .Append(F(LastAiShotVelocity.y)).Append(',')
+                .Append(F(LastAiShotVelocity.z)).Append(')');
             text.Append(" audio=\"").Append(Audio.Describe()).Append('"');
             text.Append(" notes=").Append(Notes.Count);
 
@@ -1232,8 +1614,8 @@ namespace UBlade3.Native
 
             capture?.Invoke("goal");
 
-            // 5. The post-goal reset (plan VM restart not ported) and the updated HUD.
-            for (int i = 0; i < 60; i++)
+            // 5. The goal celebration + face-off drag restart, then the updated HUD.
+            for (int i = 0; i < 100; i++)
             {
                 control.Advance(HeldBinding.None, tick);
             }

@@ -79,6 +79,20 @@ namespace UBlade3.Native
             "00-start", "01-pickup", "02-charge", "03-shot", "04-goal", "05-score", "06-pass"
         };
 
+        public const string N7CapturePrefix = "native-match-n7";
+
+        public static readonly string[] N7CaptureBeats =
+        {
+            "start", "pickup", "charge", "headcam", "shot", "goal", "celebration",
+            "faceoff", "restart", "ai-pickup", "ai-shot", "score"
+        };
+
+        public static readonly string[] N7CaptureLabels =
+        {
+            "00-start", "01-pickup", "02-charge", "03-headcam", "04-shot", "05-goal",
+            "06-celebration", "07-faceoff", "08-restart", "09-ai-pickup", "10-ai-shot", "11-score"
+        };
+
         public MatchScene Scene { get; private set; }
 
         public MatchGameplay Gameplay { get; private set; }
@@ -117,10 +131,13 @@ namespace UBlade3.Native
         private double tickAccumulator;
 
         private bool captureCommand;
+        private bool n7CaptureCommand;
         private bool autoStartCommand;
         private string captureBasePath;
+        private string n7CaptureBasePath;
 
         private static readonly Dictionary<string, int> BeatIndex = BuildBeatIndex();
+        private static readonly Dictionary<string, int> N7BeatIndex = BuildN7BeatIndex();
 
         private static Dictionary<string, int> BuildBeatIndex()
         {
@@ -129,6 +146,18 @@ namespace UBlade3.Native
             for (int i = 0; i < CaptureBeats.Length; i++)
             {
                 map[CaptureBeats[i]] = i;
+            }
+
+            return map;
+        }
+
+        private static Dictionary<string, int> BuildN7BeatIndex()
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < N7CaptureBeats.Length; i++)
+            {
+                map[N7CaptureBeats[i]] = i;
             }
 
             return map;
@@ -163,7 +192,11 @@ namespace UBlade3.Native
 
                 Build(scene, gameplay);
 
-                if (captureCommand)
+                if (n7CaptureCommand)
+                {
+                    RunCommandCaptureN7();
+                }
+                else if (captureCommand)
                 {
                     RunCommandCapture();
                 }
@@ -192,7 +225,13 @@ namespace UBlade3.Native
 
             foreach (string argument in arguments)
             {
-                if (argument.StartsWith("--play-capture=", StringComparison.Ordinal))
+                if (argument.StartsWith("--n7-capture=", StringComparison.Ordinal))
+                {
+                    n7CaptureCommand = true;
+                    autoStartCommand = true;
+                    n7CaptureBasePath = argument.Substring("--n7-capture=".Length);
+                }
+                else if (argument.StartsWith("--play-capture=", StringComparison.Ordinal))
                 {
                     captureCommand = true;
                     autoStartCommand = true;
@@ -299,8 +338,12 @@ namespace UBlade3.Native
             Audio = new MatchAudioDirector(service);
             Control = new MatchPlayControl(scene.Sim.Sim, Config, Audio);
 
-            // The ROK starts on the arena floor at the drome's own spawn point (the plan VM's drag
-            // placement is not ported).
+            // N7 fallback AI possession: the two non-goalie AI skaters pursue the free ROK, and the
+            // sim's input map now resolves every slot through the control (the human's held mask or
+            // the AI controller's steering).
+            Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2);
+            scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
             MatchScoreFixture.PlaceRokAtSpawn(scene.Sim.Sim);
             Control.ResetRokToSpawn();
 
@@ -332,7 +375,7 @@ namespace UBlade3.Native
 
         private void Update()
         {
-            if (!IsBuilt || captureCommand || Scene == null)
+            if (!IsBuilt || captureCommand || n7CaptureCommand || Scene == null)
             {
                 return;
             }
@@ -395,6 +438,10 @@ namespace UBlade3.Native
         {
             int failures = 0;
 
+            // The N6 suite is the human-only loop; the N7 suite below exercises the fallback AI.
+            Control.AiEnabled = false;
+            Control.HumanPickupEnabled = true;
+
             result = MatchPlayScript.Run(Control, beat => CaptureBeat(beat, paths), held => Scene.TickScene(held));
 
             LastScript = result;
@@ -431,6 +478,109 @@ namespace UBlade3.Native
             return failures;
         }
 
+        // --- N7: head camera, celebration/face-off restart and fallback AI possession ---------------
+
+        public int RunDeterministicCaptureN7(string[] paths, out MatchPlayN7ScriptResult result)
+        {
+            int failures = 0;
+
+            if (Control.Ai == null)
+            {
+                Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2);
+            }
+
+            Control.AiEnabled = true;
+            Control.HumanPickupEnabled = true;
+            Control.Ai.Enabled = true;
+            Scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
+            result = MatchPlayN7Script.Run(Control, beat => CaptureBeatN7(beat, paths),
+                held => Scene.TickScene(held));
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_RESULT approachTicks=" + result.ApproachTicks
+                      + " humanPickups=" + result.HumanPickups
+                      + " humanShots=" + result.HumanShots
+                      + " humanGoals=" + result.HumanGoals
+                      + " aiPickups=" + result.AiPickups
+                      + " aiShots=" + result.AiShots
+                      + " aiPasses=" + result.AiPasses
+                      + " aiGoals=" + result.AiGoals
+                      + " goals=" + result.Goals
+                      + " bounces=" + result.Bounces
+                      + " score=" + result.ScoreHome + "-" + result.ScoreAway
+                      + " headCamViewFrac=(" + result.HeadCamViewFracX.ToString("0.###", CultureInfo.InvariantCulture)
+                      + "," + result.HeadCamViewFracY.ToString("0.###", CultureInfo.InvariantCulture) + ")"
+                      + " headCamFovDegrees=" + result.HeadCamFovDegrees.ToString("0.###", CultureInfo.InvariantCulture)
+                      + " headCamShotWord=0x" + result.HeadCamShotWord.ToString("x8", CultureInfo.InvariantCulture)
+                      + " centreShotVel=(" + MatchSimulation.F(result.CentreShotVelocity.x) + ","
+                      + MatchSimulation.F(result.CentreShotVelocity.y) + ","
+                      + MatchSimulation.F(result.CentreShotVelocity.z) + ")"
+                      + " faceOffSetupTick=" + result.FaceOffSetupTick
+                      + " faceOffResumeTick=" + result.FaceOffResumeTick
+                      + " aiPickupTick=" + result.AiPickupTick
+                      + " aiShotTick=" + result.AiShotTick
+                      + " finalPhase=" + result.FinalPhase
+                      + " failures=" + result.Failures
+                      + " reason=" + result.FailureText);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_AUDIO " + Audio.Describe());
+            Debug.Log("UBLADE3_NATIVE_MATCH_N7_CONTROL " + Control.Describe());
+
+            if (result.Failures != 0)
+            {
+                failures += result.Failures;
+            }
+
+            if (Captures.Count != N7CaptureBeats.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N7_CAPTURE_FAILED captured " + Captures.Count
+                               + " of " + N7CaptureBeats.Length + " beats");
+            }
+
+            SyncPresentation();
+            return failures;
+        }
+
+        private void RunCommandCaptureN7()
+        {
+            string baseName = string.IsNullOrEmpty(n7CaptureBasePath)
+                ? System.IO.Path.Combine("artifacts", N7CapturePrefix + "-player.png")
+                : n7CaptureBasePath;
+
+            string directory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(baseName));
+            string stem = System.IO.Path.GetFileNameWithoutExtension(baseName);
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = System.IO.Directory.GetCurrentDirectory();
+            }
+
+            string[] paths = new string[N7CaptureLabels.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = System.IO.Path.Combine(directory, stem + "-" + N7CaptureLabels[i] + ".png");
+            }
+
+            MatchPlayN7ScriptResult result;
+            int failures = RunDeterministicCaptureN7(paths, out result);
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N7_CAPTURES_OK frames=" + paths.Length
+                  + " humanPickups=" + result.HumanPickups + " humanShots=" + result.HumanShots
+                  + " humanGoals=" + result.HumanGoals
+                  + " aiPickups=" + result.AiPickups + " aiShots=" + result.AiShots
+                  + " aiPasses=" + result.AiPasses + " score=" + result.ScoreHome + "-" + result.ScoreAway
+                  + " headCamFovDegrees=" + result.HeadCamFovDegrees
+                  + " audio=\"" + Audio.Describe() + "\""
+                : "UBLADE3_NATIVE_MATCH_N7_CAPTURES_FAILED failures=" + failures);
+
+            if (Application.isBatchMode || !Application.isEditor)
+            {
+                Application.Quit(failures == 0 ? 0 : 1);
+            }
+        }
+
         private void CaptureBeat(string beat, string[] paths)
         {
             int index;
@@ -447,13 +597,57 @@ namespace UBlade3.Native
             }
 
             SyncPresentation();
-            Capture(paths[index], index, beat);
+            Capture(paths[index], index, beat, false);
         }
 
-        public MatchPlayCapture Capture(string path, int index, string beat)
+        private void CaptureBeatN7(string beat, string[] paths)
+        {
+            int index;
+
+            if (!N7BeatIndex.TryGetValue(beat, out index))
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N7_CAPTURE_UNKNOWN beat=" + beat);
+                return;
+            }
+
+            if (paths == null || index >= paths.Length || string.IsNullOrEmpty(paths[index]))
+            {
+                return;
+            }
+
+            SyncPresentation();
+            Capture(paths[index], index, beat, string.Equals(beat, "headcam", StringComparison.OrdinalIgnoreCase));
+        }
+
+        public MatchPlayCapture Capture(string path, int index, string beat, bool headCamera = false)
         {
             Scene.ApplyRender(1.0f);
             SyncPresentation();
+
+            Camera matchCamera = Scene.MatchCamera;
+
+            if (headCamera)
+            {
+                Control.HeadCam.Update(Scene.Sim.Sim, Config.HumanSlot);
+                Vector3 eye = MatchSkaterView.ToUnity(Control.HeadCam.Eye);
+                Vector3 forward = MatchSkaterView.ToUnityDirection(Control.HeadCam.Forward);
+                matchCamera.transform.position = eye;
+                matchCamera.transform.rotation = Quaternion.LookRotation(forward.normalized, Vector3.up);
+                matchCamera.fieldOfView = MatchHeadCamera.FieldOfViewDegrees;
+                Gameplay.HUD.ShowReticle = true;
+                Gameplay.HUD.ReticleFracX = Control.HeadCam.ViewFracX;
+                Gameplay.HUD.ReticleFracY = Control.HeadCam.ViewFracY;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N7_HEAD_CAM frame=" + beat
+                          + " eye=(" + MatchSimulation.F(Control.HeadCam.Eye.x) + ","
+                          + MatchSimulation.F(Control.HeadCam.Eye.y) + ","
+                          + MatchSimulation.F(Control.HeadCam.Eye.z) + ")"
+                          + " forward=(" + MatchSimulation.F(Control.HeadCam.Forward.x) + ","
+                          + MatchSimulation.F(Control.HeadCam.Forward.y) + ","
+                          + MatchSimulation.F(Control.HeadCam.Forward.z) + ")"
+                          + " fovDegrees=" + MatchHeadCamera.FieldOfViewDegrees
+                          + " viewFrac=(" + MatchSimulation.F(Control.HeadCam.ViewFracX) + ","
+                          + MatchSimulation.F(Control.HeadCam.ViewFracY) + ")");
+            }
 
             RenderTexture target = new RenderTexture(CaptureWidth, CaptureHeight, 24, RenderTextureFormat.ARGB32);
             target.name = "UBlade3PlayCapture";
@@ -487,6 +681,12 @@ namespace UBlade3.Native
                 target.Release();
                 UnityEngine.Object.DestroyImmediate(target);
                 UnityEngine.Object.DestroyImmediate(image);
+
+                if (headCamera)
+                {
+                    Gameplay.HUD.ShowReticle = false;
+                    Scene.ApplyRender(1.0f);
+                }
             }
 
             string directory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(path));

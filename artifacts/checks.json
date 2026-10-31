@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T08:26:48.970Z",
+  "generatedAt": "2026-10-31T08:43:24.755Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -259,6 +259,55 @@
         "not release path"
       ],
       "doc": "docs/NATIVE-PLAY.md"
+    },
+    "n7": {
+      "status": "N7 playable C# match follow-up verified",
+      "headless": "humanPickups=1 humanShots=1 humanGoals=1 aiPickups=1 aiShots=1 score=1-0 faceOffSetupTick=179 faceOffResumeTick=200 determinism=True",
+      "headCamera": {
+        "fov": 85,
+        "aimedViewFracX": 0.622,
+        "aimWord": "0x0032253e",
+        "centreWord": "0x00321a32"
+      },
+      "faceoff": {
+        "playerCorner": 28,
+        "rokDragHeight": -95,
+        "celebrationTicks": 42,
+        "dragTicks": 21,
+        "restartTicks": 63
+      },
+      "ai": {
+        "pickups": 1,
+        "shots": 1,
+        "passes": 1
+      },
+      "captures": [
+        "artifacts/native-match-n7-03-headcam.png",
+        "artifacts/native-match-n7-06-celebration.png",
+        "artifacts/native-match-n7-07-faceoff.png",
+        "artifacts/native-match-n7-09-ai-pickup.png",
+        "artifacts/native-match-n7-10-ai-shot.png",
+        "artifacts/native-match-n7-11-score.png"
+      ],
+      "audio": {
+        "requested": 7,
+        "played": 8,
+        "goal": 1,
+        "crowd": 1,
+        "impact": 5,
+        "ambient": 1
+      },
+      "gaps": [
+        "PlanVM AI not wired",
+        "celebration animation fallback",
+        "goalies not repositioned",
+        "head-camera eye not HEAD_BONE",
+        "AI heuristic/unaimed shot",
+        "no receiver/catch",
+        "interim HUD/ROK",
+        "not release path"
+      ],
+      "doc": "docs/NATIVE-MATCH-N7.md"
     }
   }
 }

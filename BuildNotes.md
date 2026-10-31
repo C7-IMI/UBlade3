@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.012
+
+**N7 playable match: face-off/restart, head camera and fallback-AI possession.**
+
+- Date: 2026-10-31
+- Change: added MatchFlow/MatchFaceOff, MatchHeadCamera, MatchAiController and the deterministic
+  N7 play script. Goals now stop play, show a celebration beat, set face-off corners, drag the ROK,
+  restart and resume; the human gets an 85-degree head-camera aim path with a shot word; fallback AI
+  slots pursue the free ROK and take a shot/pass.
+- Verified: `UBLADE3_NATIVE_MATCH_N7_CHECK_OK mismatches=0`, humanPickups=1 humanShots=1
+  humanGoals=1 aiPickups=1 aiShots=1 score=1-0, faceOff setup/resume ticks 179/200, headcam
+  fov=85 aimedViewFracX=0.622; 12 Editor + 12 player frames byte-identical; audio played=8; N4/N5/N6
+  regressions preserved; no20xx=true.
+- Boundary: PlanVM AI remains unported; celebration is a paused HUD/audio beat, ROK drop and
+  goalies are fallbacks; head-camera eye is the sim aim position, not HEAD_BONE; AI is heuristic;
+  no receiver/catch; interim HUD/ROK; not release/parity.
+- Docs: docs/NATIVE-MATCH-N7.md.
+
 ## 2026.10.31.011
 
 **First playable native C# match loop: pickup, shoot, real goal, HUD score and audio routing.**

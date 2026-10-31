@@ -151,6 +151,14 @@ namespace UBlade3.Native
         // capture frames keep their exact layout and bytes.
         public string StatusLine = string.Empty;
 
+        // Optional N7 head-camera reticle, drawn only for the head-camera capture beat. The
+        // fractions are the same CHeadTrack view fractions that the shot word packs.
+        public bool ShowReticle;
+
+        public float ReticleFracX = 0.5f;
+
+        public float ReticleFracY = 0.5f;
+
         public bool GuiDrawn { get; private set; }
 
         private sealed class HudArt
@@ -400,6 +408,17 @@ namespace UBlade3.Native
             {
                 float statusWidth = TextWidth(StatusLine, 2f);
                 AddText(texts, StatusLine, (width - statusWidth) * 0.5f, height - 42f, 2f, yellow);
+            }
+
+            if (ShowReticle)
+            {
+                // The head-cam reticle at the CHeadTrack view fractions. The interim font has no
+                // plus glyph, so the mark is the available cross "X" with a HEAD CAM label.
+                string mark = "X";
+                float markWidth = TextWidth(mark, 3f);
+                AddText(texts, mark, (ReticleFracX * width) - (markWidth * 0.5f),
+                    (ReticleFracY * height) - 7.5f, 3f, yellow);
+                AddText(texts, "HEAD CAM", 8f, 8f, 2f, yellow);
             }
         }
 
