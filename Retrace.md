@@ -129,3 +129,14 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.012
 
+## 12 - 2026-10-31
+
+- Request: actually wire PlanVM AI into the native match.
+- Work: MatchPlanAi binds CARRYROK to AI slot 1 and runs TurnToMate>PassingPlay>PassingPlayPass
+  through the real VM; its pass decision becomes a real match pass. N8 deterministic script and
+  captures.
+- Evidence: N8_CHECK_OK mismatches=0 planTicks=48 behaviorChanges=3 aiPickups=1 aiPasses=1
+  unsupported=8 digest=4fb06b4458419444; Editor/player frames identical; N4-N7 regressions green.
+- Boundary: one plan/behavior/skater, labelled motion bridge, many handler ids remain. Goal active.
+- Version: 2026.10.31.013
+

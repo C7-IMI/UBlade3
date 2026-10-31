@@ -53,8 +53,11 @@ original data formats. **Current verified milestone:**
   byte-identical player output and 7 audio plays. See [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
 - C# N7 playable follow-up: post-goal celebration/face-off drag/restart, 85-degree head-camera aim and fallback-AI
   ROK pursuit/shots; `N7_CHECK_OK mismatches=0 score=1-0 aiPickups=1 aiShots=1`, 12 Editor/player capture beats with
-  byte-identical player frames and 8 audio plays. PlanVM AI remains the main gap. See
-  [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
+  byte-identical player frames and 8 audio plays. See [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
+- C# N8 real PlanVM AI: AI slot 1 picks up the ROK, binds CARRYROK, runs TurnToMate>PassingPlay>PassingPlayPass
+  through the real VM and its plan decision becomes a real pass. `N8_CHECK_OK mismatches=0 planTicks=48
+  aiPickups=1 aiPasses=1 digest=4fb06b4458419444`; six Editor/player captures byte-identical. One plan/skater
+  only; other AI remains fallback. See [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -68,6 +71,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - C# native gameplay: [docs/NATIVE-GAMEPLAY.md](./docs/NATIVE-GAMEPLAY.md).
 - C# playable loop: [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
 - C# N7 playable follow-up: [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
+- C# N8 PlanVM AI: [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

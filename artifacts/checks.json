@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T08:43:24.755Z",
+  "generatedAt": "2026-10-31T09:01:42.124Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -308,6 +308,41 @@
         "not release path"
       ],
       "doc": "docs/NATIVE-MATCH-N7.md"
+    },
+    "planAiMatch": {
+      "status": "N8 real C# PlanVM-driven AI in native match verified",
+      "plan": "CARRYROK.PBN",
+      "nodes": 889,
+      "behaviors": [
+        "TurnToMate",
+        "PassingPlay",
+        "PassingPlayPass"
+      ],
+      "behaviorChanges": 3,
+      "targetChanges": 2,
+      "actions": "5x3,93x1,103x1",
+      "decisions": "15x2,50x1,78x1,111x3",
+      "planTicks": 48,
+      "passRequests": 1,
+      "fallbackMotionTicks": 0,
+      "unsupported": 8,
+      "digest": "4fb06b4458419444",
+      "match": "aiPickups=1 aiPasses=1 aiShots=0 planBoundTick=52 planPassTick=99 determinism=True",
+      "captures": [
+        "artifacts/native-match-n8-01-ai-pickup.png",
+        "artifacts/native-match-n8-03-passing-play.png",
+        "artifacts/native-match-n8-04-plan-pass.png"
+      ],
+      "playerFramesIdentical": true,
+      "gaps": [
+        "one plan/behavior/skater",
+        "other plans/heuristic fallback",
+        "CSteerToTarget/glide physics bridge",
+        "behaviour subclasses/behparams",
+        "remaining action/decision bodies",
+        "no full AI parity"
+      ],
+      "doc": "docs/NATIVE-MATCH-N8.md"
     }
   }
 }

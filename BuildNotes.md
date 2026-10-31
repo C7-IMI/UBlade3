@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.013
+
+**First real PlanVM-driven AI inside the native C# match.**
+
+- Date: 2026-10-31
+- Change: added MatchPlanAi adapter and the N8 play script. AI slot 1 picks up the ROK through the
+  match possession rule, binds the shipped CARRYROK plan to live Simulation state, runs
+  TurnToMate -> PassingPlay -> PassingPlayPass through the real PlanVM agenda/timers/messages, and
+  its own pass decision becomes a real MatchPossessionRules pass. See docs/NATIVE-MATCH-N8.md.
+- Verified: `UBLADE3_NATIVE_MATCH_N8_CHECK_OK mismatches=0`; plan nodes=889 planTicks=48
+  behaviorChanges=3 targetChanges=2 aiPickups=1 aiPasses=1 planPassTick=99 unsupported=8
+  digest=4fb06b4458419444; determinism ok; heuristic comparison documented; 6 Editor + 6 player
+  frames byte-identical; N4/N5/N6/N7 regressions green; no20xx processes.
+- Boundary: one plan/behavior/skater; other AI is fallback; movement uses a labelled held-mask
+  bridge (CSteerToTarget/glide not ported); behaviour subclasses/behparams and most action/decision
+  bodies remain. Not full AI parity or release.
+- Docs: docs/NATIVE-MATCH-N8.md.
+
 ## 2026.10.31.012
 
 **N7 playable match: face-off/restart, head camera and fallback-AI possession.**

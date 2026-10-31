@@ -19,6 +19,10 @@ namespace UBlade3.Native
 
         public bool ForceNextPass;
 
+        // N8: a plan-driven slot keeps the pickup/possession path but must not receive heuristic
+        // shot/pass requests; the plan's own decisions drive those.
+        public Func<int, bool> SuppressSlot;
+
         public int LastActiveSlot = -1;
 
         public HeldBinding GetInput(Simulation sim, int slot)
@@ -63,6 +67,11 @@ namespace UBlade3.Native
                 int slot = Slots[i];
 
                 if (slot < 0 || slot >= sim.Players.Length)
+                {
+                    continue;
+                }
+
+                if (SuppressSlot != null && SuppressSlot(slot))
                 {
                     continue;
                 }

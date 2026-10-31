@@ -794,6 +794,9 @@ namespace UBlade3.Native
 
         public MatchAiController Ai;
 
+        // N8: the real C# PlanVM-driven AI for one slot; null keeps the N7 heuristic path untouched.
+        public MatchPlanAi PlanAi;
+
         public bool AiEnabled;
 
         public bool HumanPickupEnabled = true;
@@ -885,6 +888,12 @@ namespace UBlade3.Native
             get { return Sim.Rules.RunState == ClockConstants.RunPaused; }
         }
 
+        // N8: bind the shipped CARRYROK plan to one AI skater's live Simulation state.
+        public void AttachPlanAi(int slot, string planName, string dataPath)
+        {
+            PlanAi = new MatchPlanAi(this, Sim, Config, slot, planName, dataPath);
+        }
+
         public void AttachAi(params int[] slots)
         {
             Ai = new MatchAiController();
@@ -906,6 +915,11 @@ namespace UBlade3.Native
             if (slot == Config.HumanSlot)
             {
                 return CurrentHeld;
+            }
+
+            if (PlanAi != null && PlanAi.Enabled && PlanAi.Slot == slot)
+            {
+                return PlanAi.GetInput(Sim, slot);
             }
 
             if (AiEnabled && Ai != null && Ai.Slots.Contains(slot))
@@ -1067,6 +1081,11 @@ namespace UBlade3.Native
             if (AiEnabled && Ai != null)
             {
                 Ai.Update(Sim, this);
+            }
+
+            if (PlanAi != null)
+            {
+                PlanAi.BeforeMatchTick(now);
             }
 
             ProcessAiRequests(now);
@@ -1480,6 +1499,11 @@ namespace UBlade3.Native
                 .Append(F(LastAiShotVelocity.z)).Append(')');
             text.Append(" audio=\"").Append(Audio.Describe()).Append('"');
             text.Append(" notes=").Append(Notes.Count);
+
+            if (PlanAi != null)
+            {
+                text.Append(" planAi=\"").Append(PlanAi.Describe()).Append('"');
+            }
 
             return text.ToString();
         }

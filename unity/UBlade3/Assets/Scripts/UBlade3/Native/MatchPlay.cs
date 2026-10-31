@@ -93,6 +93,18 @@ namespace UBlade3.Native
             "06-celebration", "07-faceoff", "08-restart", "09-ai-pickup", "10-ai-shot", "11-score"
         };
 
+        public const string N8CapturePrefix = "native-match-n8";
+
+        public static readonly string[] N8CaptureBeats =
+        {
+            "start", "ai-pickup", "plan-bound", "passing-play", "pass", "result"
+        };
+
+        public static readonly string[] N8CaptureLabels =
+        {
+            "00-start", "01-ai-pickup", "02-plan-bound", "03-passing-play", "04-plan-pass", "05-result"
+        };
+
         public MatchScene Scene { get; private set; }
 
         public MatchGameplay Gameplay { get; private set; }
@@ -132,12 +144,15 @@ namespace UBlade3.Native
 
         private bool captureCommand;
         private bool n7CaptureCommand;
+        private bool n8CaptureCommand;
         private bool autoStartCommand;
         private string captureBasePath;
         private string n7CaptureBasePath;
+        private string n8CaptureBasePath;
 
         private static readonly Dictionary<string, int> BeatIndex = BuildBeatIndex();
         private static readonly Dictionary<string, int> N7BeatIndex = BuildN7BeatIndex();
+        private static readonly Dictionary<string, int> N8BeatIndex = BuildN8BeatIndex();
 
         private static Dictionary<string, int> BuildBeatIndex()
         {
@@ -158,6 +173,18 @@ namespace UBlade3.Native
             for (int i = 0; i < N7CaptureBeats.Length; i++)
             {
                 map[N7CaptureBeats[i]] = i;
+            }
+
+            return map;
+        }
+
+        private static Dictionary<string, int> BuildN8BeatIndex()
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < N8CaptureBeats.Length; i++)
+            {
+                map[N8CaptureBeats[i]] = i;
             }
 
             return map;
@@ -196,6 +223,10 @@ namespace UBlade3.Native
                 {
                     RunCommandCaptureN7();
                 }
+                else if (n8CaptureCommand)
+                {
+                    RunCommandCaptureN8();
+                }
                 else if (captureCommand)
                 {
                     RunCommandCapture();
@@ -230,6 +261,12 @@ namespace UBlade3.Native
                     n7CaptureCommand = true;
                     autoStartCommand = true;
                     n7CaptureBasePath = argument.Substring("--n7-capture=".Length);
+                }
+                else if (argument.StartsWith("--n8-capture=", StringComparison.Ordinal))
+                {
+                    n8CaptureCommand = true;
+                    autoStartCommand = true;
+                    n8CaptureBasePath = argument.Substring("--n8-capture=".Length);
                 }
                 else if (argument.StartsWith("--play-capture=", StringComparison.Ordinal))
                 {
@@ -375,7 +412,7 @@ namespace UBlade3.Native
 
         private void Update()
         {
-            if (!IsBuilt || captureCommand || n7CaptureCommand || Scene == null)
+            if (!IsBuilt || captureCommand || n7CaptureCommand || n8CaptureCommand || Scene == null)
             {
                 return;
             }
@@ -541,6 +578,71 @@ namespace UBlade3.Native
             return failures;
         }
 
+        // --- N8: real C# PlanVM-driven AI skater ------------------------------------------------
+
+        public int RunDeterministicCaptureN8(string[] paths, out MatchPlayN8ScriptResult result)
+        {
+            int failures = 0;
+
+            if (Control.Ai == null)
+            {
+                Control.AttachAi(ObjectConstants.SlotDromer1);
+            }
+
+            Control.AiEnabled = true;
+            Control.Ai.Enabled = true;
+            Control.HumanPickupEnabled = false;
+            Scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
+            string dataPath;
+
+            try
+            {
+                dataPath = MatchScene.ResolveRoot().DataPath;
+            }
+            catch (Exception exception)
+            {
+                dataPath = Environment.GetEnvironmentVariable("HYPERBLADE_GAME_DATA");
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N8_DATA_FALLBACK " + exception.Message
+                                 + " data=" + (dataPath ?? "none"));
+            }
+
+            result = MatchPlayN8Script.Run(Control, dataPath, beat => CaptureBeatN8(beat, paths),
+                held => Scene.TickScene(held));
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N8_RESULT aiPickups=" + result.AiPickups
+                      + " aiPasses=" + result.AiPasses + " aiShots=" + result.AiShots
+                      + " planBoundTick=" + result.PlanBoundTick
+                      + " passingPlayTick=" + result.PassingPlayTick
+                      + " planPassTick=" + result.PlanPassTick
+                      + " planPassRequests=" + result.PlanPassRequests
+                      + " planBehaviorChanges=" + result.PlanBehaviorChanges
+                      + " planTargetChanges=" + result.PlanTargetChanges
+                      + " fallbackMotionTicks=" + result.PlanFallbackMotionTicks
+                      + " unsupported=" + result.UnsupportedCount
+                      + " digest=" + result.PlanDigest
+                      + " failures=" + result.Failures + " reason=" + result.FailureText);
+            Debug.Log(result.PlanImpl);
+            Debug.Log(result.PlanOpcodeLine);
+            Debug.Log(result.PlanDescribe);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N8_CONTROL " + Control.Describe());
+
+            if (result.Failures != 0)
+            {
+                failures += result.Failures;
+            }
+
+            if (Captures.Count != N8CaptureBeats.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N8_CAPTURE_FAILED captured " + Captures.Count
+                               + " of " + N8CaptureBeats.Length + " beats");
+            }
+
+            SyncPresentation();
+            return failures;
+        }
+
         private void RunCommandCaptureN7()
         {
             string baseName = string.IsNullOrEmpty(n7CaptureBasePath)
@@ -574,6 +676,48 @@ namespace UBlade3.Native
                   + " headCamFovDegrees=" + result.HeadCamFovDegrees
                   + " audio=\"" + Audio.Describe() + "\""
                 : "UBLADE3_NATIVE_MATCH_N7_CAPTURES_FAILED failures=" + failures);
+
+            if (Application.isBatchMode || !Application.isEditor)
+            {
+                Application.Quit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private void RunCommandCaptureN8()
+        {
+            string baseName = string.IsNullOrEmpty(n8CaptureBasePath)
+                ? System.IO.Path.Combine("artifacts", N8CapturePrefix + "-player.png")
+                : n8CaptureBasePath;
+
+            string directory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(baseName));
+            string stem = System.IO.Path.GetFileNameWithoutExtension(baseName);
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = System.IO.Directory.GetCurrentDirectory();
+            }
+
+            string[] paths = new string[N8CaptureLabels.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = System.IO.Path.Combine(directory, stem + "-" + N8CaptureLabels[i] + ".png");
+            }
+
+            MatchPlayN8ScriptResult result;
+            int failures = RunDeterministicCaptureN8(paths, out result);
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N8_CAPTURES_OK frames=" + paths.Length
+                  + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                  + " aiShots=" + result.AiShots
+                  + " planPassRequests=" + result.PlanPassRequests
+                  + " planBehaviorChanges=" + result.PlanBehaviorChanges
+                  + " planTargetChanges=" + result.PlanTargetChanges
+                  + " unsupported=" + result.UnsupportedCount
+                  + " planDigest=" + result.PlanDigest
+                  + " score=" + result.Steps.Count
+                : "UBLADE3_NATIVE_MATCH_N8_CAPTURES_FAILED failures=" + failures);
 
             if (Application.isBatchMode || !Application.isEditor)
             {
@@ -617,6 +761,25 @@ namespace UBlade3.Native
 
             SyncPresentation();
             Capture(paths[index], index, beat, string.Equals(beat, "headcam", StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void CaptureBeatN8(string beat, string[] paths)
+        {
+            int index;
+
+            if (!N8BeatIndex.TryGetValue(beat, out index))
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N8_CAPTURE_UNKNOWN beat=" + beat);
+                return;
+            }
+
+            if (paths == null || index >= paths.Length || string.IsNullOrEmpty(paths[index]))
+            {
+                return;
+            }
+
+            SyncPresentation();
+            Capture(paths[index], index, beat, false);
         }
 
         public MatchPlayCapture Capture(string path, int index, string beat, bool headCamera = false)
