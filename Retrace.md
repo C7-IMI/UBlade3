@@ -38,3 +38,15 @@ Prompt and decision log for UBlade3.
 - Version: 2026.10.31.004
 - Commit: this change.
 
+## 4 - 2026-10-31
+
+- Request: fully native engine, no external runtime; exact original models/gameplay/drome; build a fully playable
+  release; full autonomy/approval.
+- Decision: embed the exact 20XX engine as a Unity native plugin rather than launch an external process, and keep the
+  C# data/asset/simulation work as the pure-C# track. Native plugin source/patch and built binaries are tracked.
+- Evidence: Unity host menu (state 3) and exact match (state 15) captured; extracted native release reaches a live
+  match with the original HUD; release contains no hyperblade_20XX.exe or external runtime; asset probe covers
+  344 models / 3528 materials / 4182 bones / 333 textures / 188 animations.
+- Version: 2026.10.31.005
+- Release: 2026.10.31.002 (SHA-256 ef46aed6...61b926).
+

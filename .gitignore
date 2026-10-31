@@ -44,3 +44,6 @@ artifacts/rea/hyb-entropy.json
 # Local Gypsy/state and staged exact runtime
 workstream/state/
 runtime/play/
+
+unity/UBlade3/build-native/
+unity/UBlade3/Logs/

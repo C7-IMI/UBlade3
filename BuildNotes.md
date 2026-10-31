@@ -4,6 +4,27 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.005
+
+**Native exact engine inside Unity: no external process, native release verified.**
+
+- Date: 2026-10-31
+- Change: built the exact HyperBlade 20XX C++ engine as the **ublade3_native** Unity native plugin. The Unity player
+  now owns the engine (menu, drome, skaters, rok, HUD, match, input) instead of launching a second executable.
+  Added `NativeEngineHost.cs`, the `NativeEngineScene` build, the plugin/SDL3 bundle, native menu/match capture
+  automation, `scripts/ublade3_release.ps1` (native package), the source patch/copy under `native/`, and the
+  C# original-asset readers from the asset workstream (`UBlade3.Assets` + docs/ASSET-FORMATS.md).
+- Verification: native Unity host menu state 3 and match state 15 captured; extracted release
+  `UBlade3-2026.10.31.002-win64.zip` starts the embedded engine, reaches a live match with HUD (640x480 exact
+  original frame), and contains **no hyperblade_20XX.exe** / external runtime. C# asset probe:
+  `UBLADE3_ASSETS_OK models=344 materials=3528 bones=4182 textures=333 animations=188 warnings=5`.
+- Release: `UBLADE3_NATIVE_RELEASE_OK version=2026.10.31.002 ... external=false`; ZIP 38,766,617 bytes
+  SHA-256 `ef46aed6a525fb949513955be65053f6ce53c5bcaa975d23db7fd4ca1171b926`; EXE SHA-256
+  `9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2`.
+- Honest boundary: the **playable exact engine is native C++ embedded in Unity**, not a 100% C# engine. The C#
+  data/simulation/asset-reader track is the next step for a pure-C# renderer; the native build is exact and
+  editable through the tracked patch/source under `native/`. Original game assets are never committed.
+
 ## 2026.10.31.004
 
 **Add the 60 fps, camera/animation smoothness and 1080p/2K/4K resolution plan.**

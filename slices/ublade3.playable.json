@@ -2,13 +2,12 @@
   "schema": "gypsy.slice/v1",
   "id": "ublade3.playable",
   "project": ".",
-  "description": "UBlade3: exact data/sim checks, Unity host build, Port Lab capture, exact runtime launch, repository checks.",
+  "description": "UBlade3: exact data/sim/asset checks, native Unity player build, embedded-engine match capture, release and repository checks.",
   "artifacts": [
     "artifacts/ublade3/checks.log",
-    "unity/UBlade3/build/UBlade3.exe",
-    "artifacts/port-lab.png",
-    "artifacts/ublade3/exact-play.png",
-    "dist/UBlade3-2026.10.31.001-win64.zip",
+    "unity/UBlade3/build-native/UBlade3Native.exe",
+    "artifacts/native-release-match.png",
+    "dist/UBlade3-2026.10.31.002-win64.zip",
     "artifacts/ublade3-release.json"
   ],
   "steps": [

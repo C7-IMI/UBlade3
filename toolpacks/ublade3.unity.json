@@ -5,10 +5,10 @@
   "tools": [
     "Unity 6000.6.7f1",
     "Windows Standalone Build Support",
-    "HyperBlade 20XX exact runtime (LGPL-3.0)",
+    "Embedded ublade3_native exact engine (LGPL-3.0)",
     "Original HyperBlade data (user supplied)"
   ],
-  "license": "UBlade3 C# code and ported decompilation: LGPL-3.0. Original game data is proprietary and never committed. The bundled 20XX runtime is LGPL-3.0.",
+  "license": "UBlade3 code and embedded decompilation: LGPL-3.0. Original game data is proprietary and never committed.",
   "actions": [
     {
       "id": "checks",
@@ -54,6 +54,48 @@
       }
     },
     {
+      "id": "native-build",
+      "argv": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/ublade3_native.ps1",
+        "-Mode",
+        "build"
+      ],
+      "cwd": ".",
+      "timeout": 1800,
+      "artifacts": [
+        "unity/UBlade3/build-native/UBlade3Native.exe"
+      ],
+      "args": {
+        "note": "Build the native Unity player hosting the embedded exact engine"
+      }
+    },
+    {
+      "id": "native-capture",
+      "argv": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scripts/ublade3_native.ps1",
+        "-Mode",
+        "capture"
+      ],
+      "cwd": ".",
+      "timeout": 600,
+      "artifacts": [
+        "artifacts/native-release-match.png"
+      ],
+      "args": {
+        "note": "Launch the native player, navigate to an exact match and capture the HUD frame"
+      }
+    },
+    {
       "id": "capture",
       "argv": [
         "powershell",
@@ -76,26 +118,6 @@
       }
     },
     {
-      "id": "exact-play",
-      "argv": [
-        "powershell",
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "scripts/ublade3_exact_play.ps1"
-      ],
-      "cwd": ".",
-      "timeout": 300,
-      "artifacts": [
-        "artifacts/ublade3/exact-play.png",
-        "artifacts/ublade3/exact-play.log"
-      ],
-      "args": {
-        "note": "Launch the bundled exact 20XX runtime from the Unity host and capture its window"
-      }
-    },
-    {
       "id": "release",
       "argv": [
         "powershell",
@@ -108,11 +130,11 @@
       "cwd": ".",
       "timeout": 600,
       "artifacts": [
-        "dist/UBlade3-2026.10.31.001-win64.zip",
+        "dist/UBlade3-2026.10.31.002-win64.zip",
         "artifacts/ublade3-release.json"
       ],
       "args": {
-        "note": "Package the Unity host plus exact runtime; original game data is never included"
+        "note": "Package the native Unity player with the embedded exact engine; original data never included"
       }
     }
   ],
@@ -142,16 +164,16 @@
       "minBytes": 10000
     },
     {
-      "id": "exact-play-frame",
-      "kind": "file",
-      "artifact": "artifacts/ublade3/exact-play.png",
-      "minBytes": 10000
-    },
-    {
       "id": "release-zip",
       "kind": "file",
-      "artifact": "dist/UBlade3-2026.10.31.001-win64.zip",
+      "artifact": "dist/UBlade3-2026.10.31.002-win64.zip",
       "minBytes": 1000000
+    },
+    {
+      "id": "native-capture-frame",
+      "kind": "file",
+      "artifact": "artifacts/native-release-match.png",
+      "minBytes": 10000
     }
   ]
 }

@@ -12,6 +12,7 @@ namespace UBlade3.EditorTools
     public static class UBlade3Build
     {
         private const string ScenePath = "Assets/Scenes/PortLab.unity";
+        private const string NativeScenePath = "Assets/Scenes/NativeEngine.unity";
 
         [MenuItem("UBlade3/Create Port Lab Scene")]
         public static void CreateScene()
@@ -39,6 +40,43 @@ namespace UBlade3.EditorTools
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
             AssetDatabase.SaveAssets();
             Debug.Log("UBLADE3_SCENE_OK " + ScenePath);
+        }
+
+        public static void CreateNativeScene()
+        {
+            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var camera = new GameObject("NativeCamera").AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.orthographic = true;
+            camera.cullingMask = 0;
+            new GameObject("NativeEngineHost").AddComponent<UBlade3.Native.NativeEngineHost>();
+            new GameObject("NativeAudioListener").AddComponent<AudioListener>();
+            Directory.CreateDirectory("Assets/Scenes");
+            EditorSceneManager.SaveScene(scene, NativeScenePath);
+            AssetDatabase.SaveAssets();
+            Debug.Log("UBLADE3_NATIVE_SCENE_OK " + NativeScenePath);
+        }
+
+        public static void BuildNativeWindows()
+        {
+            if (!File.Exists(NativeScenePath)) { CreateNativeScene(); }
+            if (!File.Exists(NativeScenePath)) { Debug.LogError("UBLADE3_NATIVE_SCENE_MISSING " + NativeScenePath); EditorApplication.Exit(1); return; }
+            Directory.CreateDirectory("build-native");
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            {
+                scenes = new[] { NativeScenePath },
+                locationPathName = Path.GetFullPath(Path.Combine("build-native", "UBlade3Native.exe")),
+                target = BuildTarget.StandaloneWindows64,
+                options = BuildOptions.None
+            }).summary;
+            if (report.result != BuildResult.Succeeded)
+            {
+                Debug.LogError("UBLADE3_NATIVE_BUILD_FAILED " + report.result);
+                EditorApplication.Exit(1);
+                return;
+            }
+            Debug.Log("UBLADE3_NATIVE_BUILD_OK bytes=" + report.totalSize + " output=" + report.outputPath);
         }
 
         public static void BuildWindows()

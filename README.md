@@ -11,16 +11,18 @@ local HyperBlade installation (for example `D:\Games\HyperBlade`) through `HYPER
 
 ## Status
 
-**Fully playable now:** the Unity host launches the exact HyperBlade engine through the bundled LGPL-3.0 20XX runtime,
-staged beside your own original game data. Press **PLAY EXACT HYPERBLADE** in the Port Lab; the exact game opens in
-its own window and quitting returns to UBlade3. Release: `dist/UBlade3-2026.10.31.001-win64.zip` (38,514,377 bytes,
-SHA-256 `fabbad4b1be3afa1e19b8e022cff14139b245cbea4972d00ff6d4598e0b4a9fe`), verified by extracting it and starting a
-game window.
+**Fully playable native release:** the exact HyperBlade engine is compiled into the Unity player as the
+`ublade3_native` plugin. There is **no external process**: the menus, drome, skaters, rok, HUD and match are the
+original engine's own frames, hosted by Unity. Release: `dist/UBlade3-2026.10.31.002-win64.zip` (38,766,617 bytes,
+SHA-256 `ef46aed6a525fb949513955be65053f6ce53c5bcaa975d23db7fd4ca1171b926`). Verified by extracting the ZIP, launching
+`UBlade3Native.exe` against the local HyperBlade data, entering a live match and capturing the original HUD frame
+(`artifacts/native-release-match.png`). The package contains no `hyperblade_20XX.exe` and starts no second process.
 
-The C# exact-port track is editable alongside it: 14/14 teams and 14/14 dromes parse from the original data, the
-simulation core passes 209/209 checks, and the port ledger is 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the
-3,054 game functions. The remaining C# renderer, ADLIB plan VM, animation, audio and asset import are not complete;
-the exact native runtime is the playable engine until they are.
+The playable exact engine is native C++ embedded in Unity, not a 100% C# engine yet. The C# track is being built
+alongside it: exact original data (14/14 teams, 14/14 dromes), 209/209 simulation checks, and the new original-asset
+readers (`UBlade3.Assets`) parse 344 models, 3,528 materials, 4,182 bones, 333 textures and 188 animation sets.
+The C# renderer, ADLIB plan VM, animation and audio integration remain in progress; the native build above is the
+fully playable exact engine.
 
 ## Port status
 
@@ -38,6 +40,8 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 [docs/EXACTNESS.md](./docs/EXACTNESS.md).
 - Gypsy integration: [docs/GYPSY-UPGRADE-INTEGRATION.md](./docs/GYPSY-UPGRADE-INTEGRATION.md).
 - Performance/resolution plan: [docs/PERFORMANCE-RESOLUTION-PLAN.md](./docs/PERFORMANCE-RESOLUTION-PLAN.md).
+- Native engine plan: [docs/NATIVE-ENGINE-PLAN.md](./docs/NATIVE-ENGINE-PLAN.md).
+- Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).
 
 ## Requirements
 

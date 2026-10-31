@@ -1,0 +1,289 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6eae3e4..b867200 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -332,6 +332,17 @@ set_target_properties(hyperx PROPERTIES
+ target_link_libraries(hyperx PRIVATE SDL3::SDL3 miniaudio imgui adlib)
+ hyperx_copy_runtime_dlls(hyperx "${HYPERX_OUT}")
+ 
++# UBlade3 native engine plugin: exact 20XX engine linked into the Unity player. No external process.
++add_library(ublade3_native SHARED $<TARGET_OBJECTS:hyperx_objects> src/app/ublade3_plugin.cpp)
++set_target_properties(ublade3_native PROPERTIES
++    OUTPUT_NAME ublade3_native_v6
++    LIBRARY_OUTPUT_DIRECTORY "${HYPERX_OUT}"
++    RUNTIME_OUTPUT_DIRECTORY "${HYPERX_OUT}")
++target_link_libraries(ublade3_native PRIVATE SDL3::SDL3 miniaudio imgui adlib)
++target_link_libraries(ublade3_native PRIVATE hyperx_options hyperx_permissive)
++hyperx_copy_runtime_dlls(ublade3_native "${HYPERX_OUT}")
++
++
+ if(WIN32)
+     set_target_properties(hyperx PROPERTIES WIN32_EXECUTABLE ON)
+     target_sources(hyperx PRIVATE res/hyperblade_20XX.rc)
+diff --git a/src/app/frametimer.cpp b/src/app/frametimer.cpp
+index 5c98bc2..439cc0a 100644
+--- a/src/app/frametimer.cpp
++++ b/src/app/frametimer.cpp
+@@ -1,4 +1,5 @@
+ #include "common/compat.h"
++#include <cstdlib>
+ #include <SDL3/SDL.h>
+ #include <chrono>
+ #include "globals.h"
+@@ -122,6 +123,11 @@ constexpr auto kResync = std::chrono::seconds{ 1 };
+ 
+ void FrameTimer::Pace()
+ {
++    if (std::getenv("UBLADE3_PLUGIN") != nullptr)
++    {
++        return;
++    }
++
+     static auto s_deadline = std::chrono::steady_clock::time_point{};
+ 
+     const auto now = std::chrono::steady_clock::now();
+diff --git a/src/app/gameapp.cpp b/src/app/gameapp.cpp
+index a65591a..c1a9caa 100644
+--- a/src/app/gameapp.cpp
++++ b/src/app/gameapp.cpp
+@@ -141,6 +141,33 @@ void GameApp::SetModelPath(int bTexEnabled)
+ 
+ static std::string s_arguments;
+ 
++static void U3Trace(const char* pszStage)
++{
++    if (std::getenv("UBLADE3_PLUGIN") == nullptr)
++    {
++        return;
++    }
++
++    const auto* const pszPath = std::getenv("UBLADE3_PLUGIN_LOG");
++
++    if (pszPath == nullptr)
++    {
++        return;
++    }
++
++    if (auto* const pFile = std::fopen(pszPath, "a"))
++    {
++        std::fprintf(pFile, "%s\n", pszStage);
++        std::fclose(pFile);
++    }
++}
++
++static const char* GameBasePath()
++{
++    const auto* const pszOverride = std::getenv("UBLADE3_GAME_ROOT");
++    return pszOverride != nullptr ? pszOverride : SDL_GetBasePath();
++}
++
+ const char* GameApp::Arguments()
+ {
+     return s_arguments.c_str();
+@@ -150,12 +177,16 @@ const char* GameApp::Arguments()
+ bool GameApp::Initialize(const char* pszArguments)
+ {
+     s_arguments = pszArguments;
++    U3Trace("enter");
+ 
+     const char* pszAppClassName;
++    U3Trace("after args");
+ 
+     std::set_new_handler(GameApp::OutOfMemoryHandler);
+     // The text comes from the player's own HYPERX.EXE the first time, and from the strings file after.
+-    const auto* const pszBase = SDL_GetBasePath();
++    const auto* const pszBase = GameBasePath();
++
++    U3Trace("before stringtable");
+ 
+     if (pszBase == nullptr || !StringTable::Load(pszBase))
+     {
+@@ -164,30 +195,41 @@ bool GameApp::Initialize(const char* pszArguments)
+         std::_Exit(1);
+     }
+ 
+-    if (!Pak::Open((std::string(pszBase) + Pak::kFileName).c_str()))
++    U3Trace("after stringtable");
++
++    const auto* const pszPakBase = std::getenv("UBLADE3_PAK_DIR");
++    const auto strPakBase = std::string(pszPakBase != nullptr && pszPakBase[0] != 0 ? pszPakBase : pszBase);
++
++    if (!Pak::Open((strPakBase + Pak::kFileName).c_str()))
+     {
+         Window::ShowMessage("HyperBlade 20XX is missing 20XX_data.pak. Keep it beside hyperblade_20XX.exe.", "HyperBlade 20XX", Window::MessageButtons::OK, Window::MessageIcon::STOP);
+ 
+         std::_Exit(1);
+     }
+ 
++    U3Trace("after pak");
+     GameApp::InitializeResourcePaths();
++    U3Trace("after resource paths");
+     GameApp::ParseCommandLine(pszArguments);
+ 
+     // A modern desktop keeps its own mode, so the game runs windowed.
+     g_bFullScreen = 0;
+ 
++    U3Trace("before palette");
+     g_pColorPalette = std::make_unique<ColorPalette>();
++    U3Trace("after palette");
+ 
+     pszAppClassName    = g_gameApp.m_strCaption.m_pchData;
+     const auto bWindow = GameApp::CreateMainWindow(pszAppClassName);
+ 
+     g_gameApp.SetWindowAndCallbacks(bWindow, GameApp::OnStartup, GameApp::OnExit);
+ 
++    U3Trace("before display");
+     g_gameApp.m_bCursorWasVisible = Display::Initialize();
++    U3Trace("after display");
+ 
+-    // A simulation never shows its window.
+-    if (!Simulator::Requested())
++    // A simulation never shows its window. The Unity plugin keeps it hidden too.
++    if (!Simulator::Requested() && std::getenv("UBLADE3_PLUGIN") == nullptr)
+     {
+         Window::Show();
+         GameApp::SetCursorVisible(1);
+@@ -197,20 +239,34 @@ bool GameApp::Initialize(const char* pszArguments)
+     }
+ 
+     // Windows shows its start-up busy cursor until a new program first takes its messages.
++    U3Trace("before pump");
+     Window::Pump();
++    U3Trace("after pump");
+ 
+     // STRING: HYPERX 0x004bba9c
++    U3Trace("before prefs");
+     Config::LoadPreferences("Prefs.txt");
++    U3Trace("after prefs");
+ 
++    U3Trace("before engine");
+     Game::InitializeEngine();
++    U3Trace("after engine");
+ 
++    U3Trace("before viewports");
+     GameApp::SetupViewports();
++    U3Trace("after viewports");
+ 
++    U3Trace("before graphics");
+     Graphics::Initialize(1);
++    U3Trace("after graphics");
+ 
++    U3Trace("before current size");
+     Window::ApplyCurrentSize();
++    U3Trace("after current size");
+ 
++    U3Trace("before initial frame");
+     g_frameTimer.ProcessInitialFrameUpdate();
++    U3Trace("after initial frame");
+ 
+     if (g_bNoSoundArg != 0)
+     {
+@@ -230,7 +286,7 @@ void GameApp::InitializeResourcePaths()
+     PathString strDirectory(kMaxPathLength);
+ 
+     // SDL's base path ends in a separator.
+-    const auto* const pszBase = SDL_GetBasePath();
++    const auto* const pszBase = GameBasePath();
+ 
+     if (pszBase != nullptr)
+     {
+@@ -482,6 +538,14 @@ void GameApp::OnShutdown()
+ // FUNCTION: HYPERX 0x00423180
+ int GameApp::FindCDRomDrive(bool bRequired)
+ {
++    // The Unity plugin has no CD-ROM; the data is the user's installed copy. Do not put a modal
++    // CD prompt in front of a match.
++    if (std::getenv("UBLADE3_PLUGIN") != nullptr)
++    {
++        m_nCDRomDrive = kCdromNotWanted;
++        return m_nCDRomDrive;
++    }
++
+     char szCaption[kMaxPathLength];
+     char szLabel[kMaxPathLength];
+     char szText[kMaxPathLength];
+@@ -759,6 +823,7 @@ int GameApp::SetCursorVisible(int bVisible)
+ // FUNCTION: HYPERX 0x0044c160
+ int GameApp::MainUpdate()
+ {
++    U3Trace("mainupdate enter");
+     // A finished track is followed by the menu track, or a random one during play.
+     if (g_soundMixer.Update() && g_pAudioMgr != nullptr)
+     {
+@@ -786,8 +851,10 @@ int GameApp::MainUpdate()
+ 
+         if (g_gameApp.m_nEngineState != kEstateMatchLive)
+         {
++            U3Trace("before update state");
+             FramePacing::Reset();
+             Game::UpdateState();
++            U3Trace("after update state");
+         }
+         else if (bUncapped)
+         {
+@@ -800,7 +867,9 @@ int GameApp::MainUpdate()
+             g_nPrevEngineState = kEstateMatchLive;
+         }
+ 
++        U3Trace("before end frame");
+         FrameTimer::EndFrameUpdate(&g_frameTimer);
++        U3Trace("after end frame");
+ 
+         // Nothing in the original waits for the frame, and a modern machine runs it too fast.
+         if (!bUncapped)
+diff --git a/src/app/window.cpp b/src/app/window.cpp
+index afb0c8c..cf8eaa5 100644
+--- a/src/app/window.cpp
++++ b/src/app/window.cpp
+@@ -1,4 +1,5 @@
+ #include "common/compat.h"
++#include <cstdlib>
+ #include "input/keycodes.h"
+ #include "input/inputevent.h"
+ #include "globals.h"
+@@ -48,8 +49,8 @@ void Window::ApplyFullscreenStyle()
+ 
+     s_bSized = true;
+ 
+-    constexpr auto kStartWidth  = 1920;
+-    constexpr auto kStartHeight = 1080;
++    const auto kStartWidth  = std::getenv("UBLADE3_PLUGIN") != nullptr ? 640 : 1920;
++    const auto kStartHeight = std::getenv("UBLADE3_PLUGIN") != nullptr ? 480 : 1080;
+ 
+     SDL_SetWindowSize(s_pWindow, kStartWidth, kStartHeight);
+     SDL_SetWindowPosition(s_pWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+@@ -465,6 +466,12 @@ Window::NativeWindow Window::Native()
+ 
+ void Window::Show()
+ {
++    if (std::getenv("UBLADE3_PLUGIN") != nullptr)
++    {
++        SDL_HideWindow(s_pWindow);
++        return;
++    }
++
+     SDL_ShowWindow(s_pWindow);
+ }
+ 
+diff --git a/src/graphics/graphicssettings.cpp b/src/graphics/graphicssettings.cpp
+index af074a7..80fb74e 100644
+--- a/src/graphics/graphicssettings.cpp
++++ b/src/graphics/graphicssettings.cpp
+@@ -1,4 +1,5 @@
+ #include "common/compat.h"
++#include <cstdlib>
+ #include "graphics/graphicssettings.h"
+ #include "graphics/presenter.h"
+ #include "engine/gameoptions.h"
+@@ -62,6 +63,11 @@ void Load()
+ 
+ GraphicsSettings::Renderer GraphicsSettings::Active()
+ {
++    if (std::getenv("UBLADE3_PLUGIN") != nullptr)
++    {
++        return Renderer::SOFTWARE;
++    }
++
+     Load();
+ 
+     if (!Presenter::HasGPU())

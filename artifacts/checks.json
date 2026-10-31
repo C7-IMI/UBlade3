@@ -1,22 +1,35 @@
 {
-  "schema": "ublade3.checks/v2",
-  "generatedAt": "2026-10-31T04:23:22.720Z",
+  "schema": "ublade3.checks/v3",
+  "generatedAt": "2026-10-31T05:22:20.121Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
     "bytes": 860160,
     "sha256": "514bcec6805f27136bed6e4de8796e75d99f224a94e3d7098a4477b029ea24cd"
   },
-  "exactRuntime": {
-    "engine": "hyperblade-20XX 0.3.1 (LGPL-3.0)",
-    "bundled": "unity/UBlade3/Assets/StreamingAssets/20xx",
-    "launchedFromUnityHost": true,
-    "releasePlayVerified": true,
-    "windowSize": "973x576",
-    "evidence": [
-      "artifacts/ublade3/exact-play.png",
-      "artifacts/ublade3-release-play.png"
-    ]
+  "nativeEngine": {
+    "release": "2026.10.31.002",
+    "plugin": "unity/UBlade3/Assets/Plugins/x86_64/ublade3_native_v6.dll",
+    "pluginBytes": 4546048,
+    "externalProcess": false,
+    "embeddedExactEngine": "hyperblade-20XX C++ compiled into Unity native plugin",
+    "menuState": 3,
+    "matchState": 15,
+    "matchCapture": "artifacts/native-release-match.png",
+    "menuCapture": "artifacts/native-release-menu.png",
+    "verifiedFromExtractedRelease": true
+  },
+  "assets": {
+    "probe": "UBLADE3_ASSETS_OK",
+    "models": 344,
+    "materials": 3528,
+    "bones": 4182,
+    "textures": 333,
+    "animations": 188,
+    "digest": "d860fe66423aa141",
+    "warnings": 5,
+    "source": "unity/UBlade3/Assets/Scripts/UBlade3/Assets",
+    "note": "C# readers are the foundation for the fully C# renderer; the playable release uses the embedded exact engine."
   },
   "originalData": {
     "files": 3018,
@@ -29,8 +42,7 @@
   },
   "simulation": {
     "checksPassed": 209,
-    "checksTotal": 209,
-    "note": "C# core self-check; fixed 30 Hz is the 20XX port path, original TickClock is variable-rate."
+    "checksTotal": 209
   },
   "portLedger": {
     "gameFunctions": 3054,
@@ -41,19 +53,15 @@
   },
   "gypsy": {
     "check": "PASS",
-    "toolpack": "passed=True",
-    "slice": "passed=True",
     "capabilities": 5,
-    "runs": 8,
-    "traces": 9,
-    "assets": 3123,
-    "provenance": "passed=True",
-    "sbomComponents": 8
+    "releases": "native release action pending update"
   },
   "release": {
-    "version": "2026.10.31.001",
-    "zip": "dist/UBlade3-2026.10.31.001-win64.zip",
-    "bytes": 38514377,
-    "sha256": "fabbad4b1be3afa1e19b8e022cff14139b245cbea4972d00ff6d4598e0b4a9fe"
+    "version": "2026.10.31.002",
+    "zip": "dist/UBlade3-2026.10.31.002-win64.zip",
+    "bytes": 38766617,
+    "sha256": "ef46aed6a525fb949513955be65053f6ce53c5bcaa975d23db7fd4ca1171b926",
+    "exeSha256": "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
+    "externalRuntime": false
   }
 }

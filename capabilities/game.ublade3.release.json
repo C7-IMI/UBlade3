@@ -5,10 +5,10 @@
   "engine": "unity",
   "kind": "release",
   "maturity": "stable",
-  "description": "Packaged Windows UBlade3 host plus bundled exact 20XX runtime; original HyperBlade data is not distributed.",
+  "description": "Packaged Windows native UBlade3 player with the embedded exact engine; original HyperBlade data is not distributed and no external runtime is used.",
   "requires": [
     "unity.windows.standalone",
-    "hyperblade.20xx.runtime"
+    "embedded.native.engine"
   ],
   "inputs": [
     {
@@ -40,6 +40,6 @@
     ]
   },
   "notes": [
-    "dist/UBlade3-2026.10.31.001-win64.zip; PLAY-README explains the required user-supplied game data."
+    "dist/UBlade3-2026.10.31.002-win64.zip; PLAY-README explains the required user-supplied game data and that no external runtime exists."
   ]
 }

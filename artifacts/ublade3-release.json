@@ -1,16 +1,18 @@
-﻿{
-    "schema":  "ublade3.release/v1",
-    "version":  "2026.10.31.001",
-    "generatedAt":  "2026-10-31T04:23:00Z",
+{
+    "schema":  "ublade3.release/v2",
+    "version":  "2026.10.31.002",
+    "generatedAt":  "2026-10-31T05:21:17Z",
     "unityVersion":  "6000.6.7f1",
-    "gitHead":  "6e879022e3bfa3b855b76ea530bb827aa01cb65b",
-    "windowsExe":  "unity/UBlade3/build/UBlade3.exe",
+    "gitHead":  "0a5c803ee717df9e18b4e101d557d1608938a230",
+    "nativeEngine":  true,
+    "externalProcess":  false,
+    "windowsExe":  "unity/UBlade3/build-native/UBlade3Native.exe",
     "windowsExeSha256":  "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
     "windowsZip":  {
-                       "path":  "dist/UBlade3-2026.10.31.001-win64.zip",
-                       "bytes":  38514377,
-                       "sha256":  "fabbad4b1be3afa1e19b8e022cff14139b245cbea4972d00ff6d4598e0b4a9fe"
+                       "path":  "dist/UBlade3-2026.10.31.002-win64.zip",
+                       "bytes":  38766617,
+                       "sha256":  "ef46aed6a525fb949513955be65053f6ce53c5bcaa975d23db7fd4ca1171b926"
                    },
     "passed":  true,
-    "note":  "PC-only; exact playable path uses the bundled LGPL-3.0 20XX runtime and a user-supplied original HyperBlade data install. No original game assets are distributed."
+    "note":  "PC-only. Exact HyperBlade engine runs as the ublade3_native plugin inside the Unity player; no external runtime. User-supplied original data required; no original assets distributed."
 }
