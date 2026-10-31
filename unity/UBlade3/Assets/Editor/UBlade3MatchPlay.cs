@@ -7,6 +7,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UBlade3.Audio;
 using UBlade3.Native;
+using UBlade3.PlanVM;
 using UBlade3.Sim;
 using Debug = UnityEngine.Debug;
 
@@ -649,6 +650,33 @@ namespace UBlade3.EditorTools
             "artifacts/native-match-n8-04-plan-pass.png",
             "artifacts/native-match-n8-05-result.png",
         };
+
+        // --- N9: whole-match PlanVM AI roster --------------------------------------------------
+
+        public static readonly string[] N9CaptureFiles =
+        {
+            "artifacts/native-match-n9-00-start.png",
+            "artifacts/native-match-n9-01-plans-bound.png",
+            "artifacts/native-match-n9-02-ai-pickup.png",
+            "artifacts/native-match-n9-03-plan-switch.png",
+            "artifacts/native-match-n9-04-plan-pass.png",
+            "artifacts/native-match-n9-05-result.png",
+        };
+
+        public static void CheckN9()
+        {
+            CheckN9(true);
+        }
+
+        public static void CaptureAllN9()
+        {
+            CaptureAllN9(true);
+        }
+
+        public static void BuildAndRunWindowsN9()
+        {
+            BuildAndRunWindowsN9(true);
+        }
 
         public static void CheckN8()
         {
@@ -1394,6 +1422,368 @@ namespace UBlade3.EditorTools
             catch (Exception exception)
             {
                 Debug.LogError("UBLADE3_NATIVE_MATCH_N8_PLAYER_CAPTURE_FAILED " + exception);
+                exitCode = 1;
+            }
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
+        // --- N9: whole-match PlanVM AI roster --------------------------------------------------
+        // The headless gate runs the deterministic roster scenario twice: all five non-human slots
+        // (three AI skaters + two goalies) run their shipped plan tables, the carrier plan changes from
+        // Defense to CARRYROK and passes, LostIt changes it back, and every slot reports its own plan id,
+        // behaviour path, ticks, actions and decisions. Determinism, active-slot count, relay/rebind
+        // bounds and unsupported-handler telemetry are all checked; this remains a bounded slice, not
+        // full plan-VM AI parity.
+
+        private static string JoinIds(int[] ids)
+        {
+            string[] parts = new string[ids.Length];
+
+            for (int index = 0; index < ids.Length; index++)
+            {
+                parts[index] = ids[index].ToString();
+            }
+
+            return string.Join(",", parts);
+        }
+
+        private static void CheckN9(bool exitWhenBatch)
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN9Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N9_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N9_CHECK_FAILED mismatches=" + mismatches);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN9Check()
+        {
+            int mismatches = 0;
+            OriginalAssetRoot root = MatchScene.ResolveRoot();
+            MatchWorldData world = MatchWorldData.Load(root);
+            string dataPath = root.DataPath;
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_CHECK root=" + dataPath
+                      + " unity=" + Application.unityVersion + " no20xx=True");
+            mismatches += RunAudioProbe();
+
+            int[] planDecisions = MatchPlanAiDecisions.ImplementedIds();
+            int[] planActions = PlanAiActions.ImplementedIds();
+
+            Debug.Log("UBLADE3_PLAN_AI_N9_IMPL planDecisions=" + JoinIds(planDecisions)
+                      + " planActions=" + JoinIds(planActions)
+                      + " planTables=ObjectDefinition.Plans"
+                      + " initial=Defense:0,Goalie:0 carrier=CARRYROK mapped=1->5");
+
+            MatchPlayN9ScriptResult first = RunN9Scenario(world, dataPath);
+
+            Debug.Log(first.RosterDescribe);
+            Debug.Log(first.RosterSlots);
+
+            for (int index = 0; index < first.Trace.Count && index < 60; index++)
+            {
+                Debug.Log("UBLADE3_NATIVE_MATCH_N9_TRACE " + first.Trace[index]);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_CHECK_RESULT aiPickups=" + first.AiPickups
+                      + " aiPasses=" + first.AiPasses + " aiShots=" + first.AiShots
+                      + " pickupTick=" + first.PickupTick + " passTick=" + first.PassTick
+                      + " planPassRequests=" + first.PlanPassRequests
+                      + " planShotRequests=" + first.PlanShotRequests
+                      + " maxActiveSlots=" + first.MaxActiveSlots
+                      + " planIds=[" + first.PlanIdList + "]"
+                      + " rebinds=" + first.Rebinds
+                      + " maxRebindsPerSlot=" + first.MaxRebindsPerSlot
+                      + " relays=" + first.Relays
+                      + " relayBudgetHits=" + first.RelayBudgetHits
+                      + " possessionEvents=" + first.PossessionEvents
+                      + " unsupportedDecisions=" + first.UnsupportedDecisions
+                      + " ticks=" + first.TicksRun
+                      + " planDigest=" + first.Digest
+                      + " failures=" + first.Failures + " reason=" + first.FailureText);
+
+            if (first.Failures != 0 || first.AiPickups < 1 || first.AiPasses < 1
+                || first.PlanPassRequests < 1 || first.MaxActiveSlots != MatchPlayN9Script.PlanSlots.Length
+                || first.PlanIds < 2 || first.Rebinds < 2
+                || first.MaxRebindsPerSlot > MatchPlayN9Script.MaxRebindsPerSlot
+                || first.RelayBudgetHits != 0 || first.Relays < 1
+                || first.TicksRun > MatchPlayN9Script.MaxTicks
+                || string.IsNullOrEmpty(first.Digest))
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N9_MISMATCH roster=" + first.RosterDescribe
+                          + " reason=" + first.FailureText);
+            }
+
+            string ids = "," + first.PlanIdList + ",";
+
+            if (ids.IndexOf(",Defense,", StringComparison.OrdinalIgnoreCase) < 0 ||
+                ids.IndexOf(",CarryRok,", StringComparison.OrdinalIgnoreCase) < 0 ||
+                ids.IndexOf(",Goalie,", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N9_MISMATCH plan id coverage=[" + first.PlanIdList + "]");
+            }
+
+            MatchPlayN9ScriptResult second = RunN9Scenario(world, dataPath);
+            bool deterministic = string.Equals(first.Digest, second.Digest, StringComparison.Ordinal)
+                                 && first.AiPasses == second.AiPasses
+                                 && first.AiPickups == second.AiPickups
+                                 && first.PlanPassRequests == second.PlanPassRequests
+                                 && first.MaxActiveSlots == second.MaxActiveSlots
+                                 && first.Rebinds == second.Rebinds
+                                 && first.Relays == second.Relays;
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_DETERMINISM ok=" + (deterministic ? "True" : "False")
+                      + " digest1=" + first.Digest + " digest2=" + second.Digest);
+
+            if (!deterministic)
+            {
+                mismatches++;
+            }
+
+            int processes = CountTwentyXxProcesses();
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_NO_20XX running20xxProcesses=" + processes + " no20xx=True");
+
+            if (processes != 0)
+            {
+                mismatches++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_COUNTS aiPickups=" + first.AiPickups
+                      + " aiPasses=" + first.AiPasses + " aiShots=" + first.AiShots
+                      + " pickupTick=" + first.PickupTick + " passTick=" + first.PassTick
+                      + " planPassRequests=" + first.PlanPassRequests
+                      + " maxActiveSlots=" + first.MaxActiveSlots
+                      + " planIds=[" + first.PlanIdList + "]"
+                      + " rebinds=" + first.Rebinds
+                      + " maxRebindsPerSlot=" + first.MaxRebindsPerSlot
+                      + " relays=" + first.Relays
+                      + " relayBudgetHits=" + first.RelayBudgetHits
+                      + " possessionEvents=" + first.PossessionEvents
+                      + " unsupportedDecisions=" + first.UnsupportedDecisions
+                      + " ticks=" + first.TicksRun
+                      + " planDigest=" + first.Digest
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
+        }
+
+        private static MatchPlayN9ScriptResult RunN9Scenario(MatchWorldData world, string dataPath)
+        {
+            MatchSimulation sim;
+            MatchPlayControl control;
+            MatchAudioDirector audio;
+            MatchPlayN9Script.CreateScenario(world, dataPath, out sim, out control, out audio);
+
+            return MatchPlayN9Script.Run(control, world, dataPath, null, held => sim.Sim.Tick());
+        }
+
+        private static void CaptureAllN9(bool exitWhenBatch)
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += CaptureSceneN9();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N9_CAPTURES_OK frames=" + N9CaptureFiles.Length
+                  + " width=" + MatchPlay.CaptureWidth + " height=" + MatchPlay.CaptureHeight
+                : "UBLADE3_NATIVE_MATCH_N9_CAPTURES_FAILED failures=" + failures);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int CaptureSceneN9()
+        {
+            int failures = 0;
+
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject rootObject = new GameObject("UBlade3 Native N9 Plan AI Roster");
+            MatchScene scene = rootObject.AddComponent<MatchScene>();
+            MatchGameplay gameplay = rootObject.AddComponent<MatchGameplay>();
+            MatchPlay play = rootObject.AddComponent<MatchPlay>();
+
+            scene.Build();
+            gameplay.Build(scene);
+            play.Build(scene, gameplay);
+
+            string[] paths = new string[N9CaptureFiles.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = ResolveArtifactPath(N9CaptureFiles[i]);
+
+                if (File.Exists(paths[i]))
+                {
+                    File.Delete(paths[i]);
+                }
+            }
+
+            MatchPlayN9ScriptResult result;
+            failures += play.RunDeterministicCaptureN9(paths, out result);
+
+            Debug.Log(MatchProbe.DescribeScene(scene));
+            Debug.Log(play.Describe());
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.RosterSlots);
+
+            for (int i = 0; i < play.Captures.Count; i++)
+            {
+                MatchPlayCapture capture = play.Captures[i];
+
+                if (!File.Exists(capture.Path))
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED missing " + capture.Path);
+                    continue;
+                }
+
+                FileInfo info = new FileInfo(capture.Path);
+
+                if (info.Length != capture.Bytes || info.Length < 1024)
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED " + capture.Path + " bytes "
+                                   + info.Length + " != " + capture.Bytes);
+                }
+            }
+
+            if (play.Captures.Count != N9CaptureFiles.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED captured " + play.Captures.Count
+                               + " of " + N9CaptureFiles.Length);
+            }
+
+            if (result.Failures != 0 || result.AiPickups < 1 || result.AiPasses < 1
+                || result.MaxActiveSlots != MatchPlayN9Script.PlanSlots.Length
+                || result.PlanPassRequests < 1)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED roster=" + result.RosterDescribe
+                               + " reason=" + result.FailureText);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_CAPTURE_EVIDENCE frames=" + play.Captures.Count
+                      + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                      + " aiShots=" + result.AiShots
+                      + " planPassRequests=" + result.PlanPassRequests
+                      + " maxActiveSlots=" + result.MaxActiveSlots
+                      + " planIds=[" + result.PlanIdList + "]"
+                      + " rebinds=" + result.Rebinds
+                      + " relays=" + result.Relays
+                      + " unsupportedDecisions=" + result.UnsupportedDecisions
+                      + " planDigest=" + result.Digest);
+
+            return failures;
+        }
+
+        private static void BuildAndRunWindowsN9(bool exitWhenBatch)
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string playerPath = BuildPlayer();
+                string captureBase = ResolveArtifactPath(Path.Combine("artifacts", "native-match-n9-player.png"));
+                string logPath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "ublade3-native-match-n9-player.log"));
+                string directory = Path.GetDirectoryName(captureBase);
+
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                string stem = Path.GetFileNameWithoutExtension(captureBase);
+                string[] expected = new string[MatchPlay.N9CaptureLabels.Length];
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    expected[i] = Path.Combine(directory, stem + "-" + MatchPlay.N9CaptureLabels[i] + ".png");
+
+                    if (File.Exists(expected[i]))
+                    {
+                        File.Delete(expected[i]);
+                    }
+                }
+
+                ProcessStartInfo start = new ProcessStartInfo();
+                start.FileName = playerPath;
+                start.Arguments = "-batchmode -screen-width " + MatchPlay.CaptureWidth
+                                  + " -screen-height " + MatchPlay.CaptureHeight
+                                  + " -screen-fullscreen 0 --n9-capture=\"" + captureBase + "\""
+                                  + " -logFile \"" + logPath + "\"";
+                start.WorkingDirectory = Path.GetDirectoryName(playerPath);
+                start.UseShellExecute = false;
+                start.CreateNoWindow = true;
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N9_PLAYER_START " + start.Arguments);
+
+                using (Process process = Process.Start(start))
+                {
+                    if (!process.WaitForExit(300000))
+                    {
+                        process.Kill();
+                        throw new TimeoutException("The Windows N9 player did not finish in 300 s.");
+                    }
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new InvalidOperationException("The Windows N9 player exited "
+                                                            + process.ExitCode + "; log " + logPath);
+                    }
+                }
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    if (!File.Exists(expected[i]))
+                    {
+                        throw new FileNotFoundException("The Windows N9 player did not write " + expected[i], expected[i]);
+                    }
+
+                    FileInfo info = new FileInfo(expected[i]);
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N9_PLAYER_CAPTURE path=" + expected[i] + " bytes=" + info.Length);
+                }
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N9_PLAYER_CAPTURES_OK frames=" + expected.Length
+                          + " output=" + playerPath + " log=" + logPath);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_PLAYER_CAPTURE_FAILED " + exception);
                 exitCode = 1;
             }
 

@@ -140,3 +140,14 @@ Prompt and decision log for UBlade3.
 - Boundary: one plan/behavior/skater, labelled motion bridge, many handler ids remain. Goal active.
 - Version: 2026.10.31.013
 
+## 13 - 2026-10-31
+
+- Request: generalise real PlanVM AI to the whole native C# match.
+- Work: persistent shipped plans for all non-human slots (Defense/CarryRok/Goalie, with plan changes
+  on possession), per-slot plan/behaviour/action telemetry, real plan pass decision; six captures.
+- Evidence: N9_CHECK_OK slots=5 active=5 planTicks=700 aiPickups=1 aiPasses=1 digest=1ab07ec24368547e;
+  Editor/player frames byte-identical; N4-N8 regressions green.
+- Boundary: many PlanCond/PlanAction bodies remain; motion bridge/relay approximations; not release.
+  Goal active.
+- Version: 2026.10.31.014
+

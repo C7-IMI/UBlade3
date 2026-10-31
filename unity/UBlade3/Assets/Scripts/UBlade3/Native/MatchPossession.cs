@@ -797,6 +797,9 @@ namespace UBlade3.Native
         // N8: the real C# PlanVM-driven AI for one slot; null keeps the N7 heuristic path untouched.
         public MatchPlanAi PlanAi;
 
+        // N9: the whole-match PlanVM roster (one persistent plan instance per non-human slot).
+        public MatchPlanAiRoster PlanRoster;
+
         public bool AiEnabled;
 
         public bool HumanPickupEnabled = true;
@@ -894,6 +897,12 @@ namespace UBlade3.Native
             PlanAi = new MatchPlanAi(this, Sim, Config, slot, planName, dataPath);
         }
 
+        // N9: attach the whole-match plan roster (AI skaters + goalies); null keeps the heuristic path.
+        public void AttachPlanRoster(MatchPlanAiRoster roster)
+        {
+            PlanRoster = roster;
+        }
+
         public void AttachAi(params int[] slots)
         {
             Ai = new MatchAiController();
@@ -915,6 +924,11 @@ namespace UBlade3.Native
             if (slot == Config.HumanSlot)
             {
                 return CurrentHeld;
+            }
+
+            if (PlanRoster != null && PlanRoster.Handles(slot))
+            {
+                return PlanRoster.GetInput(slot);
             }
 
             if (PlanAi != null && PlanAi.Enabled && PlanAi.Slot == slot)
@@ -1086,6 +1100,11 @@ namespace UBlade3.Native
             if (PlanAi != null)
             {
                 PlanAi.BeforeMatchTick(now);
+            }
+
+            if (PlanRoster != null)
+            {
+                PlanRoster.BeforeMatchTick(now);
             }
 
             ProcessAiRequests(now);
@@ -1503,6 +1522,11 @@ namespace UBlade3.Native
             if (PlanAi != null)
             {
                 text.Append(" planAi=\"").Append(PlanAi.Describe()).Append('"');
+            }
+
+            if (PlanRoster != null)
+            {
+                text.Append(" planRoster=\"").Append(PlanRoster.Describe()).Append('"');
             }
 
             return text.ToString();

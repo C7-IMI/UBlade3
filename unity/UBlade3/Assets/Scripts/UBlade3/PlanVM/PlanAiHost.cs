@@ -157,7 +157,8 @@ namespace UBlade3.PlanVM
 
             PlanAiDecisionHandler handler;
 
-            if (!PlanAiDecisions.TryGet(decisionId, out handler))
+            if (!PlanAiDecisions.TryGet(decisionId, out handler) &&
+                !PlanAiDecisionExtensions.TryGet(decisionId, out handler))
             {
                 RecordUnsupported("decision", decisionId);
                 World.Log("unsupported.decision id=" + decisionId + " " + PlanOpcodes.DecisionName(decisionId));

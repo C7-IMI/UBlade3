@@ -105,6 +105,18 @@ namespace UBlade3.Native
             "00-start", "01-ai-pickup", "02-plan-bound", "03-passing-play", "04-plan-pass", "05-result"
         };
 
+        public const string N9CapturePrefix = "native-match-n9";
+
+        public static readonly string[] N9CaptureBeats =
+        {
+            "start", "plans-bound", "ai-pickup", "plan-switch", "plan-pass", "result"
+        };
+
+        public static readonly string[] N9CaptureLabels =
+        {
+            "00-start", "01-plans-bound", "02-ai-pickup", "03-plan-switch", "04-plan-pass", "05-result"
+        };
+
         public MatchScene Scene { get; private set; }
 
         public MatchGameplay Gameplay { get; private set; }
@@ -145,14 +157,17 @@ namespace UBlade3.Native
         private bool captureCommand;
         private bool n7CaptureCommand;
         private bool n8CaptureCommand;
+        private bool n9CaptureCommand;
         private bool autoStartCommand;
         private string captureBasePath;
         private string n7CaptureBasePath;
         private string n8CaptureBasePath;
+        private string n9CaptureBasePath;
 
         private static readonly Dictionary<string, int> BeatIndex = BuildBeatIndex();
         private static readonly Dictionary<string, int> N7BeatIndex = BuildN7BeatIndex();
         private static readonly Dictionary<string, int> N8BeatIndex = BuildN8BeatIndex();
+        private static readonly Dictionary<string, int> N9BeatIndex = BuildN9BeatIndex();
 
         private static Dictionary<string, int> BuildBeatIndex()
         {
@@ -185,6 +200,18 @@ namespace UBlade3.Native
             for (int i = 0; i < N8CaptureBeats.Length; i++)
             {
                 map[N8CaptureBeats[i]] = i;
+            }
+
+            return map;
+        }
+
+        private static Dictionary<string, int> BuildN9BeatIndex()
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < N9CaptureBeats.Length; i++)
+            {
+                map[N9CaptureBeats[i]] = i;
             }
 
             return map;
@@ -227,6 +254,10 @@ namespace UBlade3.Native
                 {
                     RunCommandCaptureN8();
                 }
+                else if (n9CaptureCommand)
+                {
+                    RunCommandCaptureN9();
+                }
                 else if (captureCommand)
                 {
                     RunCommandCapture();
@@ -261,6 +292,12 @@ namespace UBlade3.Native
                     n7CaptureCommand = true;
                     autoStartCommand = true;
                     n7CaptureBasePath = argument.Substring("--n7-capture=".Length);
+                }
+                else if (argument.StartsWith("--n9-capture=", StringComparison.Ordinal))
+                {
+                    n9CaptureCommand = true;
+                    autoStartCommand = true;
+                    n9CaptureBasePath = argument.Substring("--n9-capture=".Length);
                 }
                 else if (argument.StartsWith("--n8-capture=", StringComparison.Ordinal))
                 {
@@ -412,7 +449,7 @@ namespace UBlade3.Native
 
         private void Update()
         {
-            if (!IsBuilt || captureCommand || n7CaptureCommand || n8CaptureCommand || Scene == null)
+            if (!IsBuilt || captureCommand || n7CaptureCommand || n8CaptureCommand || n9CaptureCommand || Scene == null)
             {
                 return;
             }
@@ -643,6 +680,127 @@ namespace UBlade3.Native
             return failures;
         }
 
+        // --- N9: whole-match PlanVM AI roster -------------------------------------------------
+
+        public int RunDeterministicCaptureN9(string[] paths, out MatchPlayN9ScriptResult result)
+        {
+            int failures = 0;
+
+            if (Control.Ai == null)
+            {
+                Control.AttachAi(MatchPlayN9Script.PlanSlots);
+            }
+
+            Control.AiEnabled = true;
+            Control.Ai.Enabled = true;
+            Control.HumanPickupEnabled = false;
+            Scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
+            string dataPath;
+
+            try
+            {
+                dataPath = MatchScene.ResolveRoot().DataPath;
+            }
+            catch (Exception exception)
+            {
+                dataPath = Environment.GetEnvironmentVariable("HYPERBLADE_GAME_DATA");
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N9_DATA_FALLBACK " + exception.Message
+                                 + " data=" + (dataPath ?? "none"));
+            }
+
+            result = MatchPlayN9Script.Run(Control, Scene.World, dataPath,
+                beat => CaptureBeatN9(beat, paths), held => Scene.TickScene(held));
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_RESULT aiPickups=" + result.AiPickups
+                      + " aiPasses=" + result.AiPasses + " aiShots=" + result.AiShots
+                      + " planPassRequests=" + result.PlanPassRequests
+                      + " maxActiveSlots=" + result.MaxActiveSlots
+                      + " planIds=[" + result.PlanIdList + "]"
+                      + " rebinds=" + result.Rebinds
+                      + " maxRebindsPerSlot=" + result.MaxRebindsPerSlot
+                      + " relays=" + result.Relays
+                      + " relayBudgetHits=" + result.RelayBudgetHits
+                      + " possessionEvents=" + result.PossessionEvents
+                      + " unsupportedDecisions=" + result.UnsupportedDecisions
+                      + " digest=" + result.Digest
+                      + " failures=" + result.Failures + " reason=" + result.FailureText);
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.RosterSlots);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N9_CONTROL " + Control.Describe());
+
+            if (result.Failures != 0)
+            {
+                failures += result.Failures;
+            }
+
+            if (Captures.Count != N9CaptureBeats.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N9_CAPTURE_FAILED captured " + Captures.Count
+                               + " of " + N9CaptureBeats.Length + " beats");
+            }
+
+            SyncPresentation();
+            return failures;
+        }
+
+        private void RunCommandCaptureN9()
+        {
+            string baseName = string.IsNullOrEmpty(n9CaptureBasePath)
+                ? System.IO.Path.Combine("artifacts", N9CapturePrefix + "-player.png")
+                : n9CaptureBasePath;
+
+            string directory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(baseName));
+            string stem = System.IO.Path.GetFileNameWithoutExtension(baseName);
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = System.IO.Directory.GetCurrentDirectory();
+            }
+
+            string[] paths = new string[N9CaptureLabels.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = System.IO.Path.Combine(directory, stem + "-" + N9CaptureLabels[i] + ".png");
+            }
+
+            MatchPlayN9ScriptResult result;
+            int failures = RunDeterministicCaptureN9(paths, out result);
+            int active = 0;
+
+            for (int index = 0; index < MatchPlayN9Script.PlanSlots.Length; index++)
+            {
+                MatchPlanAi adapter = Control.PlanRoster == null
+                    ? null
+                    : Control.PlanRoster.Adapter(MatchPlayN9Script.PlanSlots[index]);
+
+                if (adapter != null && adapter.Bound)
+                {
+                    active++;
+                }
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N9_CAPTURES_OK frames=" + paths.Length
+                  + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                  + " aiShots=" + result.AiShots
+                  + " maxActiveSlots=" + result.MaxActiveSlots
+                  + " planIds=[" + result.PlanIdList + "]"
+                  + " planPassRequests=" + result.PlanPassRequests
+                  + " rebinds=" + result.Rebinds + " relays=" + result.Relays
+                  + " unsupportedDecisions=" + result.UnsupportedDecisions
+                  + " planDigest=" + result.Digest
+                  + " activeNow=" + active
+                : "UBLADE3_NATIVE_MATCH_N9_CAPTURES_FAILED failures=" + failures);
+
+            if (Application.isBatchMode || !Application.isEditor)
+            {
+                Application.Quit(failures == 0 ? 0 : 1);
+            }
+        }
+
         private void RunCommandCaptureN7()
         {
             string baseName = string.IsNullOrEmpty(n7CaptureBasePath)
@@ -732,6 +890,25 @@ namespace UBlade3.Native
             if (!BeatIndex.TryGetValue(beat, out index))
             {
                 Debug.LogWarning("UBLADE3_NATIVE_PLAY_CAPTURE_UNKNOWN beat=" + beat);
+                return;
+            }
+
+            if (paths == null || index >= paths.Length || string.IsNullOrEmpty(paths[index]))
+            {
+                return;
+            }
+
+            SyncPresentation();
+            Capture(paths[index], index, beat, false);
+        }
+
+        private void CaptureBeatN9(string beat, string[] paths)
+        {
+            int index;
+
+            if (!N9BeatIndex.TryGetValue(beat, out index))
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N9_CAPTURE_UNKNOWN beat=" + beat);
                 return;
             }
 

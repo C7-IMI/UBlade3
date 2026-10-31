@@ -54,6 +54,28 @@ namespace UBlade3.Native
 
         public const int BehaviorKindSetMovingInPlace = 18;
 
+        // src/engine/messageids.h / DATA/ENUMIDS.H id_MSG_ list.
+        public const int MessageLostIt = 2;
+
+        public const int MessageGotIt = 3;
+
+        public const int MessageRokIsFree = 13;
+
+        // EngineObject::SelectAndActivatePlan maps a non-goalie AI skater to "Defense" behaviour 0 and
+        // a goalie to plan table index 0 behaviour 0 (docs/NATIVE-MATCH-N9.md section 2).
+        public const string InitialSkaterPlan = "Defense";
+
+        public const int InitialSkaterBehavior = 0;
+
+        public const int InitialGoalieBehavior = 0;
+
+        // The carrier's engine request is CHANGE_OF_PLAN "CarryRok" 1 "GoForGoal" (the GotIt handler in
+        // every skater plan). GoForGoal needs the unported attack/weapon decision bodies, so the roster
+        // maps its entry to the verified TurnToMate behaviour 5 pass path (documented mapping, N9).
+        public const int CarryRokRequestedBehavior = 1;
+
+        public const int CarrierEntryBehavior = BehaviorTurnToMate;
+
         // g_nTeammateMode default: 0 (single player) per engine/gameengine.cpp ReadInt default.
         public const int DefaultTeammateMode = 0;
 
@@ -61,7 +83,9 @@ namespace UBlade3.Native
         // plan decision reads it, so the adapter supplies the team-file default as a labelled input.
         public const float FixtureCarryRokThrowDistance = 150.0f;
 
-        private static readonly string[] PlanTableNames = { "CarryRok", "Defense", "Human", "OffWing", "Sideln" };
+        // The Plan AI slice's fixed owner table; the N9 roster replaces it with the slot's shipped
+        // ObjectDefinition.Plans from the team file (docs/NATIVE-MATCH-N9.md).
+        private static readonly string[] DefaultPlanTable = { "CarryRok", "Defense", "Human", "OffWing", "Sideln" };
 
         private static readonly Dictionary<string, PlanFileImage> ImageCache =
             new Dictionary<string, PlanFileImage>(StringComparer.OrdinalIgnoreCase);
@@ -70,9 +94,48 @@ namespace UBlade3.Native
 
         public readonly int Slot;
 
-        public readonly string PlanName;
+        public string PlanName;
 
         public readonly string DataPath;
+
+        public readonly bool Persistent;
+
+        public readonly bool RosterMode;
+
+        public readonly string[] PlanTableNames;
+
+        public readonly int EntryBehavior;
+
+        // N9 roster telemetry, all plan results are the plan's own.
+        public int RebindCount;
+
+        public int PlanChangeRequestsSeen;
+
+        public int PlanChangeRequestsAdopted;
+
+        public int UnsupportedDecisionErrors;
+
+        public int RuntimeErrors;
+
+        public int InjectedMessages;
+
+        public int InjectedMessagesDropped;
+
+        public int RelayedMessages;
+
+        public int RelayBudgetHits;
+
+        public int LastRequestedBehavior = -1;
+
+        public string LastUnsupportedDecision = string.Empty;
+
+        public readonly List<string> PlanHistory = new List<string>();
+
+        public readonly List<string> PlanIdsUsed = new List<string>();
+
+        public readonly HashSet<int> UnsupportedDecisionIds = new HashSet<int>();
+
+        public readonly Dictionary<int, int> UnsupportedDecisionCounts = new Dictionary<int, int>();
 
         public bool Enabled = true;
 
@@ -132,7 +195,13 @@ namespace UBlade3.Native
 
         private readonly MatchPlayConfig config;
 
-        private readonly PlanFileImage image;
+        private PlanFileImage image;
+
+        private int processedPlanChangeRequests;
+
+        private int relayScanned;
+
+        private int lastRelayInjectionCount;
 
         private PlanAiWorld world;
 
@@ -152,14 +221,29 @@ namespace UBlade3.Native
 
         private bool digestDirty = true;
 
+        /// <summary>The N8 single-plan, possession-bound adapter (CARRYROK TurnToMate flow).</summary>
         public MatchPlanAi(MatchPlayControl control, Simulation sim, MatchPlayConfig config, int slot, string planName, string dataPath)
+            : this(control, sim, config, slot, planName, dataPath, DefaultPlanTable, InitialBehavior, false)
+        {
+        }
+
+        /// <summary>
+        /// The N9 roster adapter: a persistent plan instance for one slot over the slot's shipped plan
+        /// table from the team file, with plan changes adopted from the plan's own CHANGE_OF_PLAN requests.
+        /// </summary>
+        public MatchPlanAi(MatchPlayControl control, Simulation sim, MatchPlayConfig config, int slot, string planName,
+            string dataPath, string[] planTableNames, int initialBehavior, bool persistent)
         {
             Control = control;
             this.sim = sim;
             this.config = config;
             Slot = slot;
-            PlanName = string.IsNullOrEmpty(planName) ? DefaultPlanName : planName;
             DataPath = dataPath;
+            PlanTableNames = planTableNames == null || planTableNames.Length == 0 ? DefaultPlanTable : planTableNames;
+            EntryBehavior = initialBehavior;
+            Persistent = persistent;
+            RosterMode = persistent;
+            PlanName = string.IsNullOrEmpty(planName) ? DefaultPlanName : planName;
             image = LoadPlanImage(DataPath, PlanName);
         }
 
@@ -203,6 +287,12 @@ namespace UBlade3.Native
                 return;
             }
 
+            if (Persistent)
+            {
+                PersistentMatchTick(nowMs);
+                return;
+            }
+
             bool carrying = sim.Rok.IsCarried && sim.Rok.AttachedSlot == Slot;
 
             if (!carrying)
@@ -231,6 +321,368 @@ namespace UBlade3.Native
             ScanPlanEvents(nowMs);
             TrackBehavior(nowMs);
             held = ResolveMotion(nowMs);
+        }
+
+        /// <summary>
+        /// N9 roster tick: the plan stays instantiated for the whole match and every tick runs the
+        /// agenda, the pending plan messages and the plan's own behaviour machine. Unported decision
+        /// bodies are explicit telemetry and abort only the current script step (the plan keeps its
+        /// current behaviour; no branch is guessed). Plan changes the plan itself requests through
+        /// CHANGE_OF_PLAN are adopted by rebinding this slot to the requested shipped plan/behaviour.
+        /// </summary>
+        private void PersistentMatchTick(uint nowMs)
+        {
+            if (!Bound)
+            {
+                if (!Bind(nowMs))
+                {
+                    return;
+                }
+            }
+
+            PlanTicks++;
+            SyncMirror(nowMs);
+            world.ClockMs = (int)nowMs;
+
+            try
+            {
+                world.TickAgenda();
+            }
+            catch (PlanAiUnportedHandlerException exception)
+            {
+                RecordUnsupportedDecision(exception);
+            }
+            catch (PlanVmException exception)
+            {
+                RuntimeErrors++;
+                digestDirty = true;
+                Trace.Add("t=" + nowMs + " plan-runtime-error " + exception.GetType().Name + ": " + exception.Message);
+            }
+
+            DrainPlanMessages(nowMs, 256);
+            ScanPlanEvents(nowMs);
+            TrackBehavior(nowMs);
+            ProcessPlanChanges(nowMs);
+            TrackBehavior(nowMs);
+            held = ResolveMotion(nowMs);
+        }
+
+        /// <summary>Posts an engine-level plan message into this slot's plan instance (possession, free ROK).</summary>
+        public void InjectSceneMessage(int message, int arg, int sender)
+        {
+            if (!Bound || world == null)
+            {
+                InjectedMessagesDropped++;
+
+                return;
+            }
+
+            world.PostSceneMessage(Slot, message, arg, sender, 0);
+            InjectedMessages++;
+        }
+
+        /// <summary>
+        /// Collects this slot's cross-slot message traffic (explicit targets and broadcasts) since the
+        /// last scan. The roster relays it into the target plan instances; the original network copy is
+        /// already logged by the mock. Engine-level messages (both possession events) are injected by the
+        /// roster directly, not relayed here.
+        /// </summary>
+        public void ScanRelayEvents(List<PlanRelayMessage> output)
+        {
+            if (!Bound || world == null)
+            {
+                return;
+            }
+
+            for (int index = relayScanned; index < world.Events.Count; index++)
+            {
+                string line = world.Events[index];
+
+                if (line.Contains("broadcast message="))
+                {
+                    PlanRelayMessage message;
+                    message.TargetSlot = -1;
+                    message.Message = ParseIntToken(line, "message=");
+                    message.Arg = ParseIntToken(line, "arg=");
+                    message.Sender = ParseIntToken(line, "sender=");
+
+                    if (message.Message >= 0)
+                    {
+                        output.Add(message);
+                    }
+
+                    continue;
+                }
+
+                if (line.Contains("post target="))
+                {
+                    int target = ParseIntToken(line, "post target=");
+
+                    if (target >= 0 && target < PlanConstants.PlayerObjectCount && target != Slot)
+                    {
+                        PlanRelayMessage message;
+                        message.TargetSlot = target;
+                        message.Message = ParseIntToken(line, "message=");
+                        message.Arg = ParseIntToken(line, "arg=");
+                        message.Sender = ParseIntToken(line, "sender=");
+
+                        if (message.Message >= 0)
+                        {
+                            output.Add(message);
+                        }
+                    }
+                }
+            }
+
+            relayScanned = world.Events.Count;
+        }
+
+        /// <summary>Rebinds this slot to another shipped plan at the entry behaviour the plan requested.</summary>
+        private bool RebindPlan(uint nowMs, string planName, int requestedBehavior, out int mappedBehavior, string why)
+        {
+            mappedBehavior = requestedBehavior;
+            PlanFileImage target = LoadPlanImage(DataPath, planName);
+
+            if (target == null)
+            {
+                Trace.Add("t=" + nowMs + " plan-change-missed plan=" + planName + " why=" + why);
+                digestDirty = true;
+
+                return false;
+            }
+
+            mappedBehavior = MapEntryBehavior(planName, requestedBehavior);
+            PlanState fresh;
+
+            try
+            {
+                if (state != null)
+                {
+                    state.Teardown();
+                }
+
+                PlanName = planName;
+                image = target;
+                fresh = host.InstantiatePlan(target);
+                int behaviors = fresh.BehaviorNodeCount;
+
+                if (behaviors <= 0)
+                {
+                    mappedBehavior = 0;
+                }
+                else if (mappedBehavior < 0 || mappedBehavior >= behaviors - 1)
+                {
+                    mappedBehavior = 0;
+                }
+
+                fresh.ActivateBehavior(unchecked((uint)mappedBehavior));
+                state = fresh;
+            }
+            catch (Exception exception)
+            {
+                RuntimeErrors++;
+                Trace.Add("t=" + nowMs + " plan-change-failed plan=" + planName + " behaviour=" + requestedBehavior
+                          + " why=" + why + " error=" + exception.GetType().Name + ": " + exception.Message);
+                digestDirty = true;
+
+                return false;
+            }
+
+            RebindCount++;
+            PlanChangeRequestsAdopted++;
+            LastRequestedBehavior = requestedBehavior;
+            LastBehaviorIndex = -1;
+            LastBehaviorName = string.Empty;
+            LastBehaviorKind = -1;
+            LastTargetSlot = int.MinValue;
+            passRequested = false;
+            shotRequested = false;
+            processedPlanChangeRequests = host.PlanChangeRequests.Count;
+            PlanHistory.Add("t=" + nowMs + " why=" + why + " requested=" + planName + ":" + requestedBehavior
+                            + " mapped=" + mappedBehavior
+                            + " behaviours=" + (state == null ? 0 : state.BehaviorNodeCount));
+            AddPlanId(planName);
+            RefreshPlanStatistics();
+            digestDirty = true;
+
+            return true;
+        }
+
+        private static int MapEntryBehavior(string planName, int requestedBehavior)
+        {
+            if (string.Equals(planName, DefaultPlanName, StringComparison.OrdinalIgnoreCase) &&
+                requestedBehavior == CarryRokRequestedBehavior)
+            {
+                return CarrierEntryBehavior;
+            }
+
+            return requestedBehavior;
+        }
+
+        private void ProcessPlanChanges(uint nowMs)
+        {
+            if (host == null || host.PlanChangeRequests.Count == processedPlanChangeRequests)
+            {
+                return;
+            }
+
+            PlanChangeRequestsSeen += host.PlanChangeRequests.Count - processedPlanChangeRequests;
+            string request = host.PlanChangeRequests[host.PlanChangeRequests.Count - 1];
+            processedPlanChangeRequests = host.PlanChangeRequests.Count;
+
+            string planName;
+            int behavior;
+
+            if (!TryParsePlanChangeRequest(request, out planName, out behavior))
+            {
+                Trace.Add("t=" + nowMs + " plan-change-unparsed " + request);
+                digestDirty = true;
+
+                return;
+            }
+
+            int mapped;
+            bool adopted = RebindPlan(nowMs, planName, behavior, out mapped, "plan-change");
+
+            Trace.Add("t=" + nowMs + " plan-change-adopted=" + (adopted ? "True" : "False")
+                      + " request=" + request + " mappedBehavior=" + mapped);
+            digestDirty = true;
+        }
+
+        private static bool TryParsePlanChangeRequest(string request, out string planName, out int behavior)
+        {
+            planName = null;
+            behavior = 0;
+
+            int at = request.IndexOf("plan=", StringComparison.Ordinal);
+
+            if (at < 0)
+            {
+                return false;
+            }
+
+            int indexAt = at + 5;
+            int open = request.IndexOf('(', indexAt);
+            int close = open < 0 ? -1 : request.IndexOf(')', open);
+
+            if (open < 0 || close < 0)
+            {
+                return false;
+            }
+
+            planName = request.Substring(open + 1, close - open - 1);
+
+            int behaviorAt = request.IndexOf("behavior=", close, StringComparison.Ordinal);
+
+            if (behaviorAt < 0)
+            {
+                return false;
+            }
+
+            int start = behaviorAt + "behavior=".Length;
+            int end = start;
+
+            while (end < request.Length && (char.IsDigit(request[end]) || request[end] == '-'))
+            {
+                end++;
+            }
+
+            return int.TryParse(request.Substring(start, end - start), out behavior);
+        }
+
+        /// <summary>
+        /// Drains the plan's pending scene messages one at a time. An unported handler body aborts only
+        /// that message and is recorded in the explicit unsupported telemetry; the rest of the queue
+        /// still runs, so a missing decision cannot stall the whole slot forever (the stock
+        /// DrainPendingMessages keeps a failed message at the head and would replay it every tick).
+        /// </summary>
+        private void DrainPlanMessages(uint nowMs, int budget)
+        {
+            int dispatched = 0;
+
+            while (world.Pending.Count > 0 && dispatched < budget)
+            {
+                PlanAiPendingMessage message = world.Pending[0];
+                world.Pending.RemoveAt(0);
+                dispatched++;
+
+                try
+                {
+                    world.DispatchSceneMessage(message.TargetSlot, message.Message, message.Arg,
+                        DecisionLog.Fresh, message.Sender, message.FromInput);
+                }
+                catch (PlanAiUnportedHandlerException exception)
+                {
+                    RecordUnsupportedDecision(exception);
+                }
+                catch (PlanVmException exception)
+                {
+                    RuntimeErrors++;
+                    digestDirty = true;
+                    Trace.Add("t=" + nowMs + " plan-runtime-error " + exception.GetType().Name + ": " + exception.Message);
+                }
+            }
+
+            if (world.Pending.Count > 0)
+            {
+                int dropped = world.Pending.Count;
+                world.Pending.Clear();
+                digestDirty = true;
+                Trace.Add("t=" + nowMs + " pending-overflow dropped=" + dropped + " budget=" + budget);
+            }
+        }
+
+        private void RecordUnsupportedDecision(PlanAiUnportedHandlerException exception)
+        {
+            UnsupportedDecisionErrors++;
+            UnsupportedDecisionIds.Add(exception.HandlerId);
+            LastUnsupportedDecision = "decision:" + exception.HandlerId + " " + PlanOpcodes.DecisionName(exception.HandlerId);
+
+            int count;
+            UnsupportedDecisionCounts.TryGetValue(exception.HandlerId, out count);
+            UnsupportedDecisionCounts[exception.HandlerId] = count + 1;
+            UnsupportedIds.Add("decision:" + exception.HandlerId);
+            UnsupportedIds.Add("unsupported.decision id=" + exception.HandlerId);
+            Trace.Add("t=" + (world == null ? 0 : world.ClockMs) + " unsupported-decision id=" + exception.HandlerId
+                      + " " + PlanOpcodes.DecisionName(exception.HandlerId)
+                      + " behavior=" + (state == null || state.Current == null ? "?" : state.Current.Name)
+                      + " (no branch guessed; current behaviour kept)");
+            digestDirty = true;
+        }
+
+        private static int ParseIntToken(string line, string token)
+        {
+            int at = line.IndexOf(token, StringComparison.Ordinal);
+
+            if (at < 0)
+            {
+                return -1;
+            }
+
+            int start = at + token.Length;
+            int end = start;
+
+            while (end < line.Length && char.IsDigit(line[end]))
+            {
+                end++;
+            }
+
+            int value;
+
+            return int.TryParse(line.Substring(start, end - start), out value) ? value : -1;
+        }
+
+        private bool IsShotAction(int actionId)
+        {
+            for (int index = 0; index < ShotActionIds.Length; index++)
+            {
+                if (ShotActionIds[index] == actionId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>The held mask the match simulation uses for this slot. When no plan is bound the heuristic keeps the movement (pickup approach).</summary>
@@ -297,10 +749,12 @@ namespace UBlade3.Native
                 }
 
                 state = host.InstantiatePlan(image);
-                state.ActivateBehavior(InitialBehavior);
+                state.ActivateBehavior(unchecked((uint)EntryBehavior));
 
                 scannedEvents = world.Events.Count;
+                relayScanned = world.Events.Count;
                 Bound = true;
+                AddPlanId(PlanName);
                 BindCount++;
                 LastBindTick = (int)nowMs;
                 LastTargetSlot = int.MinValue;
@@ -313,6 +767,7 @@ namespace UBlade3.Native
                 PlanTicks = 0;
                 Trace.Add("t=" + nowMs + " bind plan=" + PlanName + " slot=" + Slot
                           + " behaviours=" + (state.Behaviors == null ? 0 : state.Behaviors.Length)
+                          + " slotPlans=" + PlanTableNames.Length + " persistent=" + (Persistent ? "True" : "False")
                           + " planDigest=" + PlanVmDigest.Hex(statistics.Digest));
                 digestDirty = true;
 
@@ -329,6 +784,37 @@ namespace UBlade3.Native
                 Enabled = false;
 
                 return false;
+            }
+        }
+
+        private void AddPlanId(string planName)
+        {
+            for (int index = 0; index < PlanIdsUsed.Count; index++)
+            {
+                if (string.Equals(PlanIdsUsed[index], planName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            PlanIdsUsed.Add(planName);
+        }
+
+        private void RefreshPlanStatistics()
+        {
+            if (image == null || host == null)
+            {
+                return;
+            }
+
+            PlanProgram program = PlanStreamParser.Parse(image, PlanArgResolver.ForSlot(Slot), host);
+            PlanStatistics statistics = PlanAnalyzer.Analyze(image, program);
+            PlanNodeCount = statistics.Nodes;
+            PlanOpcodeCounts.Clear();
+
+            foreach (KeyValuePair<int, int> entry in statistics.OpcodeHistogram)
+            {
+                PlanOpcodeCounts[entry.Key] = entry.Value;
             }
         }
 
@@ -450,6 +936,18 @@ namespace UBlade3.Native
                 for (int i = 0; i < ShotActionIds.Length; i++)
                 {
                     if (line.Contains("action id=" + ShotActionIds[i] + " "))
+                    {
+                        RequestShot(nowMs, line);
+                    }
+                }
+
+                // The unported launch/throw action bodies still name the carrier's shot intent; the
+                // carrier-only condition keeps a goalie LaunchAt (a launch, not a shot) out of the mapping.
+                if (line.Contains("unsupported.action id="))
+                {
+                    int actionId = ParseIntToken(line, "unsupported.action id=");
+
+                    if (IsShotAction(actionId) && sim.Rok.IsCarried && sim.Rok.AttachedSlot == Slot)
                     {
                         RequestShot(nowMs, line);
                     }
@@ -831,6 +1329,38 @@ namespace UBlade3.Native
             text.Append(" traceLines=").Append(Trace.Count);
             text.Append(" digest=").Append(PlanVmDigest.Hex(TraceDigest()));
 
+            if (Persistent)
+            {
+                text.Append(" persistent=True");
+                text.Append(" planIds=[").Append(string.Join(",", PlanIdsUsed.ToArray())).Append(']');
+                text.Append(" rebinds=").Append(RebindCount);
+                text.Append(" planChangesSeen=").Append(PlanChangeRequestsSeen);
+                text.Append(" planChangesAdopted=").Append(PlanChangeRequestsAdopted);
+                text.Append(" requestedBehavior=").Append(LastRequestedBehavior);
+                text.Append(" unsupportedDecisions=").Append(UnsupportedDecisionErrors);
+                text.Append(" unsupportedDecisionIds=[");
+                List<int> decisionIds = new List<int>(UnsupportedDecisionIds);
+                decisionIds.Sort();
+
+                for (int index = 0; index < decisionIds.Count; index++)
+                {
+                    if (index > 0)
+                    {
+                        text.Append(',');
+                    }
+
+                    text.Append(decisionIds[index]).Append('x')
+                        .Append(UnsupportedDecisionCounts[decisionIds[index]]);
+                }
+
+                text.Append(']');
+                text.Append(" runtimeErrors=").Append(RuntimeErrors);
+                text.Append(" injected=").Append(InjectedMessages);
+                text.Append(" injectedDropped=").Append(InjectedMessagesDropped);
+                text.Append(" relayed=").Append(RelayedMessages);
+                text.Append(" relayBudgetHits=").Append(RelayBudgetHits);
+            }
+
             if (!string.IsNullOrEmpty(Failure))
             {
                 text.Append(" failure=\"").Append(Failure).Append('"');
@@ -921,6 +1451,15 @@ namespace UBlade3.Native
 
             return string.Join(",", sorted.ToArray());
         }
+    }
+
+    /// <summary>One cross-slot plan message the roster relays into another slot's plan instance.</summary>
+    public struct PlanRelayMessage
+    {
+        public int TargetSlot; // -1 is a broadcast
+        public int Message;
+        public int Arg;
+        public int Sender;
     }
 
     /// <summary>The plan slot constants the adapter mirrors, kept local so the adapter reads like the engine tables.</summary>

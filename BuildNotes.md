@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.014
+
+**Whole-match PlanVM AI roster: five plans active simultaneously in the C# match.**
+
+- Date: 2026-10-31
+- Change: added MatchPlanAiRoster/MatchPlanAiDecisions and PlanAiDecisionExtensions. Every
+  non-human slot now runs a persistent shipped plan from its HTM SetPlans table: AI skaters start
+  Defense, the carrier changes to CARRYROK (documented 1->5 entry) and TurnToMate/PassingPlay
+  becomes a real match pass, LostIt returns it to Defense, and both goalies run GOALIE. Plans,
+  behaviours, agenda/timers, actions/decisions and plan changes stay in the real PlanVM.
+- Verified: `N9_CHECK_OK` frames=6; headless slots=5 active=5 maxActive=5 planIds=CarryRok/Defense/
+  Goalie ticks=140 planTicks=700 aiPickups=1 aiPasses=1 planPassTick=50 rebinds=2 relays=4
+  unsupportedDecisions=9 digest=1ab07ec24368547e determinism=True; Editor/player frames
+  byte-identical (digest 25e2607dcad029e3); N4-N8 regressions green; no20xx processes.
+- Boundary: most PlanCond/PlanAction bodies still unported (observed ids listed in the doc);
+  SET_Target motion uses the labelled held-mask bridge, no exact CSteerToTarget/collision/goal-
+  celebration chain; plan changes coalesced per tick; relays approximated; no plan shot path.
+  Interactive N4-N8 default remains heuristic until coverage broadens. Not parity/release.
+- Docs: docs/NATIVE-MATCH-N9.md.
+
 ## 2026.10.31.013
 
 **First real PlanVM-driven AI inside the native C# match.**

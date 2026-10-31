@@ -56,8 +56,11 @@ original data formats. **Current verified milestone:**
   byte-identical player frames and 8 audio plays. See [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
 - C# N8 real PlanVM AI: AI slot 1 picks up the ROK, binds CARRYROK, runs TurnToMate>PassingPlay>PassingPlayPass
   through the real VM and its plan decision becomes a real pass. `N8_CHECK_OK mismatches=0 planTicks=48
-  aiPickups=1 aiPasses=1 digest=4fb06b4458419444`; six Editor/player captures byte-identical. One plan/skater
-  only; other AI remains fallback. See [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
+  aiPickups=1 aiPasses=1 digest=4fb06b4458419444`. See [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
+- C# N9 whole-match PlanVM roster: every non-human slot runs a persistent shipped plan (Defense/CarryRok/Goalie)
+  with plan changes on possession; `N9_CHECK_OK slots=5 active=5 planTicks=700 aiPickups=1 aiPasses=1
+  digest=1ab07ec24368547e`; six Editor/player frames byte-identical. Many handler bodies/motion physics remain.
+  See [docs/NATIVE-MATCH-N9.md](./docs/NATIVE-MATCH-N9.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -72,6 +75,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - C# playable loop: [docs/NATIVE-PLAY.md](./docs/NATIVE-PLAY.md).
 - C# N7 playable follow-up: [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
 - C# N8 PlanVM AI: [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
+- C# N9 PlanVM roster: [docs/NATIVE-MATCH-N9.md](./docs/NATIVE-MATCH-N9.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

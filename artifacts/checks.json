@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T09:01:42.124Z",
+  "generatedAt": "2026-10-31T09:21:02.386Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -343,6 +343,41 @@
         "no full AI parity"
       ],
       "doc": "docs/NATIVE-MATCH-N8.md"
+    },
+    "planAiRoster": {
+      "status": "N9 whole-match PlanVM AI roster verified",
+      "slots": 5,
+      "active": 5,
+      "planIds": [
+        "CarryRok",
+        "Defense",
+        "Goalie"
+      ],
+      "ticks": 140,
+      "planTicks": 700,
+      "rebinds": 2,
+      "relays": 4,
+      "gotIt": 1,
+      "lostIt": 1,
+      "planPassRequests": 1,
+      "aiPickups": 1,
+      "aiPasses": 1,
+      "aiShots": 0,
+      "digest": "1ab07ec24368547e",
+      "captureDigest": "25e2607dcad029e3",
+      "captures": 6,
+      "playerFramesIdentical": true,
+      "decisions": "5,14,18,33,97,98",
+      "actions": "5,93,103",
+      "gaps": [
+        "most PlanCond/PlanAction bodies unported",
+        "held-mask motion bridge",
+        "plan changes coalesced per tick",
+        "relays approximated",
+        "no plan shot path",
+        "interactive default remains heuristic"
+      ],
+      "doc": "docs/NATIVE-MATCH-N9.md"
     }
   }
 }

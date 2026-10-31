@@ -1,0 +1,946 @@
+VBCSCompilerPreWarmer: watching VBCSCompiler (PID 26108)
+VBCSCompilerPreWarmer: pre-warm launched (dotnet PID 25644)
+VBCSCompiler prewarm took 17.63 ms
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.6/staging' branch; Version is '6000.6.7f1 (b22767f04f04) revision 11675495'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-StephenSimmons doesn't exist
+OS: 'Windows 11  (10.0.26300) Professional' Language: 'en' Physical Memory: 65220 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-10-31T09:17:08Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 15480)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Unity.exe
+-batchmode
+-quit
+-nographics
+-projectPath
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+-executeMethod
+UBlade3.EditorTools.UBlade3MatchPlay.CheckN7
+-logFile
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\ublade3\n7-regression-n9.log
+Successfully changed project path to: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-remapper-allocator-initial-capacity=32768"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=1"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Logging is directed to a specific file, skipping project log.
+Player connection [30252]  Target information:
+
+Player connection [30252]  * "[IP] 192.168.56.1 [Port] 55504 [Flags] 2 [Guid] 406632620 [EditorId] 406632620 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [30252]  * "[IP] 172.18.176.1 [Port] 55504 [Flags] 2 [Guid] 406632620 [EditorId] 406632620 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [30252]  * "[IP] 172.29.224.1 [Port] 55504 [Flags] 2 [Guid] 406632620 [EditorId] 406632620 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [30252]  * "[IP] 172.16.4.25 [Port] 55504 [Flags] 2 [Guid] 406632620 [EditorId] 406632620 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Unable to join player connection multicast group (err: 10013).
+Player connection [30252] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Starting IPC server.
+Waiting for clients to connect on \\.\pipe\Unity-LicenseClient-StephenSimmons, press Ctrl-C to exit.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons" at "2026-10-31T09:17:09.1482718Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 15480, path: "C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              493557a42e0949e7a541ddd9aae14d85
+  Correlation Id:          5ff0848b7fdbd286f78686902873c575
+  External correlation Id: 566702738650049197
+  Machine Id:              1Bt83mJDiMleMuAMUegGTrLHPqI=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-StephenSimmons" (connect: 0.37s, validation: 0.09s, handshake: 0.05s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons-notifications" at "2026-10-31T09:17:09.2928372Z"
+[Licensing::Module] Connected to LicensingClient (PId: 15480, launch time: 0.01, total connection time: 0.52s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 20067671438473-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.58s
+[Package Manager] Connected to IPC stream "Upm-38084" after 0.4 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+Initialising UDS system complete:
+  - System type: Client
+  - Resource namespace: d141e32e2286273497e925fa359ca53a
+  - Shared memory size: 1073741824
+  - Command buffer id: 1052576
+  - Command buffer size: 8192
+  - Hashmap size: 4194304
+  - Service connected: false
+Launching Unity Data Store - C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Tools/Unity.DataStore.exe 
+Unity Data Store artifact dir = Library/DataStore, working dir = C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3Unity Data Store running and initialised
+Refreshing native plugins compatible for Editor in 2.65 ms, found 2 plugins.
+[Physics::Module] Selected backend (deferred post-plugins).
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+[EntityIdStore] init: VM path (explicit commit), pageSize=4096, blockCount=262144, entitiesPerBlock=1024, blocksPerSlotPage=0, slots reserved=4294967296 bytes
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56084
+CodeReloadManager initialized
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+Registered in 0.006027 seconds.
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:False
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.917 seconds
+Domain Reload Profiling: 1580ms
+	BeginReloadAssembly (157ms)
+		CreateAndSetChildDomain (12ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (80ms)
+	LoadAllAssembliesAndSetupDomain (402ms)
+		LoadAssemblies (140ms)
+		TypeCache.Refresh (254ms)
+			TypeCache.ScanAssembly (238ms)
+		AnalyzeDomain (1ms)
+	FinalizeReload (919ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (13ms)
+			BeforeProcessingInitializeOnLoad (124ms)
+			ProcessInitializeOnLoadAttributes (191ms)
+			ProcessInitializeOnLoadMethodAttributes (285ms)
+			EditorAssembliesLoaded (3ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 42 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ide.rider@3.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.rider@570989d4a882)
+    com.unity.ide.visualstudio@2.0.26 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.visualstudio@a99d56dec63f)
+  Built-in packages:
+    com.unity.modules.accessibility@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.physicscore2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physicscore2d)
+    com.unity.modules.screencapture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tetgen@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tetgen)
+    com.unity.modules.tilemap@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.timelinefoundation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.timelinefoundation)
+    com.unity.modules.ui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.test-framework@1.8.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.test-framework@ee3fe9477490)
+    com.unity.ext.nunit@2.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ext.nunit@0198eae3b53e)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+Starting: C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s315ms
+[211/224    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.28 seconds), 1 items updated, 224 evaluated
+Total cache size 50613152
+AssetDatabase: script compilation time: 0.766147s
+Total cache size after purge 50613152, took 00:00:00.0255892
+Begin MonoManager ReloadAssembly
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.657 seconds
+Domain Reload Profiling: 1270ms
+	BeginReloadAssembly (264ms)
+		DisableScriptedObjects (30ms)
+		CreateAndSetChildDomain (49ms)
+	RebuildCommonClasses (10ms)
+	RebuildNativeTypeToScriptingClass (19ms)
+	initialDomainReloadingComplete (55ms)
+	LoadAllAssembliesAndSetupDomain (263ms)
+		LoadAssemblies (231ms)
+		TypeCache.Refresh (24ms)
+			TypeCache.ScanAssembly (17ms)
+		AnalyzeDomain (9ms)
+			BuildScriptInfoCaches (8ms)
+	FinalizeReload (659ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			BeforeProcessingInitializeOnLoad (116ms)
+			ProcessInitializeOnLoadAttributes (179ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (13ms)
+		AwakeInstancesAfterBackupRestoration (39ms)
+Starting new worker id: 0 with log in C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Logs/AssetImportWorkerHW0.log
+
+Asset Pipeline Refresh (id=ce47b3359bacc5b40a4e482cfd46cd15): Total: 2.451 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=959 ms
+		Asset DB Callback time: managed=25 ms, native=20 ms
+		Scripting: domain reloads=1, domain reload time=654 ms, compile time=770 ms, other=21 ms
+		Project Asset Count: scripts=184, non-scripts=69
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 23.480ms
+	ApplyChangesToAssetFolders: 1.157ms
+	Scan: 95.435ms
+	Collect global state as custom dependencies: 16.610ms
+	CategorizeScriptCompilationAssets: 7.817ms
+	ProcessAssetsWithTransientArtifactChanges: 8.678ms
+	CategorizeAssets: 1.551ms
+	CompileScripts: 770.437ms
+	ImportOutOfDateAssets: 678.557ms (660.372ms without children)
+		UnloadImportedAssets: 1.347ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.065ms
+		ImportSchedulerStart: 16.769ms
+	PostProcessAllAssets: 25.493ms
+		MonoPostProcessAllAssets: 25.433ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 10.498ms
+			EditModeScopePostprocessor.OnPostprocessAllAssets 1.083ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.981ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.339ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.259ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.217ms
+			SyncVS.PostprocessSyncProject 0.138ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.103ms
+	UnloadStreamsBegin: 1.635ms
+	Untracked: 783.311ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 4.021ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-UBlade3
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 620 unused Assets / (0.5 MB). Loaded Objects now: 1343.
+Memory consumption went from 230.7 MB to 230.2 MB.
+Total: 7.210300 ms (FindLiveObjects: 0.300800 ms CreateObjectMapping: 0.033800 ms MarkObjects: 6.168900 ms  DeleteObjects: 0.523000 ms)
+
+UBLADE3_NATIVE_MATCH_N7_CHECK root=D:\Games\HyperBlade\HYB\data unity=6000.6.7f1 no20xx=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:741)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 741)
+
+UBLADE3_AUDIO_OK files=295 entries=363 durationMs=875224 digest=1a8d0a92b89a6019
+UBLADE3_AUDIO_DETAIL data=D:\Games\HyperBlade\HYB\data sounds=D:\Games\HyperBlade\HYB\data\sounds
+UBLADE3_AUDIO_COUNTS files=295 entries=363 resolvedEntries=276 missingEntries=87 orphanFiles=23 duplicateNames=4 dataBytes=35442651 frames=19297803 durationMs=875224 factChunkFiles=31 fmtChunk18Files=4 riffSizeMismatchFiles=40 trailingByteFiles=74 trailingZeroFiles=71 trailingMetadataFiles=1 trailingSampleBytesFiles=2 trailingBytes=265 roles=9 roleFiles=9
+UBLADE3_AUDIO_FORMATS 11025/8/1=6 22050/8/1=157 22050/8/2=49 22050/16/1=59 22050/16/2=23 44100/16/1=1
+UBLADE3_AUDIO_ROLES menu-ui=289:Sxbutt1 impact-first=0:Sxhhite2 impact-second=1:Sxhhitf2 goal-1x=74:Sxrscra2 goal-2x=75:Sxrscra3 goal-4x=76:Sxrscra4 crowd-goal-cheer=18:Sxcrwdc2 crowd-goal-boo=21:Sxcbooa2 crowd-ambient=15:Sxxambb2
+UBLADE3_AUDIO_DIGEST files=6dc8e8278c0ebaf3 lists=915aa6d967e98d23 roles=2c679fa1237757dd total=1a8d0a92b89a6019
+UBLADE3_AUDIO_WARNING sndfiles.lst: 87 of 363 entries have no .wav under Data\Sounds (Sxrctha4, Sxrctha5, Sxrctha6, Sxrctha7, Sxxamba2, Sxvhitb3, Sxvhitg3, Sxvhitj3, ...); AudioMgr::LoadSound leaves a missing entry unloaded and silent
+UBLADE3_AUDIO_WARNING sounds: 23 .wav file(s) are not named by sndfiles.lst and are never opened by the original sound manager (sabeard2, sadude2, salook4, salook5, saloser2, sangm3, sapigdog, sarass2, ...)
+UBLADE3_AUDIO_WARNING sndfiles.lst: 4 name(s) appear on more than one line; both lines resolve to the same wave file
+UBLADE3_AUDIO_WARNING sounds: 2 wave file(s) carry sample bytes beyond their declared data chunk (sxapprb2.wav, sxhhitf2.wav); the original reads only the declared data chunk
+UBLADE3_AUDIO_WARNINGS 4
+UBLADE3_AUDIO_CHECK mismatches=0
+UBLADE3_NATIVE_PLAY_AUDIO_PROBE ok=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunAudioProbe () (at Assets/Editor/UBlade3MatchPlay.cs:311)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:753)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 311)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:875)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-pickup audioRole=impact-first/second played=False tickMs=3399
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1338)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:77)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=shot-release audioRole=impact-first/second played=False tickMs=4099
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1042)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:982)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:125)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=goal points=1 goalSide=south-home-scores audioRole=goal-1x crowdRole=crowd-goal-cheer played=False/False homeScore=1 awayScore=0 tickMs=4566
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Goal (int,bool,int,int,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:79)
+UBlade3.Native.MatchPlayControl:CountGoal (UBlade3.Native.MatchGoalEvent,uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1383)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1237)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:146)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-rok-pickup audioRole=impact-first/second played=False tickMs=8233
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1345)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:211)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-shot-release audioRole=impact-first/second played=False tickMs=9633
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:ProcessAiRequests (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1137)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1110)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:982)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:229)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-bounce audioRole=impact-first/second played=False tickMs=11599
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1221)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:246)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:759)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_MATCH_N7_CHECK_RESULT approachTicks=42 humanPickups=1 humanShots=1 humanGoals=1 aiPickups=1 aiShots=1 aiGoals=0 score=1-0 headCam=(0.622,0.5) failures=0 reason=
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:761)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 761)
+
+UBLADE3_NATIVE_MATCH_N7_FACE_OFF celebrationTicks=42 dragTicks=21 restartTicks=63 playerCorner=28 rokDragHeight=-95
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:763)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 763)
+
+UBLADE3_NATIVE_MATCH_N7_CONTROL UBLADE3_NATIVE_PLAY_COUNTS ticks=350 phase=Live pickups=2 humanPickups=1 aiPickups=1 shots=2 humanShots=1 aiShots=1 passes=0 humanPasses=0 aiPasses=0 goals=1 humanGoals=1 aiGoals=0 bounces=1 scoreHome=1 scoreAway=0 carrying=False flight=True shotPower=0 headCam="eye=(-1.4149,-152.0082,-55.4735) forward=(-0.4274,-0.7095,0.5602) fovDegrees=85 halfFovRad=0.7417649 viewFrac=(0.5,0.5)" lastHumanShotWord=0x00322532 lastHumanShotVel=(0.062,-2.403,3.396) lastAiShotVel=(-0.096,-2.435,2.581) audio="UBLADE3_MATCH_AUDIO_COUNTS requested=6 played=0 failed=0 goal=1 crowd=1 impact=5 menu=0 ambient=0 service=none events=6 warnings=0" notes=11
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:764)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 764)
+
+UBLADE3_NATIVE_MATCH_N7_AUDIO UBLADE3_MATCH_AUDIO_COUNTS requested=6 played=0 failed=0 goal=1 crowd=1 impact=5 menu=0 ambient=0 service=none events=6 warnings=0
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:765)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 765)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:875)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-pickup audioRole=impact-first/second played=False tickMs=3399
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1338)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:77)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=shot-release audioRole=impact-first/second played=False tickMs=4099
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1042)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:982)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:125)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=goal points=1 goalSide=south-home-scores audioRole=goal-1x crowdRole=crowd-goal-cheer played=False/False homeScore=1 awayScore=0 tickMs=4566
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Goal (int,bool,int,int,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:79)
+UBlade3.Native.MatchPlayControl:CountGoal (UBlade3.Native.MatchGoalEvent,uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1383)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1237)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:146)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-rok-pickup audioRole=impact-first/second played=False tickMs=8233
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1345)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:211)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-shot-release audioRole=impact-first/second played=False tickMs=9633
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:ProcessAiRequests (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1137)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1110)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:982)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:229)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-bounce audioRole=impact-first/second played=False tickMs=11599
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1221)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:989)
+UBlade3.Native.MatchPlayN7Script:Run (UBlade3.Native.MatchPlayControl,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:246)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Script (UBlade3.Native.MatchWorldData,UBlade3.Native.MatchPlayN7ScriptResult&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchSimulation&) (at Assets/Editor/UBlade3MatchPlay.cs:885)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:779)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_MATCH_N7_DETERMINISM ok=True run1=approachTicks=42 humanPickups=1 humanShots=1 humanGoals=1 aiPickups=1 aiShots=1 aiGoals=0 score=1-0 headCam=(0.622,0.5) run2=approachTicks=42 humanPickups=1 humanShots=1 humanGoals=1 aiPickups=1 aiShots=1 aiGoals=0 score=1-0 headCam=(0.622,0.5)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:796)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 796)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.Native.MatchPlayN7Script:CreateScenario (UBlade3.Native.MatchWorldData,bool,UBlade3.Native.MatchSimulation&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchAudioDirector&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:435)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:302)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-pickup audioRole=impact-first/second played=False tickMs=2066
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1338)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:977)
+UBlade3.Native.MatchPlayN7Script:Ticks (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,UBlade3.Sim.HeldBinding,int) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:382)
+UBlade3.Native.MatchPlayN7Script:PrepareHumanCarry (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:361)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:306)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=shot-release audioRole=impact-first/second played=False tickMs=2566
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1042)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:970)
+UBlade3.Native.MatchPlayN7Script:Ticks (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,UBlade3.Sim.HeldBinding,int) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:382)
+UBlade3.Native.MatchPlayN7Script:ChargeAndShoot (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,int,bool) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:375)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:307)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.Native.MatchPlayN7Script:CreateScenario (UBlade3.Native.MatchWorldData,bool,UBlade3.Native.MatchSimulation&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchAudioDirector&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:435)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:315)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=rok-pickup audioRole=impact-first/second played=False tickMs=2066
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1338)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:977)
+UBlade3.Native.MatchPlayN7Script:Ticks (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,UBlade3.Sim.HeldBinding,int) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:382)
+UBlade3.Native.MatchPlayN7Script:PrepareHumanCarry (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:361)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:318)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=shot-release audioRole=impact-first/second played=False tickMs=2766
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1042)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:970)
+UBlade3.Native.MatchPlayN7Script:Ticks (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,UBlade3.Sim.HeldBinding,int) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:382)
+UBlade3.Native.MatchPlayN7Script:ChargeAndShoot (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchSimulation,int,bool) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:375)
+UBlade3.Native.MatchPlayN7Script:HeadCamAimCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:319)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:805)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_MATCH_N7_HEAD_CAM_AIM ok=True fovDegrees=85 centreWord=0x00321a32 aimWord=0x0032253e centreAimX=50 aimX=62 aimedViewFracX=0.622 centreVel=(0,-2.3802,3.2167) aimVel=(-0.0646,-2.3963,3.3986) velocityDelta=0.1937
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:806)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 806)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.Native.MatchPlayN7Script:CreateScenario (UBlade3.Native.MatchWorldData,bool,UBlade3.Native.MatchSimulation&,UBlade3.Native.MatchPlayControl&,UBlade3.Native.MatchAudioDirector&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:435)
+UBlade3.Native.MatchPlayN7Script:AiPassCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:396)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:815)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-rok-pickup audioRole=impact-first/second played=False tickMs=2533
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1345)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1256)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:977)
+UBlade3.Native.MatchPlayN7Script:AiPassCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:405)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:815)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-pass-release audioRole=impact-first/second played=False tickMs=2533
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:ProcessAiRequests (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1162)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1110)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:970)
+UBlade3.Native.MatchPlayN7Script:AiPassCheck (UBlade3.Native.MatchWorldData,string&) (at Assets/Scripts/UBlade3/Native/MatchPlayN7Script.cs:405)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:815)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_MATCH_N7_AI_PASS ok=True aiPickups=1 aiPasses=1 aiShots=0 ticks=77 aiSlot=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:816)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 816)
+
+UBLADE3_NATIVE_MATCH_N7_NO_20XX running20xxProcesses=0 no20xx=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:827)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 827)
+
+UBLADE3_NATIVE_MATCH_N7_COUNTS humanPickups=1 humanShots=1 humanGoals=1 aiPickups=1 aiShots=1 aiPasses=0 goals=1 score=1-0 headCamFovDegrees=85 faceOffSetupTick=179 faceOffResumeTick=200 audioProbeMismatches=0 mismatches=0
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:RunN7Check () (at Assets/Editor/UBlade3MatchPlay.cs:834)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:717)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 834)
+
+UBLADE3_NATIVE_MATCH_N7_CHECK_OK
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:726)
+UBlade3.EditorTools.UBlade3MatchPlay:CheckN7 () (at Assets/Editor/UBlade3MatchPlay.cs:698)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 726)
+
+MonoPathRemapper: Attempts to remap: 3672; Successful remaps: 0
+Serialized file version minimum: 23, current 23
+Worker ready: AssetImportWorkerHW0 0
+Killing ADB server in 2.0658178 seconds.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons channel disconnected successfully.
+Shut down.
+Lingering sessions upon destruction of worker manager
+Shut down UDS service system complete
+Unity Data Store service was successfully shut down
+UDS shutting down local client system
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+abort_threads: Failed aborting id: 0000000000008B84, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002E88, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000008B84, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002E88, mono_thread_manage will ignore it
+
+debugger-agent: Unable to listen on 3480
+VBCSCompilerPreWarmer: requested VBCSCompiler shutdown
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1793438238044,"processId":38084,"allocatedMemory":11173334,"memoryLabels":[{"Default":176288},{"Permanent":15516},{"NewDelete":68623},{"Thread":4198064},{"Manager":35357},{"VertexData":8},{"Geometry":824},{"Texture":24},{"Shader":842829},{"Material":132},{"GfxDevice":55968},{"Animation":952},{"Audio":1272},{"FreeType":8},{"FontEngine":736},{"Physics":1970},{"Physics2D":16},{"Serialization":16704},{"Input":42840},{"JobScheduler":256},{"TextLib":280},{"Mono":48},{"ScriptingNativeRuntime":1192848},{"BaseObject":48848},{"Resource":1444},{"Renderer":2504},{"Transform":4781},{"File":4416},{"WebCam":616},{"Culling":32},{"Terrain":11442},{"Wind":24},{"STL":40},{"String":674341},{"StaticString":3808},{"Utility":2675350},{"Curl":2559},{"PoolAlloc":2168},{"AI":80},{"TypeTree":20997},{"ScriptManager":12656},{"CodeReload":448},{"RuntimeInitializeOnLoadManager":64},{"Sprites":102},{"SpriteAtlas":120},{"GI":7816},{"Director":8296},{"CloudService":7296},{"WebRequest":8476},{"VR":49650},{"SceneManager":608},{"Video":64},{"LazyScriptCache":32},{"Camera":729},{"Secure":2377},{"SerializationCache":9256},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":592},{"Hierarchy":1188},{"UIElements":40},{"CoreStats":14456},{"Identifiers":7152},{"EntityIdStore":33088},{"Gui":128},{"EditorUtility":93994},{"VersionControl":8},{"Undo":931},{"AssetDatabase":403409},{"AssetImporter":40},{"EditorGi":328},{"UnityConnect":40441},{"Upm":1912},{"UpmDiagnostics":8},{"AssetCompliance":96},{"DrivenProperties":72},{"LocalIPC":220},{"ProfilerEditor":9746},{"CoreBusinessMetrics":3626},{"Windowing":456},{"Licensing":1264},{"AssetReference":32},{"IPCStream":32}]}
+~StackAllocator(ALLOC_TEMP_MAIN) m_LastAlloc not NULL. Did you forget to call FreeAllStackAllocations()? To get more information, run app with -diag-temp-memory-leak-validation cmd line argument
