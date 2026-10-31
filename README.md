@@ -5,10 +5,7 @@ the byte-matching decompilation [`zach2good/hyperblade-decomp`](https://github.c
 validated against the modern port [`zach2good/hyperblade-20XX`](https://github.com/zach2good/hyperblade-20XX).
 
 The goal is an **exact clone** in C#/Unity: same data files, same rules, same arena, camera, controls, AI and
-presentation, then editable in Unity. Original game assets are **not** committed. The project reads them from a
-local HyperBlade installation (for example `D:\Games\HyperBlade`) through `HYPERBLADE_GAME_DATA` or
-`Assets/StreamingAssets/game-data-path.txt`.
-
+presentation, then editable in Unity. Original game assets are **not** committed. T
 ## Status
 
 **Fully playable native release:** the exact HyperBlade engine is compiled into the Unity player as the
