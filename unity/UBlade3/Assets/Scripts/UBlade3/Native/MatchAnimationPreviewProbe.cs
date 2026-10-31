@@ -13,6 +13,8 @@ namespace UBlade3.Native
     public sealed class MatchAnimationPreviewProbe : MonoBehaviour
     {
         public const string Prefix = "--n15-probe";
+
+        public const string PrefixN16 = "--n16-probe";
         public const string Marker = "UBLADE3_NATIVE_ANIMATION_PROBE";
 
         private string capturePath = string.Empty;
@@ -29,7 +31,8 @@ namespace UBlade3.Native
 
             for (int i = 0; i < arguments.Length; i++)
             {
-                if (arguments[i].StartsWith(Prefix, StringComparison.Ordinal))
+                if (arguments[i].StartsWith(Prefix, StringComparison.Ordinal)
+                    || arguments[i].StartsWith(PrefixN16, StringComparison.Ordinal))
                 {
                     GameObject host = new GameObject("UBlade3 Animation Probe");
                     UnityEngine.Object.DontDestroyOnLoad(host);
@@ -48,6 +51,10 @@ namespace UBlade3.Native
                 if (arguments[i].StartsWith(Prefix + "=", StringComparison.Ordinal))
                 {
                     capturePath = arguments[i].Substring((Prefix + "=").Length);
+                }
+                else if (arguments[i].StartsWith(PrefixN16 + "=", StringComparison.Ordinal))
+                {
+                    capturePath = arguments[i].Substring((PrefixN16 + "=").Length);
                 }
             }
         }
@@ -131,6 +138,22 @@ namespace UBlade3.Native
                 if (!string.IsNullOrEmpty(capturePath))
                 {
                     CaptureStaged(0);
+                }
+
+                MatchEffectsDriver effects = UnityEngine.Object.FindAnyObjectByType<MatchEffectsDriver>();
+
+                if (effects != null)
+                {
+                    Debug.Log(Marker + "_EFFECTS driver=True stats=\""
+                              + (effects.Stats == null ? "none" : effects.Stats.Describe()) + "\""
+                              + " bubbles=\""
+                              + (effects.Bubbles == null ? "none" : effects.Bubbles.Describe()) + "\""
+                              + " messages=\""
+                              + (effects.Messages == null ? "none" : effects.Messages.Describe()) + "\"");
+                }
+                else
+                {
+                    Debug.Log(Marker + "_EFFECTS driver=False (N16 driver not installed)");
                 }
 
                 Debug.Log(Marker + "_OK clips=" + scene.Animation.ClipChanges

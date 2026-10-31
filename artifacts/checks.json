@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T11:16:10.177Z",
+  "generatedAt": "2026-10-31T11:30:13.711Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -540,14 +540,29 @@
         "natural trace lacks temporary clip/beh11/12",
         "stat/bubble consumers absent"
       ]
+    },
+    "effects": {
+      "status": "N16 stat/bubble/animation-trigger consumers verified",
+      "stats": "action9 applied=2 lastStat=37 values 2199->6999 exact MatchStats switch",
+      "bubbles": "action71 applied=2 radius=30 adapter-only (no Sim collision path)",
+      "triggerBridge": "AnimAssm id_MSG triggers->PlanVM; triggers=87 sync=86 injected=1 failures=0",
+      "animation": "nextSegment transitions=1 sync transitions=127",
+      "doc": "docs/NATIVE-EFFECTS.md",
+      "gaps": [
+        "no plan stat read handler",
+        "no Sim bubble collision binding",
+        "only mapped id_MSG triggers inject",
+        "hard switches no crossfade",
+        "staged captures"
+      ]
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.009-csharp-preview",
-    "status": "native C# preview with plan-animation consumer packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.009-csharp-preview-win64.zip",
-    "bytes": 39001428,
-    "sha256": "fb521107f961569d909044c52b18caeba859043da4f6fdb4e98034bc63d8c241",
+    "version": "2026.10.31.010-csharp-preview",
+    "status": "native C# preview with stat/bubble/animation-trigger consumers packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.010-csharp-preview-win64.zip",
+    "bytes": 39007448,
+    "sha256": "d600b663228f80d1e63af0166633429dcc9e6e86da6960ae352eb2fc7e3b95f9",
     "externalProcess": false,
     "preview": true,
     "audioDefault": true,

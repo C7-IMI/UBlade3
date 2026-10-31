@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.024
+
+**Plan effects consumers: stats, bubbles, animation-message injection; C# preview 010.**
+
+- Date: 2026-10-31
+- Change: MatchStatAccumulator implements the exact MatchStats::AccumulateStat switch and consumes
+  action 9 events; MatchBubbleAdapter consumes action 71 radii (adapter-only because the Sim has no
+  per-player bubble collision path); MatchAnimationMessageBridge maps id_MSG AnimAssm triggers into
+  PlanVM messages; MatchAnimationPlayer adds next-segment and sync-trigger transitions.
+- Verified: UBLADE3_NATIVE_EFFECTS_CHECK_OK stats applied=2 lastStat=37 values 2199->6999;
+  bubbles applied=2 radius=30; triggers=87 sync=86 injected=1 failures=0; segmentTransitions=1;
+  N4-N15 regressions green; 213 text files PASS.
+- Release 2026.10.31.010-csharp-preview: ZIP 39,007,448 bytes SHA-256
+  `d600b663228f80d1e63af0166633429dcc9e6e86da6960ae352eb2fc7e3b95f9`; extracted player starts
+  with audio on, no external process.
+- Boundary: PlanVM has no match-stat read handler yet; bubble has no Sim collision binding; only
+  mapped id_MSG triggers inject; animation transitions are hard switches without crossfade and no
+  animation-driven physics; captures staged. Preview, not parity.
+- Docs: docs/NATIVE-EFFECTS.md.
+
 ## 2026.10.31.023
 
 **Plan-driven animation consumer and C# preview 009.**

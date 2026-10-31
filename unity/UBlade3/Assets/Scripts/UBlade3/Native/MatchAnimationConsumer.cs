@@ -71,6 +71,12 @@ namespace UBlade3.Native
 
         public int TriggerEvents;
 
+        public int SyncTransitions;
+
+        public int SegmentTransitions;
+
+        public int SyncFailures;
+
         public int FixtureRequests;
 
         public int FixtureApplied;
@@ -445,6 +451,9 @@ namespace UBlade3.Native
         {
             ClipChanges = 0;
             UnsupportedCount = 0;
+            SyncTransitions = 0;
+            SegmentTransitions = 0;
+            SyncFailures = 0;
             DeferredQueued = 0;
             DeferredApplied = 0;
 
@@ -457,6 +466,9 @@ namespace UBlade3.Native
 
                 ClipChanges += Players[slot].ClipChanges;
                 UnsupportedCount += Players[slot].UnsupportedCount;
+                SyncTransitions += Players[slot].SyncTransitions;
+                SegmentTransitions += Players[slot].SegmentTransitions;
+                SyncFailures += Players[slot].SyncFailures;
                 DeferredQueued += Players[slot].DeferredPending;
                 DeferredApplied += Players[slot].DeferredApplied;
             }
@@ -493,6 +505,9 @@ namespace UBlade3.Native
             text.Append(" deferredQueued=").Append(DeferredQueued);
             text.Append(" deferredApplied=").Append(DeferredApplied);
             text.Append(" unsupported=").Append(UnsupportedCount);
+            text.Append(" syncTransitions=").Append(SyncTransitions);
+            text.Append(" segmentTransitions=").Append(SegmentTransitions);
+            text.Append(" syncFailures=").Append(SyncFailures);
             text.Append(" fixtureRequests=").Append(FixtureRequests);
             text.Append(" fixtureApplied=").Append(FixtureApplied);
             text.Append(" resolvedPlanIds=").Append(ResolvedPlanIds.Count);

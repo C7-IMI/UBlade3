@@ -244,3 +244,14 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.023
 
+## 23 - 2026-10-31
+
+- Request: consume remaining PlanVM effects in the C# match.
+- Work: stat accumulator, bubble adapter, animation-message bridge, next-segment/sync transitions;
+  preview 010.
+- Evidence: N16 effects check stats applied=2 values 2199->6999, bubbles radius=30, triggers=87
+  injected=1, N4-N15 regressions; release 010 39007448 bytes d600b663...
+- Boundary: no plan stat read handler, no Sim bubble collision, mapped triggers only, no crossfade.
+  Goal active.
+- Version: 2026.10.31.024
+

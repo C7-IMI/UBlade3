@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UBlade3.Assets;
 using UBlade3.Audio;
 using UBlade3.Native;
 using UBlade3.PlanVM;
@@ -3790,6 +3791,383 @@ namespace UBlade3.EditorTools
             catch (Exception exception)
             {
                 Debug.LogError("UBLADE3_NATIVE_PREVIEW_009_BUILD_FAILED " + exception);
+                Debug.LogException(exception);
+                exitCode = 1;
+            }
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
+        // --- N16: stat accumulator, bubble adapter, animation message bridge --------
+
+        public static void CheckEffects()
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += RunEffectsCheck();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_EFFECTS_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_EFFECTS_CHECK_OK"
+                : "UBLADE3_NATIVE_EFFECTS_CHECK_FAILED failures=" + failures);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunEffectsCheck()
+        {
+            int failures = 0;
+            MatchAnimationConsumer.ForceEnabled = true;
+            MatchEffectsDriver.ForceEnabled = false;
+
+            // The N12 default-PlanVM scenario is the shipped-plan window that actually executes
+            // action 9 IncrementStat and action 71 ScaleBubToRating. Reusing its stage/ticks keeps the
+            // stat/bubble evidence deterministic rather than synthesizing values.
+            MatchPlay play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
+            MatchPlayN11Script.Stage(play.Control);
+
+            MatchScene scene = play.Scene;
+            MatchAnimationConsumer animation = scene.Animation;
+            MatchPlanAiRoster roster = play.Control == null ? null : play.Control.PlanRoster;
+
+            if (animation == null || roster == null)
+            {
+                Debug.LogError("UBLADE3_NATIVE_EFFECTS_MISMATCH animation=" + (animation != null)
+                               + " roster=" + (roster != null));
+                return 1;
+            }
+
+            MatchStatAccumulator stats = new MatchStatAccumulator();
+            MatchBubbleAdapter bubbles = new MatchBubbleAdapter();
+            MatchAnimationMessageBridge messages = new MatchAnimationMessageBridge();
+            messages.Attach(animation, roster);
+            int lastStats = 0;
+            int lastBubbles = 0;
+            int lastInjected = 0;
+            int lastSync = 0;
+            int captures = 0;
+
+            // Baseline: the first tick records the already-present counters; later deltas are applied.
+            stats.Tick(roster, scene.Sim.Sim);
+            bubbles.Tick(roster, scene.Sim.Sim);
+
+            for (int tick = 0; tick < 240; tick++)
+            {
+                play.Control.Advance(HeldBinding.None, held =>
+                {
+                    play.Scene.TickScene(held);
+                    MatchPlayN11Script.HoldStaged(play.Control.Sim);
+                });
+                animation.RefreshCounters();
+                stats.Tick(roster, scene.Sim.Sim);
+                bubbles.Tick(roster, scene.Sim.Sim);
+
+                if (stats.AppliedEvents != lastStats)
+                {
+                    lastStats = stats.AppliedEvents;
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_STAT_CHANGE tick=" + scene.TickCount
+                              + " applied=" + stats.AppliedEvents
+                              + " lastStat=" + stats.LastStatId + " lastSlot=" + stats.LastSlot
+                              + " value=" + stats.LastValue.ToString("0.###")
+                              + " state=\"" + stats.Describe() + "\"");
+                }
+
+                if (bubbles.AppliedEvents != lastBubbles)
+                {
+                    lastBubbles = bubbles.AppliedEvents;
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_BUBBLE_CHANGE tick=" + scene.TickCount
+                              + " applied=" + bubbles.AppliedEvents
+                              + " lastSlot=" + bubbles.LastSlot
+                              + " radius=" + bubbles.LastRadius.ToString("0.####")
+                              + " neighbours=" + bubbles.AwarenessPairs);
+                }
+
+                if (messages.InjectedMessages != lastInjected)
+                {
+                    lastInjected = messages.InjectedMessages;
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_MESSAGE_CHANGE tick=" + scene.TickCount
+                              + " injected=" + lastInjected);
+                }
+
+                if (messages.SyncTriggers != lastSync)
+                {
+                    lastSync = messages.SyncTriggers;
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_SYNC_CHANGE tick=" + scene.TickCount
+                              + " syncTriggers=" + lastSync);
+                }
+            }
+
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_STAT_STATE " + stats.Describe());
+            Debug.Log(stats.TraceText(120));
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_BUBBLE_STATE " + bubbles.Describe());
+            Debug.Log(bubbles.TraceText(80));
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_MESSAGE_STATE " + messages.Describe());
+            Debug.Log(messages.TraceText(120));
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_ANIMATION_STATE " + animation.Describe());
+
+            if (stats.AppliedEvents <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-stat-events (action 9 not observed)");
+            }
+
+            int nonzero = 0;
+
+            for (int slot = 0; slot < MatchStatAccumulator.PlayerSlots; slot++)
+            {
+                float[] values = stats.GetStats(slot);
+
+                for (int stat = 0; stat < MatchStatAccumulator.StatCount; stat++)
+                {
+                    if (values[stat] != 0.0f && !float.IsNaN(values[stat]))
+                    {
+                        nonzero++;
+                    }
+                }
+            }
+
+            if (stats.AppliedEvents > 0 && nonzero <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-nonzero-stat");
+            }
+
+            if (bubbles.AppliedEvents <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-bubble-events (action 71 not observed)");
+            }
+
+            if (messages.AttachedPlayers <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-animation-message-attach");
+            }
+
+            if (animation.SyncTransitions <= 0)
+            {
+                failures++;
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-sync-transitions");
+            }
+
+            // Real non-sync AnimAssm trigger through the live consumer, to exercise re-injection
+            // without synthesizing a message.
+            string triggerClipName;
+            int triggerClipId;
+            int triggerSlot = FindNonSyncTrigger(animation, out triggerClipName, out triggerClipId);
+
+            if (triggerSlot >= 0)
+            {
+                int before = messages.InjectedMessages;
+                animation.PlayFixture(1, triggerClipId, 1.0f, 0, "effects-trigger-fixture");
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_TRIGGER_FIXTURE id=" + triggerClipId
+                          + " name=" + triggerClipName + " triggerSlot=" + triggerSlot);
+
+                for (int i = 0; i < 80; i++)
+                {
+                    play.TickPlay(HeldBinding.None);
+                }
+
+                animation.RefreshCounters();
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_MESSAGE_AFTER " + messages.Describe());
+
+                if (messages.InjectedMessages <= before)
+                {
+                    failures++;
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_MISMATCH no-trigger-reinjection");
+                }
+            }
+            else
+            {
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_GAP no-non-sync-trigger-in-registry");
+            }
+
+            string multiName;
+            int multiId = FindMultiSegmentClip(animation, out multiName);
+
+            if (multiId >= 0)
+            {
+                animation.PlayFixture(1, multiId, 1.0f, 0, "effects-multisegment-fixture");
+
+                for (int i = 0; i < 220; i++)
+                {
+                    play.TickPlay(HeldBinding.None);
+                }
+
+                animation.RefreshCounters();
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_SEGMENT_FIXTURE id=" + multiId
+                          + " name=" + multiName
+                          + " segmentTransitions=" + animation.SegmentTransitions
+                          + " syncTransitions=" + animation.SyncTransitions
+                          + " state=\"" + animation.Describe() + "\"");
+
+                if (animation.SegmentTransitions <= 0)
+                {
+                    Debug.Log("UBLADE3_NATIVE_EFFECTS_GAP multi-segment-clip-did-not-transition id="
+                              + multiId + " name=" + multiName);
+                }
+            }
+            else
+            {
+                Debug.Log("UBLADE3_NATIVE_EFFECTS_GAP no-multi-segment-clip");
+            }
+
+            scene.ApplyRender(1.0f);
+            PlaceAnimationCaptureCamera(scene, 1);
+            string capturePath = ResolveArtifactPath("artifacts/native-effects-00.png");
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(capturePath)));
+            DromePreviewCapture.Result capture = DromePreviewCapture.Capture(
+                scene.MatchCamera, capturePath, MatchScene.CaptureWidth, MatchScene.CaptureHeight);
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_CAPTURE path=" + capture.Path + " bytes=" + capture.Bytes
+                      + " statApplied=" + stats.AppliedEvents
+                      + " bubbleApplied=" + bubbles.AppliedEvents
+                      + " injected=" + messages.InjectedMessages
+                      + " sync=" + messages.SyncTriggers);
+            captures++;
+
+            if (captures <= 0)
+            {
+                failures++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_EFFECTS_CHECK_COUNTS statApplied=" + stats.AppliedEvents
+                      + " statNonzero=" + nonzero
+                      + " bubbleApplied=" + bubbles.AppliedEvents
+                      + " bubbleRadius=" + bubbles.LastRadius.ToString("0.####")
+                      + " messagesInjected=" + messages.InjectedMessages
+                      + " syncTriggers=" + messages.SyncTriggers
+                      + " unmappedTriggers=" + messages.UnmappedTriggers
+                      + " attachedPlayers=" + messages.AttachedPlayers
+                      + " syncTransitions=" + animation.SyncTransitions
+                      + " segmentTransitions=" + animation.SegmentTransitions
+                      + " unsupported=" + animation.UnsupportedCount
+                      + " captures=" + captures);
+
+            return failures;
+        }
+
+        private static int FindMultiSegmentClip(MatchAnimationConsumer animation, out string clipName)
+        {
+            clipName = string.Empty;
+
+            for (int id = 0; id < animation.Registry.Count; id++)
+            {
+                string name;
+                AnimationAssembly assembly;
+
+                if (!animation.Registry.TryResolve(id, out name, out assembly) || assembly == null
+                    || assembly.Segments == null || assembly.Segments.Length < 2)
+                {
+                    continue;
+                }
+
+                if (assembly.Segments[0].LoopCount == 0)
+                {
+                    continue;
+                }
+
+                bool hasSync = false;
+
+                for (int i = 0; i < assembly.Triggers.Length; i++)
+                {
+                    if (assembly.Triggers[i].HasSync)
+                    {
+                        hasSync = true;
+                        break;
+                    }
+                }
+
+                if (!hasSync)
+                {
+                    clipName = name;
+                    return id;
+                }
+            }
+
+            return -1;
+        }
+
+        private static int FindNonSyncTrigger(MatchAnimationConsumer animation, out string clipName,
+            out int clipId)
+        {
+            clipName = string.Empty;
+            clipId = -1;
+
+            for (int id = 0; id < animation.Registry.Count; id++)
+            {
+                string name;
+                AnimationAssembly assembly;
+
+                if (!animation.Registry.TryResolve(id, out name, out assembly) || assembly == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < assembly.Triggers.Length; i++)
+                {
+                    AnimationAssemblyTrigger trigger = assembly.Triggers[i];
+
+                    if (!trigger.HasSync && trigger.Segment == 0
+                        && !string.IsNullOrEmpty(trigger.ActionName))
+                    {
+                        string action = trigger.ActionName;
+
+                        if (action.StartsWith("id_MSG_", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string messageName = action.Substring("id_MSG_".Length);
+
+                            if (PlanOpcodes.MessageNames.ContainsValue(messageName))
+                            {
+                                clipName = name;
+                                clipId = id;
+                                return trigger.Segment;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        // --- N16: native C# preview 010 (remaining PlanVM effects) ---------------------
+
+        public static string Preview010PlayerPath()
+        {
+            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            return Path.GetFullPath(Path.Combine(projectRoot, "build", "preview-010",
+                "UBlade3NativePreview010.exe"));
+        }
+
+        public static void BuildPreview010()
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string path = BuildPlayer(Preview010PlayerPath());
+                Debug.Log("UBLADE3_NATIVE_PREVIEW_010_BUILD_OK output=" + path
+                          + " defaultAnimation=interactive defaultAudio=interactive"
+                          + " defaultHud=original defaultEffects=interactive");
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_PREVIEW_010_BUILD_FAILED " + exception);
                 Debug.LogException(exception);
                 exitCode = 1;
             }

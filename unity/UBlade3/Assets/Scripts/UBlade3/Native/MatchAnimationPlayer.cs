@@ -6,19 +6,19 @@ using UBlade3.Assets;
 
 namespace UBlade3.Native
 {
-    // N15: one skater/goalie's plan-driven clip player. It resolves a plan animation id through
-    // MatchAnimationRegistry, starts the assembly's segment 0 like AnimPlayer::SetClip, advances at
-    // the segment's own standard fps, loops/finishes per the segment's Loop field, fires the
-    // AnimAssm trigger events when their frame is crossed, and poses the existing MatchSkaterView
-    // through the same SkaterCharacter.PoseFrame/ApplyTo path the match already renders.
+    // N15/N16: one skater/goalie's plan-driven clip player. It resolves plan animation ids through
+    // MatchAnimationRegistry, starts the assembly's segment like AnimPlayer::SetClip, advances at
+    // that segment's own standard fps, loops/finishes per the segment Loop field, fires the AnimAssm
+    // trigger events when their frame is crossed, follows a sync trigger to its target
+    // assembly/segment/frame, advances to the next segment on clip end, and poses the existing
+    // MatchSkaterView through SkaterCharacter.PoseFrame/ApplyTo.
     //
-    // Exact playback timing: AnimPlayer::SetClip (HYPERX 0x00425220) starts at StartFrame and steps
-    // delta * StandardFps * playbackRate. StartClipPlayback's flRate argument is passed to
-    // SelectAnimationSet as the relative flag (inside it is the SetClip blend argument); it is not
-    // the playback speed. The shipped plan action/behparam rate is recorded in RequestedRate below
-    // and playback stays at the original 1.0 unless a future SetAnimationSpeed(39) consumer changes
-    // it. Deferred flags==1 waits for the current clip to finish, exactly as SelectAnimationSet
-    // parks m_pending; other flag values switch immediately.
+    // Exact timing: AnimPlayer::SetClip (HYPERX 0x00425220) starts at StartFrame and steps
+    // delta * StandardFps * playbackRate. StartClipPlayback's flRate is the SetClip blend argument,
+    // not playback speed, so it is recorded as RequestedRate and playback remains 1.0. Deferred
+    // flags==1 waits for the current clip to finish, as SelectAnimationSet parks m_pending.
+    // Trigger transitions are hard switches: the blend/crossfade interpolation is not represented in
+    // the CPU pose path and is documented as a gap rather than faked.
     public sealed class MatchAnimationPlayer
     {
         public const string Marker = "UBLADE3_NATIVE_ANIMATION_CLIP";
@@ -32,6 +32,12 @@ namespace UBlade3.Native
         public readonly MatchAnimationRegistry Registry;
 
         public SkaterAnimationClip CurrentClip;
+
+        public AnimationAssembly CurrentAssembly;
+
+        public int CurrentSegmentIndex;
+
+        public AnimationAssemblySegment CurrentSegment;
 
         public int CurrentIndex = -1;
 
@@ -51,6 +57,12 @@ namespace UBlade3.Native
 
         public double Position;
 
+        public int StartFrame;
+
+        public int EndFrame;
+
+        public float StandardFps = 30.0f;
+
         public float PlaybackRate = 1.0f;
 
         public float RequestedRate = -1.0f;
@@ -60,6 +72,8 @@ namespace UBlade3.Native
         public int Loops;
 
         public SkaterAnimationClip PersistentClip;
+
+        public AnimationAssembly PersistentAssembly;
 
         public int PersistentIndex = -1;
 
@@ -86,6 +100,12 @@ namespace UBlade3.Native
         public int DeferredApplied;
 
         public int Restores;
+
+        public int SyncTransitions;
+
+        public int SyncFailures;
+
+        public int SegmentTransitions;
 
         private readonly List<AnimationAssemblyTrigger> triggers =
             new List<AnimationAssemblyTrigger>();
@@ -116,9 +136,17 @@ namespace UBlade3.Native
             PersistentName = CurrentName;
             Registry.TryFindIndex(CurrentName, out CurrentIndex);
             Registry.TryFindIndex(CurrentName, out PersistentIndex);
+            Registry.TryResolve(CurrentIndex, out string resolvedName, out CurrentAssembly);
+            PersistentAssembly = CurrentAssembly;
+            CurrentSegment = CurrentClip == null ? null : CurrentClip.Segment;
+            CurrentSegmentIndex = 0;
+            StartFrame = CurrentSegment == null ? 0 : CurrentSegment.StartFrame;
+            EndFrame = CurrentSegment == null ? 0 : CurrentSegment.EndFrame;
+            StandardFps = CurrentSegment == null ? 30.0f : CurrentSegment.StandardFps;
             Done = CurrentClip == null;
-            Frame = CurrentClip == null ? 0 : CurrentClip.StartFrame;
+            Frame = StartFrame;
             Position = Frame;
+            LoadTriggersForSegment();
         }
 
         public bool IsTemporary
@@ -135,6 +163,7 @@ namespace UBlade3.Native
             string name;
             string error;
             SkaterAnimationClip clip = Registry.TryLoad(index, View, out name, out error);
+            Registry.TryResolve(index, out string resolvedName, out assembly);
 
             if (clip == null)
             {
@@ -158,8 +187,6 @@ namespace UBlade3.Native
 
             if (CurrentClip != null && !Done && CurrentIndex == index && !Temporary)
             {
-                // The original SelectAnimationSet does not restart the playing set; the request is
-                // still consumed/applied by the consumer.
                 Trace.Add("same-clip id=" + index + " name=" + name + " source=" + source);
                 return true;
             }
@@ -171,7 +198,7 @@ namespace UBlade3.Native
                 return true;
             }
 
-            StartClip(index, name, clip, rate, flags, source);
+            StartClip(index, name, clip, assembly, 0, -1, rate, flags, source);
             return true;
         }
 
@@ -181,6 +208,7 @@ namespace UBlade3.Native
             string name;
             string error;
             SkaterAnimationClip clip = Registry.TryLoad(index, View, out name, out error);
+            Registry.TryResolve(index, out string resolvedName, out assembly);
 
             if (clip == null)
             {
@@ -194,6 +222,7 @@ namespace UBlade3.Native
             PersistentIndex = index;
             PersistentName = name;
             PersistentClip = clip;
+            PersistentAssembly = assembly;
             PersistentRate = rate;
             PersistentFlags = flags;
             Trace.Add("persistent id=" + index + " name=" + name + " rate="
@@ -201,7 +230,7 @@ namespace UBlade3.Native
 
             if (CurrentClip == null || Done || Temporary)
             {
-                StartClip(index, name, clip, rate, flags, "persistent");
+                StartClip(index, name, clip, assembly, 0, -1, rate, flags, "persistent");
                 return true;
             }
 
@@ -219,12 +248,13 @@ namespace UBlade3.Native
                 return;
             }
 
-            StartClip(PersistentIndex, PersistentName, PersistentClip, PersistentRate,
-                PersistentFlags, "persistent");
+            StartClip(PersistentIndex, PersistentName, PersistentClip, PersistentAssembly, 0, -1,
+                PersistentRate, PersistentFlags, "persistent");
             Trace.Add("restore persistent=" + PersistentName + " reason=" + reason);
         }
 
-        private void StartClip(int index, string name, SkaterAnimationClip clip, float rate, int flags,
+        private void StartClip(int index, string name, SkaterAnimationClip clip,
+            AnimationAssembly assembly, int segmentIndex, int startFrameOverride, float rate, int flags,
             string source)
         {
             if (clip == null)
@@ -232,56 +262,105 @@ namespace UBlade3.Native
                 return;
             }
 
+            AnimationAssemblySegment segment = null;
+
+            if (assembly != null && segmentIndex >= 0 && segmentIndex < assembly.Segments.Length)
+            {
+                segment = assembly.Segments[segmentIndex];
+            }
+            else if (segmentIndex == 0 && clip.Segment != null)
+            {
+                segment = clip.Segment;
+            }
+
+            if (segment == null)
+            {
+                SyncFailures++;
+                UnsupportedCount++;
+                Unsupported.Add("slot=" + Slot + " id=" + index + " segment=" + segmentIndex
+                                 + " reason=no-segment");
+                Trace.Add("unsupported segment id=" + index + " segment=" + segmentIndex);
+                return;
+            }
+
+            if (segment.EndFrame >= clip.Clips.AnimationHeader.FrameCount
+                || segment.StartFrame < 0 || segment.EndFrame < segment.StartFrame)
+            {
+                SyncFailures++;
+                UnsupportedCount++;
+                Unsupported.Add("slot=" + Slot + " id=" + index + " segment=" + segmentIndex
+                                 + " reason=range " + segment.StartFrame + ".." + segment.EndFrame
+                                 + " frames=" + clip.Clips.AnimationHeader.FrameCount);
+                return;
+            }
+
             CurrentIndex = index;
             CurrentName = name;
             CurrentClip = clip;
+            CurrentAssembly = assembly;
+            CurrentSegment = segment;
+            CurrentSegmentIndex = segmentIndex;
             Source = source;
             Temporary = !string.Equals(source, "persistent", StringComparison.Ordinal)
                         && !string.Equals(source, "default", StringComparison.Ordinal);
             RequestedRate = rate;
             RequestedFlags = flags;
             PlaybackRate = 1.0f;
-            Frame = clip.StartFrame;
+            StartFrame = startFrameOverride >= 0 ? startFrameOverride : segment.StartFrame;
+            EndFrame = segment.EndFrame;
+
+            if (StartFrame < segment.StartFrame)
+            {
+                StartFrame = segment.StartFrame;
+            }
+
+            if (StartFrame > EndFrame)
+            {
+                StartFrame = EndFrame;
+            }
+
+            StandardFps = segment.StandardFps;
+            Frame = StartFrame;
             Position = Frame;
             Done = false;
-            Infinite = clip.Segment.LoopCount == 0;
-            PassesRemaining = clip.Segment.LoopCount > 0 ? clip.Segment.LoopCount : 1;
+            Infinite = segment.LoopCount == 0;
+            PassesRemaining = segment.LoopCount > 0 ? segment.LoopCount : 1;
             Loops = 0;
             triggerCursor = 0;
             pendingIndex = -1;
-            triggers.Clear();
-
-            AnimationAssembly assembly;
-            string assemblyName;
-
-            if (Registry.TryResolve(index, out assemblyName, out assembly) && assembly != null)
-            {
-                for (int i = 0; i < assembly.Triggers.Length; i++)
-                {
-                    if (assembly.Triggers[i].Segment == 0)
-                    {
-                        triggers.Add(assembly.Triggers[i]);
-                    }
-                }
-
-                triggers.Sort((a, b) => a.Frame.CompareTo(b.Frame));
-            }
-
+            LoadTriggersForSegment();
             ClipChanges++;
             Trace.Add("clip slot=" + Slot + " id=" + index + " name=" + name + " source=" + source
-                      + " range=" + clip.StartFrame + ".." + clip.EndFrame + " fps="
-                      + clip.StandardFps.ToString("0.###", CultureInfo.InvariantCulture) + " loop="
-                      + clip.Segment.LoopCount + " rate=" + rate.ToString("0.###",
+                      + " segment=" + segmentIndex + " range=" + StartFrame + ".." + EndFrame
+                      + " fps=" + StandardFps.ToString("0.###", CultureInfo.InvariantCulture)
+                      + " loop=" + segment.LoopCount + " rate=" + rate.ToString("0.###",
                           CultureInfo.InvariantCulture) + " flags=" + flags);
-
-            // The first frame is posed immediately; the consumer's Pose() call applies it to the
-            // match view after the view's own placement/animation clock has run.
             Pose();
+        }
+
+        private void LoadTriggersForSegment()
+        {
+            triggers.Clear();
+
+            if (CurrentAssembly == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < CurrentAssembly.Triggers.Length; i++)
+            {
+                if (CurrentAssembly.Triggers[i].Segment == CurrentSegmentIndex)
+                {
+                    triggers.Add(CurrentAssembly.Triggers[i]);
+                }
+            }
+
+            triggers.Sort((a, b) => a.Frame.CompareTo(b.Frame));
         }
 
         public void Tick(double deltaSeconds)
         {
-            if (CurrentClip == null || Done)
+            if (CurrentClip == null || CurrentSegment == null || Done)
             {
                 Pose();
                 return;
@@ -293,21 +372,25 @@ namespace UBlade3.Native
                 return;
             }
 
-            double span = CurrentClip.EndFrame - CurrentClip.StartFrame + 1;
-            double step = (deltaSeconds * CurrentClip.StandardFps * PlaybackRate);
+            double span = EndFrame - StartFrame + 1;
+            double step = deltaSeconds * StandardFps * PlaybackRate;
             int oldFrame = Frame;
             double next = Position + step;
             int guard = 0;
 
-            while (next > CurrentClip.EndFrame + 0.000001 && guard++ < 16)
+            while (next > EndFrame + 0.000001 && guard++ < 16)
             {
-                FireTriggers(oldFrame, CurrentClip.EndFrame);
+                if (FireTriggers(oldFrame, EndFrame))
+                {
+                    Pose();
+                    return;
+                }
 
                 if (Infinite)
                 {
                     Loops++;
                     next -= span;
-                    oldFrame = CurrentClip.StartFrame - 1;
+                    oldFrame = StartFrame - 1;
                     triggerCursor = 0;
                 }
                 else if (PassesRemaining > 1)
@@ -315,16 +398,16 @@ namespace UBlade3.Native
                     PassesRemaining--;
                     Loops++;
                     next -= span;
-                    oldFrame = CurrentClip.StartFrame - 1;
+                    oldFrame = StartFrame - 1;
                     triggerCursor = 0;
                 }
                 else
                 {
-                    Position = CurrentClip.EndFrame;
-                    Frame = CurrentClip.EndFrame;
+                    Position = EndFrame;
+                    Frame = EndFrame;
                     Done = true;
                     Trace.Add("done slot=" + Slot + " id=" + CurrentIndex + " name=" + CurrentName
-                              + " source=" + Source);
+                              + " segment=" + CurrentSegmentIndex + " source=" + Source);
                     break;
                 }
             }
@@ -334,20 +417,36 @@ namespace UBlade3.Native
                 Position = next;
                 Frame = (int)Math.Floor(next + 0.000001);
 
-                if (Frame < CurrentClip.StartFrame)
+                if (Frame < StartFrame)
                 {
-                    Frame = CurrentClip.StartFrame;
+                    Frame = StartFrame;
                 }
 
-                if (Frame > CurrentClip.EndFrame)
+                if (Frame > EndFrame)
                 {
-                    Frame = CurrentClip.EndFrame;
+                    Frame = EndFrame;
                 }
 
-                FireTriggers(oldFrame, Frame);
+                if (FireTriggers(oldFrame, Frame))
+                {
+                    Pose();
+                    return;
+                }
             }
             else
             {
+                if (CurrentAssembly != null
+                    && CurrentSegmentIndex + 1 < CurrentAssembly.Segments.Length)
+                {
+                    SegmentTransitions++;
+                    Trace.Add("next-segment slot=" + Slot + " id=" + CurrentIndex + " from="
+                              + CurrentSegmentIndex + " to=" + (CurrentSegmentIndex + 1));
+                    StartClip(CurrentIndex, CurrentName, CurrentClip, CurrentAssembly,
+                        CurrentSegmentIndex + 1, -1, RequestedRate, RequestedFlags, Source);
+                    Pose();
+                    return;
+                }
+
                 if (pendingIndex >= 0)
                 {
                     int index = pendingIndex;
@@ -360,10 +459,11 @@ namespace UBlade3.Native
                     string error;
                     AnimationAssembly assembly;
                     SkaterAnimationClip clip = Registry.TryLoad(index, View, out name, out error);
+                    Registry.TryResolve(index, out string resolvedName, out assembly);
 
                     if (clip != null)
                     {
-                        StartClip(index, name, clip, rate, flags, "deferred");
+                        StartClip(index, name, clip, assembly, 0, -1, rate, flags, "deferred");
                     }
                     else
                     {
@@ -379,11 +479,11 @@ namespace UBlade3.Native
             Pose();
         }
 
-        private void FireTriggers(int fromFrame, int toFrame)
+        private bool FireTriggers(int fromFrame, int toFrame)
         {
             if (triggers.Count == 0 || toFrame < fromFrame)
             {
-                return;
+                return false;
             }
 
             while (triggerCursor < triggers.Count && triggers[triggerCursor].Frame <= fromFrame)
@@ -395,6 +495,7 @@ namespace UBlade3.Native
             {
                 AnimationAssemblyTrigger trigger = triggers[triggerCursor];
                 Events++;
+                bool sync = trigger.HasSync && TrySync(trigger);
 
                 if (EventFired != null)
                 {
@@ -404,9 +505,56 @@ namespace UBlade3.Native
                 Trace.Add("event slot=" + Slot + " frame=" + trigger.Frame + " action="
                           + trigger.ActionName + " segment=" + trigger.Segment + " sync="
                           + (trigger.HasSync ? trigger.SyncAssembly + ":" + trigger.SyncSegment + ":"
-                              + trigger.SyncFrame : "none"));
+                              + trigger.SyncFrame : "none") + " applied=" + (sync ? "True" : "False"));
                 triggerCursor++;
+
+                if (sync)
+                {
+                    return true;
+                }
             }
+
+            return false;
+        }
+
+        private bool TrySync(AnimationAssemblyTrigger trigger)
+        {
+            if (!trigger.HasSync || string.IsNullOrEmpty(trigger.SyncAssembly))
+            {
+                SyncFailures++;
+                return false;
+            }
+
+            if (!Registry.TryFindIndex(trigger.SyncAssembly, out int syncIndex))
+            {
+                SyncFailures++;
+                Trace.Add("sync-missing slot=" + Slot + " assembly=" + trigger.SyncAssembly);
+                return false;
+            }
+
+            if (!Registry.TryResolve(syncIndex, out string syncName, out AnimationAssembly syncAssembly))
+            {
+                SyncFailures++;
+                return false;
+            }
+
+            string error;
+            SkaterAnimationClip syncClip = Registry.TryLoad(syncIndex, View, out syncName, out error);
+
+            if (syncClip == null)
+            {
+                SyncFailures++;
+                Trace.Add("sync-load-failed slot=" + Slot + " assembly=" + trigger.SyncAssembly
+                          + " reason=" + error);
+                return false;
+            }
+
+            StartClip(syncIndex, syncName, syncClip, syncAssembly, trigger.SyncSegment,
+                trigger.SyncFrame, RequestedRate, RequestedFlags, "sync");
+            SyncTransitions++;
+            Trace.Add("sync slot=" + Slot + " from=" + CurrentName + " to=" + syncName
+                      + " segment=" + trigger.SyncSegment + " frame=" + trigger.SyncFrame);
+            return true;
         }
 
         public void Pose()
@@ -418,9 +566,9 @@ namespace UBlade3.Native
 
             int frame = Frame;
 
-            if (frame < CurrentClip.StartFrame || frame > CurrentClip.EndFrame)
+            if (frame < StartFrame || frame > EndFrame)
             {
-                frame = Math.Max(CurrentClip.StartFrame, Math.Min(CurrentClip.EndFrame, frame));
+                frame = Math.Max(StartFrame, Math.Min(EndFrame, frame));
             }
 
             try
@@ -442,9 +590,9 @@ namespace UBlade3.Native
         public string Snapshot()
         {
             return "slot=" + Slot + " id=" + CurrentIndex + " name=" + CurrentName
-                   + " frame=" + Frame + " range=" + (CurrentClip == null ? "-"
-                       : CurrentClip.StartFrame + ".." + CurrentClip.EndFrame)
-                   + " source=" + Source + " temp=" + (Temporary ? "True" : "False")
+                   + " frame=" + Frame + " range=" + StartFrame + ".." + EndFrame
+                   + " segment=" + CurrentSegmentIndex + " source=" + Source
+                   + " temp=" + (Temporary ? "True" : "False")
                    + " loops=" + Loops + " done=" + (Done ? "True" : "False")
                    + " persistent=" + PersistentName;
         }
@@ -455,6 +603,7 @@ namespace UBlade3.Native
             text.Append(Marker).Append(" slot=").Append(Slot);
             text.Append(" clip=").Append(CurrentName);
             text.Append(" id=").Append(CurrentIndex);
+            text.Append(" segment=").Append(CurrentSegmentIndex);
             text.Append(" frame=").Append(Frame);
             text.Append(" source=").Append(Source);
             text.Append(" temporary=").Append(Temporary ? "True" : "False");
@@ -465,6 +614,9 @@ namespace UBlade3.Native
             text.Append(" unsupported=").Append(UnsupportedCount);
             text.Append(" deferred=").Append(DeferredPending);
             text.Append(" deferredApplied=").Append(DeferredApplied);
+            text.Append(" syncTransitions=").Append(SyncTransitions);
+            text.Append(" syncFailures=").Append(SyncFailures);
+            text.Append(" segmentTransitions=").Append(SegmentTransitions);
             text.Append(" persistent=").Append(PersistentName);
             text.Append(" requestedRate=").Append(RequestedRate.ToString("0.###",
                 CultureInfo.InvariantCulture));

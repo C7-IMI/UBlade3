@@ -167,12 +167,12 @@
         "-File",
         "scripts/ublade3_csharp_release.ps1",
         "-Version",
-        "2026.10.31.009-csharp-preview"
+        "2026.10.31.010-csharp-preview"
       ],
       "cwd": ".",
       "timeout": 900,
       "artifacts": [
-        "dist/UBlade3-CSharpPreview-2026.10.31.009-csharp-preview-win64.zip",
+        "dist/UBlade3-CSharpPreview-2026.10.31.010-csharp-preview-win64.zip",
         "artifacts/ublade3-csharp-release.json"
       ],
       "args": {
@@ -226,13 +226,13 @@
     {
       "id": "csharp-release-zip",
       "kind": "file",
-      "artifact": "dist/UBlade3-CSharpPreview-2026.10.31.009-csharp-preview-win64.zip",
+      "artifact": "dist/UBlade3-CSharpPreview-2026.10.31.010-csharp-preview-win64.zip",
       "minBytes": 1000000
     },
     {
       "id": "csharp-preview-frame",
       "kind": "file",
-      "artifact": "artifacts/native-preview-009-animation.png",
+      "artifact": "artifacts/native-preview-010-effects.png",
       "minBytes": 10000
     }
   ]
