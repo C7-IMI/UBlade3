@@ -4,6 +4,29 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.017
+
+**Plan-target steering physics and display/resolution options; C# preview 004.**
+
+- Date: 2026-10-31
+- Change: MatchPlanAiMotion ports CSteerToTarget/CAdjustAcceleration for behaviour kind 0
+  GlideToObject and drives the Sim skater through the exact glide physics (target force, braking,
+  lead/clamp, arrival, bank forces; deterministic jitter substitution). Other kinds remain labelled
+  bridge fallback. Added MatchDisplaySettings/Controller with presets 720p/1080p/1440p/4K/Native,
+  windowed/borderless/fullscreen, validation/fallback, HUD scaling (1/1.5/2/3), persistence and
+  F10/F11/F12 controls. Rebuilt and repackaged the native C# preview.
+- Verified motion: N11_CHECK_OK targetPhysics=True planPhysicsTicks=250 slot1PhysicsTicks=100
+  slot1Displacement=82.123 slot1StartDistance=60.253 slot1MinDistance=0.382 targetChange=1
+  bridgeFallbackTicks=50 digest=30b6ad7650946a88; Editor captures 6.
+- Verified display: default client 1280x720; 1080p 1920x1080; 1440p 2560x1440; 4K borderless
+  3840x2160; unsupported 8K falls back to 4K; HUD scale 1/1.5/2/3; CheckDisplay failures=0.
+- Release 2026.10.31.004-csharp-preview: ZIP 38,969,894 bytes SHA-256
+  `07d9782cf69adb9f273cae902345c42a111a6c2ed61923a4c1bcdb725c06721c`; extracted player
+  launched with --play-autostart, display applied 1280x720, no external process.
+- Boundary: only GlideToObject kind 0 exact; other motion kinds bridge/no-op; display is a runtime
+  layer with first-frame caveat and limited exclusive/multi-monitor/DPI testing. Preview, not parity.
+- Docs: docs/PLAN-MOTION.md, docs/NATIVE-DISPLAY.md.
+
 ## 2026.10.31.016
 
 **Native C# playable preview release packaged and verified.**

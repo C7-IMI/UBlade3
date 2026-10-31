@@ -937,6 +937,7 @@ namespace UBlade3.Native
                 ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3,
                 ObjectConstants.GoalieSlotA, ObjectConstants.GoalieSlotB);
             PlanRoster.EnableAnimationBridge(true);
+            PlanRoster.EnableTargetPhysics(true);
             DefaultPlanAi = true;
             AiEnabled = true;
 

@@ -159,6 +159,11 @@ namespace UBlade3.Native
 
         public float ReticleFracY = 0.5f;
 
+        // N11 display scaling: the HUD layout is designed in 1280x720-ish screen units and this
+        // factor scales both the layout canvas and the drawn sprites/glyphs. Default 1 keeps every
+        // N5/N6 capture byte-identical; MatchDisplayController sets it in the runtime player.
+        public float UiScale = 1f;
+
         public bool GuiDrawn { get; private set; }
 
         private sealed class HudArt
@@ -466,21 +471,23 @@ namespace UBlade3.Native
                 model = MatchHudModel.From(Scene.World, Scene.Sim.Sim);
             }
 
+            float ui = UiScale > 0.01f ? UiScale : 1f;
             List<HudSprite> sprites = new List<HudSprite>();
             List<HudText> texts = new List<HudText>();
-            Layout(Screen.width, Screen.height, model, sprites, texts);
+            Layout(Mathf.Max(1, Mathf.RoundToInt(Screen.width / ui)),
+                Mathf.Max(1, Mathf.RoundToInt(Screen.height / ui)), model, sprites, texts);
 
             Color saved = GUI.color;
 
             for (int i = 0; i < sprites.Count; i++)
             {
                 GUI.color = Color.white;
-                GUI.DrawTexture(sprites[i].Dest, sprites[i].Art.Texture);
+                GUI.DrawTexture(ScaleRect(sprites[i].Dest, ui), sprites[i].Art.Texture);
             }
 
             for (int i = 0; i < texts.Count; i++)
             {
-                DrawGuiText(texts[i]);
+                DrawGuiText(texts[i], ui);
             }
 
             GUI.color = saved;
@@ -489,11 +496,16 @@ namespace UBlade3.Native
             FramesDrawn++;
         }
 
-        private void DrawGuiText(HudText text)
+        private static Rect ScaleRect(Rect rect, float scale)
         {
-            float cellWidth = FontCellWidth * text.Scale;
-            float glyphWidth = FontGlyphWidth * text.Scale;
-            float glyphHeight = FontGlyphHeight * text.Scale;
+            return new Rect(rect.x * scale, rect.y * scale, rect.width * scale, rect.height * scale);
+        }
+
+        private void DrawGuiText(HudText text, float ui)
+        {
+            float cellWidth = FontCellWidth * text.Scale * ui;
+            float glyphWidth = FontGlyphWidth * text.Scale * ui;
+            float glyphHeight = FontGlyphHeight * text.Scale * ui;
             GUI.color = text.Colour;
 
             for (int i = 0; i < text.Text.Length; i++)
@@ -512,7 +524,8 @@ namespace UBlade3.Native
                     continue;
                 }
 
-                GUI.DrawTexture(new Rect(text.Dest.x + (i * cellWidth), text.Dest.y, glyphWidth, glyphHeight), glyph);
+                GUI.DrawTexture(new Rect((text.Dest.x * ui) + (i * cellWidth), text.Dest.y * ui,
+                    glyphWidth, glyphHeight), glyph);
             }
         }
 
@@ -528,18 +541,25 @@ namespace UBlade3.Native
                 return;
             }
 
+            float ui = UiScale > 0.01f ? UiScale : 1f;
             List<HudSprite> sprites = new List<HudSprite>();
             List<HudText> texts = new List<HudText>();
-            Layout(width, height, model, sprites, texts);
+            Layout(Mathf.Max(1, Mathf.RoundToInt(width / ui)),
+                Mathf.Max(1, Mathf.RoundToInt(height / ui)), model, sprites, texts);
 
             for (int i = 0; i < sprites.Count; i++)
             {
-                BlitArt(pixels, width, height, sprites[i].Art, sprites[i].Dest);
+                HudSprite sprite = sprites[i];
+                sprite.Dest = ScaleRect(sprite.Dest, ui);
+                BlitArt(pixels, width, height, sprite.Art, sprite.Dest);
             }
 
             for (int i = 0; i < texts.Count; i++)
             {
-                PlotText(pixels, width, height, texts[i]);
+                HudText text = texts[i];
+                text.Dest = ScaleRect(text.Dest, ui);
+                text.Scale *= ui;
+                PlotText(pixels, width, height, text);
             }
 
             LastModelText = model.Describe();

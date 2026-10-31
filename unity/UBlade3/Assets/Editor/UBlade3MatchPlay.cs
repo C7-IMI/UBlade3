@@ -483,9 +483,9 @@ namespace UBlade3.EditorTools
             }
         }
 
-        private static string BuildPlayer()
+        private static string BuildPlayer(string requestedPath = null)
         {
-            string playerPath = ResolvePlayerPath();
+            string playerPath = string.IsNullOrEmpty(requestedPath) ? ResolvePlayerPath() : requestedPath;
             Directory.CreateDirectory(Path.GetDirectoryName(playerPath));
 
             try
@@ -675,6 +675,28 @@ namespace UBlade3.EditorTools
             "artifacts/native-match-n10-05-plan-shot.png",
             "artifacts/native-match-n10-06-result.png",
         };
+
+        // --- N11: exact plan-target steering physics ------------------------------------------
+
+        public static readonly string[] N11CaptureFiles =
+        {
+            "artifacts/native-match-n11-00-start.png",
+            "artifacts/native-match-n11-01-plan-physics.png",
+            "artifacts/native-match-n11-02-target-close.png",
+            "artifacts/native-match-n11-03-ai-pickup.png",
+            "artifacts/native-match-n11-04-target-change.png",
+            "artifacts/native-match-n11-05-result.png",
+        };
+
+        public static void CheckN11()
+        {
+            CheckN11(true);
+        }
+
+        public static void CaptureAllN11()
+        {
+            CaptureAllN11(true);
+        }
 
         public static void CheckN10()
         {
@@ -2191,6 +2213,458 @@ namespace UBlade3.EditorTools
             {
                 EditorApplication.Exit(exitCode);
             }
+        }
+
+        // --- N11: display/resolution options ------------------------------------------------
+
+        public const string DisplayPlayerExecutable = "build-match/UBlade3NativeDisplay.exe";
+
+        public static void CheckDisplay()
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunDisplayCheck();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_DISPLAY_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_DISPLAY_CHECK_OK"
+                : "UBLADE3_DISPLAY_CHECK_FAILED mismatches=" + mismatches);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunDisplayCheck()
+        {
+            int failures = 0;
+
+            // 1. default + parser + persistence round-trip
+            MatchDisplaySettings defaults = MatchDisplaySettings.Default();
+
+            if (defaults.Width != MatchDisplaySettings.DefaultWidth
+                || defaults.Height != MatchDisplaySettings.DefaultHeight
+                || defaults.Mode != "windowed"
+                || defaults.Preset != "1280x720")
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH defaults " + defaults.Describe());
+            }
+
+            if (!MatchDisplaySettings.TryParseResolution("1920x1080", out int width, out int height)
+                || width != 1920 || height != 1080)
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH parse 1920x1080");
+            }
+
+            MatchDisplaySettings persisted = new MatchDisplaySettings();
+            persisted.ApplyPreset("2560x1440");
+            persisted.Mode = "borderless";
+            string tempPath = Path.Combine(Application.temporaryCachePath, "ublade3-display-check.json");
+            string saveDetail;
+
+            if (!MatchDisplaySettings.Save(tempPath, persisted, out saveDetail))
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH save " + saveDetail);
+            }
+
+            string loadDetail;
+            MatchDisplaySettings loaded = MatchDisplaySettings.Load(tempPath, out loadDetail);
+
+            if (loaded.Width != 2560 || loaded.Height != 1440 || loaded.Mode != "borderless"
+                || loaded.Preset != "2560x1440")
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH round-trip " + loaded.Describe() + " " + loadDetail);
+            }
+
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+
+            // 2. validation/fallback on a synthetic 1080p host
+            Resolution[] supported =
+            {
+                new Resolution { width = 1280, height = 720 },
+                new Resolution { width = 1920, height = 1080 },
+            };
+            Resolution desktop = new Resolution { width = 1920, height = 1080 };
+
+            MatchDisplaySettings hd = new MatchDisplaySettings();
+            hd.Width = 1920;
+            hd.Height = 1080;
+            hd.Mode = "windowed";
+            hd.Preset = "1920x1080";
+            MatchDisplayPlan.Result hdPlan = MatchDisplayPlan.Validate(hd, supported, desktop, null);
+
+            if (hdPlan.Width != 1920 || hdPlan.Height != 1080 || hdPlan.Fallback)
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH 1080p plan " + hdPlan.Width + "x" + hdPlan.Height
+                          + " fallback=" + hdPlan.Fallback);
+            }
+
+            MatchDisplaySettings qhd = new MatchDisplaySettings();
+            qhd.ApplyPreset("2560x1440");
+            qhd.Mode = "windowed";
+            MatchDisplayPlan.Result qhdPlan = MatchDisplayPlan.Validate(qhd, supported, desktop, null);
+
+            if (qhdPlan.Width != 1920 || qhdPlan.Height != 1080 || !qhdPlan.Fallback
+                || qhdPlan.Reason != "windowed-larger-than-desktop")
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH qhd windowed fallback " + qhdPlan.Width + "x"
+                          + qhdPlan.Height + " fallback=" + qhdPlan.Fallback + " reason=" + qhdPlan.Reason);
+            }
+
+            MatchDisplaySettings uhd = new MatchDisplaySettings();
+            uhd.ApplyPreset("3840x2160");
+            uhd.Mode = "borderless";
+            MatchDisplayPlan.Result uhdPlan = MatchDisplayPlan.Validate(uhd, supported, desktop, null);
+
+            if (uhdPlan.Width != 1920 || uhdPlan.Height != 1080 || !uhdPlan.Fallback
+                || uhdPlan.Reason != "unsupported-mode-resolution")
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH 4K borderless fallback " + uhdPlan.Width + "x"
+                          + uhdPlan.Height + " fallback=" + uhdPlan.Fallback + " reason=" + uhdPlan.Reason);
+            }
+
+            MatchDisplaySettings native = new MatchDisplaySettings();
+            native.ApplyPreset("native");
+            native.Mode = "windowed";
+            MatchDisplayPlan.Result nativePlan = MatchDisplayPlan.Validate(native, supported, desktop, null);
+
+            if (nativePlan.Width != 1920 || nativePlan.Height != 1080 || nativePlan.Fallback)
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH native plan " + nativePlan.Width + "x" + nativePlan.Height);
+            }
+
+            // 3. corrupt file falls back to defaults
+            string corrupt = Path.Combine(Application.temporaryCachePath, "ublade3-display-corrupt.json");
+            File.WriteAllText(corrupt, "{not json", new System.Text.UTF8Encoding(false));
+            MatchDisplaySettings invalid = MatchDisplaySettings.Load(corrupt, out string corruptDetail);
+
+            if (invalid.Width != MatchDisplaySettings.DefaultWidth || !corruptDetail.StartsWith("invalid"))
+            {
+                failures++;
+                Debug.Log("UBLADE3_DISPLAY_MISMATCH corrupt fallback " + invalid.Describe() + " " + corruptDetail);
+            }
+
+            if (File.Exists(corrupt))
+            {
+                File.Delete(corrupt);
+            }
+
+            Debug.Log("UBLADE3_DISPLAY_CHECK_COUNTS presets=" + MatchDisplaySettings.Presets.Length
+                      + " modes=" + string.Join(",", MatchDisplaySettings.Modes)
+                      + " hd=" + hdPlan.Width + "x" + hdPlan.Height
+                      + " qhdFallback=" + qhdPlan.Width + "x" + qhdPlan.Height
+                      + " uhdFallback=" + uhdPlan.Width + "x" + uhdPlan.Height
+                      + " native=" + nativePlan.Width + "x" + nativePlan.Height
+                      + " failures=" + failures);
+
+            return failures;
+        }
+
+        public static void BuildWindowsDisplay()
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string playerPath = Path.GetFullPath(Path.Combine(ProjectRoot, DisplayPlayerExecutable));
+                Debug.Log("UBLADE3_DISPLAY_BUILD_OK output=" + BuildPlayer(playerPath));
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_DISPLAY_BUILD_FAILED " + exception);
+                exitCode = 1;
+            }
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
+
+        // --- N11: exact plan-target steering physics ------------------------------------------
+
+        private static void CheckN11(bool exitWhenBatch)
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN11Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N11_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N11_CHECK_FAILED mismatches=" + mismatches);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN11Check()
+        {
+            int mismatches = 0;
+
+            MatchPlay firstPlay;
+            int firstFailures = RunN11Scenario(out firstPlay, out MatchPlayN11ScriptResult first);
+            mismatches += firstFailures;
+
+            Debug.Log(first.RosterDescribe);
+            Debug.Log(first.SlotLines);
+            Debug.Log(first.StartMotion);
+            Debug.Log(first.PhysicsMotion);
+            Debug.Log(first.BeforeChangeMotion);
+            Debug.Log(first.AfterChangeMotion);
+
+            for (int index = 0; index < first.TargetTrace.Count && index < 12; index++)
+            {
+                Debug.Log("UBLADE3_NATIVE_MATCH_N11_TARGET_CHANGE " + first.TargetTrace[index]);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_CHECK_RESULT defaultPlanAi="
+                      + (firstPlay.Control != null && firstPlay.Control.DefaultPlanAi ? "True" : "False")
+                      + " targetPhysics="
+                      + (firstPlay.Control != null && firstPlay.Control.PlanRoster != null
+                         && firstPlay.Control.PlanRoster.TargetPhysicsEnabled ? "True" : "False")
+                      + " aiPickups=" + first.AiPickups
+                      + " planPhysicsTicks=" + first.PlanPhysicsTicks
+                      + " slot1PhysicsTicks=" + first.Slot1PhysicsTicks
+                      + " slot1BankedTicks=" + first.Slot1BankedTicks
+                      + " slot1TargetChanges=" + first.Slot1TargetChanges
+                      + " slot1Displacement=" + first.Slot1Displacement.ToString("0.###")
+                      + " slot1HeadingTravelDeg=" + first.Slot1HeadingTravelDeg.ToString("0.###")
+                      + " slot1StartDistance=" + first.Slot1StartDistance.ToString("0.###")
+                      + " slot1MinDistance=" + first.Slot1MinDistance.ToString("0.###")
+                      + " slot1LastDistance=" + first.Slot1LastDistance.ToString("0.###")
+                      + " bridgeFallbackTicks=" + first.RosterBridgeFallbackTicks
+                      + " ticks=" + first.TicksRun
+                      + " digest=" + first.Digest
+                      + " failures=" + first.Failures + " reason=" + first.FailureText);
+
+            bool defaultWired = firstPlay.Control != null && firstPlay.Control.DefaultPlanAi
+                                && firstPlay.Control.PlanRoster != null
+                                && firstPlay.Control.PlanRoster.TargetPhysicsEnabled;
+
+            if (first.Failures != 0 || !defaultWired
+                || first.Slot1PhysicsTicks < 10
+                || (first.Slot1BankedTicks + first.RosterBankedTicks) < 1
+                || first.Slot1Displacement < 5.0f || first.Slot1HeadingTravelDeg < 5.0f
+                || first.Slot1StartDistance < 5.0f
+                || first.Slot1MinDistance >= first.Slot1StartDistance - 2.0f
+                || first.Slot1TargetChanges < 1 || first.TargetChanges < 1
+                || first.AiPickups < 1 || first.RosterBridgeFallbackTicks < 1
+                || first.TicksRun > MatchPlayN11Script.MaxTicks
+                || string.IsNullOrEmpty(first.Digest))
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N11_MISMATCH defaultWired=" + defaultWired
+                          + " roster=" + first.RosterDescribe + " reason=" + first.FailureText);
+            }
+
+            MatchPlay secondPlay;
+            int secondFailures = RunN11Scenario(out secondPlay, out MatchPlayN11ScriptResult second);
+            mismatches += secondFailures;
+
+            bool deterministic = string.Equals(first.Digest, second.Digest, StringComparison.Ordinal)
+                                 && first.AiPickups == second.AiPickups
+                                 && first.Slot1PhysicsTicks == second.Slot1PhysicsTicks
+                                 && first.Slot1BankedTicks == second.Slot1BankedTicks
+                                 && first.Slot1TargetChanges == second.Slot1TargetChanges
+                                 && Math.Abs(first.Slot1Displacement - second.Slot1Displacement) < 1e-4f
+                                 && Math.Abs(first.Slot1StartDistance - second.Slot1StartDistance) < 1e-4f
+                                 && Math.Abs(first.Slot1MinDistance - second.Slot1MinDistance) < 1e-4f;
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_DETERMINISM ok=" + (deterministic ? "True" : "False")
+                      + " digest1=" + first.Digest + " digest2=" + second.Digest);
+
+            if (!deterministic)
+            {
+                mismatches++;
+            }
+
+            int processes = CountTwentyXxProcesses();
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_NO_20XX running20xxProcesses=" + processes + " no20xx=True");
+
+            if (processes != 0)
+            {
+                mismatches++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_COUNTS aiPickups=" + first.AiPickups
+                      + " planPhysicsTicks=" + first.PlanPhysicsTicks
+                      + " slot1PhysicsTicks=" + first.Slot1PhysicsTicks
+                      + " slot1BankedTicks=" + first.Slot1BankedTicks
+                      + " slot1TargetChanges=" + first.Slot1TargetChanges
+                      + " slot1Displacement=" + first.Slot1Displacement.ToString("0.###")
+                      + " slot1HeadingTravelDeg=" + first.Slot1HeadingTravelDeg.ToString("0.###")
+                      + " slot1StartDistance=" + first.Slot1StartDistance.ToString("0.###")
+                      + " slot1MinDistance=" + first.Slot1MinDistance.ToString("0.###")
+                      + " bridgeFallbackTicks=" + first.RosterBridgeFallbackTicks
+                      + " ticks=" + first.TicksRun
+                      + " digest=" + first.Digest
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
+        }
+
+        private static int RunN11Scenario(out MatchPlay play, out MatchPlayN11ScriptResult result)
+        {
+            int failures = 0;
+            play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
+            {
+                failures++;
+                result = new MatchPlayN11ScriptResult();
+                result.Failures = 1;
+                result.FailureText = "normal build did not attach the default PlanVM AI roster; ";
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CHECK_FAILED " + result.FailureText);
+
+                return failures;
+            }
+
+            failures += play.RunDeterministicCaptureN11(null, out result);
+
+            return failures;
+        }
+
+        private static void CaptureAllN11(bool exitWhenBatch)
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += CaptureSceneN11();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N11_CAPTURES_OK frames=" + N11CaptureFiles.Length
+                  + " width=" + MatchPlay.CaptureWidth + " height=" + MatchPlay.CaptureHeight
+                : "UBLADE3_NATIVE_MATCH_N11_CAPTURES_FAILED failures=" + failures);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int CaptureSceneN11()
+        {
+            int failures = 0;
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi
+                || !play.Control.PlanRoster.TargetPhysicsEnabled)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED the normal build is not running target physics");
+            }
+
+            string[] paths = new string[N11CaptureFiles.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = ResolveArtifactPath(N11CaptureFiles[i]);
+
+                if (File.Exists(paths[i]))
+                {
+                    File.Delete(paths[i]);
+                }
+            }
+
+            MatchPlayN11ScriptResult result;
+            failures += play.RunDeterministicCaptureN11(paths, out result);
+
+            Debug.Log(MatchProbe.DescribeScene(play.Scene));
+            Debug.Log(play.Describe());
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.SlotLines);
+
+            for (int i = 0; i < play.Captures.Count; i++)
+            {
+                MatchPlayCapture capture = play.Captures[i];
+
+                if (!File.Exists(capture.Path))
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED missing " + capture.Path);
+                    continue;
+                }
+
+                FileInfo info = new FileInfo(capture.Path);
+
+                if (info.Length != capture.Bytes || info.Length < 1024)
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED " + capture.Path + " bytes "
+                                   + info.Length + " != " + capture.Bytes);
+                }
+            }
+
+            if (play.Captures.Count != N11CaptureFiles.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED captured " + play.Captures.Count
+                               + " of " + N11CaptureFiles.Length);
+            }
+
+            if (result.Failures != 0 || result.Slot1PhysicsTicks < 10 || result.Slot1TargetChanges < 1
+                || result.AiPickups < 1)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED roster=" + result.RosterDescribe
+                               + " reason=" + result.FailureText);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_CAPTURE_EVIDENCE frames=" + play.Captures.Count
+                      + " defaultPlanAi=True targetPhysics=True"
+                      + " aiPickups=" + result.AiPickups
+                      + " planPhysicsTicks=" + result.PlanPhysicsTicks
+                      + " slot1PhysicsTicks=" + result.Slot1PhysicsTicks
+                      + " slot1BankedTicks=" + result.Slot1BankedTicks
+                      + " slot1TargetChanges=" + result.Slot1TargetChanges
+                      + " slot1Displacement=" + result.Slot1Displacement.ToString("0.###")
+                      + " slot1HeadingTravelDeg=" + result.Slot1HeadingTravelDeg.ToString("0.###")
+                      + " slot1StartDistance=" + result.Slot1StartDistance.ToString("0.###")
+                      + " slot1MinDistance=" + result.Slot1MinDistance.ToString("0.###")
+                      + " bridgeFallbackTicks=" + result.RosterBridgeFallbackTicks
+                      + " planDigest=" + result.Digest);
+
+            return failures;
         }
 
     }

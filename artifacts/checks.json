@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T09:37:25.729Z",
+  "generatedAt": "2026-10-31T09:55:11.111Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -412,18 +412,46 @@
         "not full parity/release"
       ],
       "doc": "docs/NATIVE-MATCH-N10.md"
+    },
+    "planMotion": {
+      "status": "N11 exact plan-target steering for behaviour kind 0 verified",
+      "behavior": "GlideToObject",
+      "planPhysicsTicks": 250,
+      "slot1PhysicsTicks": 100,
+      "slot1Displacement": 82.123,
+      "slot1StartDistance": 60.253,
+      "slot1MinDistance": 0.382,
+      "targetChanges": 1,
+      "bridgeFallbackTicks": 50,
+      "digest": "30b6ad7650946a88",
+      "doc": "docs/PLAN-MOTION.md"
+    },
+    "display": {
+      "status": "N11 display/resolution options verified",
+      "default": "1280x720 windowed",
+      "presets": [
+        "1280x720",
+        "1920x1080",
+        "2560x1440",
+        "3840x2160",
+        "native"
+      ],
+      "validated": "default/720p client 1280x720; 1080p 1920x1080; 1440p 2560x1440; 4K borderless 3840x2160; 8K falls back to 4K",
+      "hudScale": "1/1.5/2/3",
+      "hotkeys": "F10/F11/F12",
+      "doc": "docs/NATIVE-DISPLAY.md"
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.003-csharp-preview",
-    "status": "native C# playable preview packaged and verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.003-csharp-preview-win64.zip",
-    "bytes": 38957710,
-    "sha256": "0c0acc42d1bb6a6b9fcfcfc285c1030b09883b728d8a3c8964a6f3009623f049",
+    "version": "2026.10.31.004-csharp-preview",
+    "status": "native C# playable preview with display options packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.004-csharp-preview-win64.zip",
+    "bytes": 38969894,
+    "sha256": "07d9782cf69adb9f273cae902345c42a111a6c2ed61923a4c1bcdb725c06721c",
     "externalProcess": false,
     "preview": true,
-    "verification": "extracted ZIP launched player with --play-autostart; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX process; capture artifacts/native-csharp-preview.png",
-    "controls": "Up/Down accelerate/brake, Left/Right steer, D/S strafe, Space hold/release shoot, C pass, Escape pause",
+    "defaultDisplay": "1280x720 windowed",
+    "verification": "extracted ZIP launched --play-autostart; display requested/applied 1280x720; UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

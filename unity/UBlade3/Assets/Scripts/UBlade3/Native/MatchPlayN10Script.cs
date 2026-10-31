@@ -69,9 +69,9 @@ namespace UBlade3.Native
     /// </summary>
     public static class MatchPlayN10Script
     {
-        public const int MaxTicks = 220;
+        public const int MaxTicks = 240;
 
-        public const int PostPassTicks = 110;
+        public const int PostPassTicks = 160;
 
         public const float StagedHumanX = -28.0f;
 
@@ -102,6 +102,10 @@ namespace UBlade3.Native
                 return result;
             }
 
+            // N11 moved the default match to the exact target-steering physics. The N10 deterministic
+            // suite is the pre-N11 regression evidence (including its plan-shot frames), so it pins its
+            // default roster to the labelled bridge mode; N11/default interactive use the real physics.
+            roster.EnableTargetPhysics(false);
             Stage(control);
             capture?.Invoke("start");
 

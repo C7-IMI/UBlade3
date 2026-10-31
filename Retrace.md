@@ -172,3 +172,14 @@ Prompt and decision log for UBlade3.
 - Boundary: playable preview, not final parity; exact native release remains 2026.10.31.002.
   Goal active.
 
+## 16 - 2026-10-31
+
+- Request: improve plan motion exactness and the native C# player display.
+- Work: exact CSteerToTarget/CAdjustAcceleration path for GlideToObject plan targets; display
+  presets/fallback/HUD scaling; rebuilt C# preview 004.
+- Evidence: N11_CHECK_OK targetPhysics=True planPhysicsTicks=250 slot1Displacement=82.123
+  targetChange=1 digest=30b6ad7650946a88; display 1280x720/1920x1080/2560x1440/3840x2160
+  validated, HUD scale 1/1.5/2/3; release 004 hash 07d9782c..., extracted player starts, no20XX.
+- Boundary: only GlideToObject kind 0 exact; preview not parity. Goal active.
+- Version: 2026.10.31.017
+

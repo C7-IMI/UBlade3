@@ -65,6 +65,14 @@ namespace UBlade3.Native
 
         public int AnimationBridgeEvents;
 
+        public int PlanPhysicsTicks;
+
+        public int BridgeFallbackTicks;
+
+        public int PhysicsTargetChanges;
+
+        public bool TargetPhysicsEnabled;
+
         public bool InjectInitialRokEvent;
 
         private bool possessionInitialised;
@@ -161,6 +169,22 @@ namespace UBlade3.Native
         }
 
         /// <summary>Enables the documented N10 animation bridge for every plan instance (default match only).</summary>
+        /// <summary>Enables the exact N11 target-steering physics for every plan instance (default match).</summary>
+        public void EnableTargetPhysics(bool enabled)
+        {
+            TargetPhysicsEnabled = enabled;
+
+            for (int index = 0; index < PlanSlots.Count; index++)
+            {
+                MatchPlanAi adapter = Slots[PlanSlots[index]];
+
+                if (adapter != null)
+                {
+                    adapter.EnableTargetPhysics(enabled);
+                }
+            }
+        }
+
         public void EnableAnimationBridge(bool enabled)
         {
             AnimationBridgeEvents = 0;
@@ -365,6 +389,9 @@ namespace UBlade3.Native
                 TotalRuntimeErrors += adapter.RuntimeErrors;
                 HeuristicFallbackTicks += adapter.HeuristicFallbackTicks;
                 AnimationBridgeEvents += adapter.AnimationBridgeEvents;
+                PlanPhysicsTicks += adapter.PlanPhysicsTicks;
+                BridgeFallbackTicks += adapter.BridgeFallbackTicks;
+                PhysicsTargetChanges += adapter.PhysicsTargetChanges;
                 adapter.RelayedMessages = RelayCount;
             }
 
@@ -482,6 +509,9 @@ namespace UBlade3.Native
             text.Append(" runtimeErrors=").Append(TotalRuntimeErrors);
             text.Append(" heuristicFallbackTicks=").Append(HeuristicFallbackTicks);
             text.Append(" animationBridgeEvents=").Append(AnimationBridgeEvents);
+            text.Append(" planPhysicsTicks=").Append(PlanPhysicsTicks);
+            text.Append(" bridgeFallbackTicks=").Append(BridgeFallbackTicks);
+            text.Append(" physicsTargetChanges=").Append(PhysicsTargetChanges);
             text.Append(" initialRokEvent=").Append(InjectInitialRokEvent ? "True" : "False");
             text.Append(" maxRebindsPerSlot=").Append(MaxRebindsPerSlot());
 
@@ -544,6 +574,8 @@ namespace UBlade3.Native
                 text.Append(" targets=").Append(adapter.TargetChanges);
                 text.Append(" fallbackMotion=").Append(adapter.FallbackMotionTicks);
                 text.Append(" heuristicFallback=").Append(adapter.HeuristicFallbackTicks);
+                text.Append(" planPhysicsTicks=").Append(adapter.PlanPhysicsTicks);
+                text.Append(" bridgeFallbackTicks=").Append(adapter.BridgeFallbackTicks);
                 text.Append(" unsupportedDecisions=").Append(adapter.UnsupportedDecisionErrors);
                 text.Append(" unsupported=[").Append(DescribeSet(adapter.UnsupportedIds)).Append(']');
                 text.Append(" digest=").Append(PlanVmDigest.Hex(adapter.TraceDigest()));

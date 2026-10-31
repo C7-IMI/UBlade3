@@ -130,6 +130,18 @@ namespace UBlade3.Native
             "05-plan-shot", "06-result"
         };
 
+        public const string N11CapturePrefix = "native-match-n11";
+
+        public static readonly string[] N11CaptureBeats =
+        {
+            "start", "plan-physics", "target-close", "ai-pickup", "target-change", "result"
+        };
+
+        public static readonly string[] N11CaptureLabels =
+        {
+            "00-start", "01-plan-physics", "02-target-close", "03-ai-pickup", "04-target-change", "05-result"
+        };
+
         public MatchScene Scene { get; private set; }
 
         public MatchGameplay Gameplay { get; private set; }
@@ -184,6 +196,7 @@ namespace UBlade3.Native
         private static readonly Dictionary<string, int> N8BeatIndex = BuildN8BeatIndex();
         private static readonly Dictionary<string, int> N9BeatIndex = BuildN9BeatIndex();
         private static readonly Dictionary<string, int> N10BeatIndex = BuildN10BeatIndex();
+        private static readonly Dictionary<string, int> N11BeatIndex = BuildN11BeatIndex();
 
         private static Dictionary<string, int> BuildBeatIndex()
         {
@@ -240,6 +253,18 @@ namespace UBlade3.Native
             for (int i = 0; i < N10CaptureBeats.Length; i++)
             {
                 map[N10CaptureBeats[i]] = i;
+            }
+
+            return map;
+        }
+
+        private static Dictionary<string, int> BuildN11BeatIndex()
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < N11CaptureBeats.Length; i++)
+            {
+                map[N11CaptureBeats[i]] = i;
             }
 
             return map;
@@ -984,6 +1009,71 @@ namespace UBlade3.Native
             }
         }
 
+        // --- N11: exact plan-target steering physics ------------------------------------------
+
+        public int RunDeterministicCaptureN11(string[] paths, out MatchPlayN11ScriptResult result)
+        {
+            int failures = 0;
+
+            if (Control.Ai == null)
+            {
+                Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3);
+            }
+
+            Control.AiEnabled = true;
+            Control.Ai.Enabled = true;
+            Control.HumanPickupEnabled = false;
+            Scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
+            result = MatchPlayN11Script.Run(Control, beat => CaptureBeatN11(beat, paths),
+                held => Scene.TickScene(held));
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_RESULT defaultPlanAi=" + (Control.DefaultPlanAi ? "True" : "False")
+                      + " targetPhysics=" + (Control.PlanRoster != null && Control.PlanRoster.TargetPhysicsEnabled ? "True" : "False")
+                      + " aiPickups=" + result.AiPickups
+                      + " planPhysicsTicks=" + result.PlanPhysicsTicks
+                      + " slot1PhysicsTicks=" + result.Slot1PhysicsTicks
+                      + " slot1BankedTicks=" + result.Slot1BankedTicks
+                      + " slot1TargetChanges=" + result.Slot1TargetChanges
+                      + " slot1Displacement=" + result.Slot1Displacement.ToString("0.###")
+                      + " slot1HeadingTravelDeg=" + result.Slot1HeadingTravelDeg.ToString("0.###")
+                      + " slot1StartDistance=" + result.Slot1StartDistance.ToString("0.###")
+                      + " slot1MinDistance=" + result.Slot1MinDistance.ToString("0.###")
+                      + " slot1LastDistance=" + result.Slot1LastDistance.ToString("0.###")
+                      + " bridgeFallbackTicks=" + result.RosterBridgeFallbackTicks
+                      + " ticks=" + result.TicksRun
+                      + " digest=" + result.Digest
+                      + " failures=" + result.Failures + " reason=" + result.FailureText);
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.SlotLines);
+            Debug.Log(result.StartMotion);
+            Debug.Log(result.PhysicsMotion);
+            Debug.Log(result.BeforeChangeMotion);
+            Debug.Log(result.AfterChangeMotion);
+
+            for (int index = 0; index < result.TargetTrace.Count && index < 12; index++)
+            {
+                Debug.Log("UBLADE3_NATIVE_MATCH_N11_TARGET_CHANGE " + result.TargetTrace[index]);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N11_CONTROL " + Control.Describe());
+
+            if (result.Failures != 0)
+            {
+                failures += result.Failures;
+            }
+
+            if (paths != null && Captures.Count != N11CaptureBeats.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N11_CAPTURE_FAILED captured " + Captures.Count
+                               + " of " + N11CaptureBeats.Length + " beats");
+            }
+
+            SyncPresentation();
+            return failures;
+        }
+
         private void RunCommandCaptureN7()
         {
             string baseName = string.IsNullOrEmpty(n7CaptureBasePath)
@@ -1111,6 +1201,25 @@ namespace UBlade3.Native
             if (!N10BeatIndex.TryGetValue(beat, out index))
             {
                 Debug.LogWarning("UBLADE3_NATIVE_MATCH_N10_CAPTURE_UNKNOWN beat=" + beat);
+                return;
+            }
+
+            if (paths == null || index >= paths.Length || string.IsNullOrEmpty(paths[index]))
+            {
+                return;
+            }
+
+            SyncPresentation();
+            Capture(paths[index], index, beat, false);
+        }
+
+        private void CaptureBeatN11(string beat, string[] paths)
+        {
+            int index;
+
+            if (!N11BeatIndex.TryGetValue(beat, out index))
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N11_CAPTURE_UNKNOWN beat=" + beat);
                 return;
             }
 

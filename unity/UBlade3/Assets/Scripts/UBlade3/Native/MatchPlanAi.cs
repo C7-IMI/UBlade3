@@ -144,6 +144,43 @@ namespace UBlade3.Native
 
         public int HeuristicFallbackTicks;
 
+        // N11: exact CSteerToTarget/CAdjustAcceleration motion for behaviour kind 0 (GlideToObject).
+        public bool UseTargetPhysics;
+
+        public int PlanPhysicsTicks;
+
+        public int BridgeFallbackTicks;
+
+        public int PhysicsBankedTicks;
+
+        public int PhysicsTargetChanges;
+
+        public int PhysicsArrivalEvents;
+
+        public float PhysicsDistanceStart = -1.0f;
+
+        public float PhysicsDistanceMin = float.MaxValue;
+
+        public float PhysicsDistanceLast = -1.0f;
+
+        public float PhysicsDisplacement;
+
+        public float PhysicsHeadingTravelRad;
+
+        public PlanTargetMotionTelemetry LastMotion;
+
+        public readonly List<string> PhysicsTargetTrace = new List<string>();
+
+        private int lastPhysicsTarget = int.MinValue;
+
+        private bool physicsStarted;
+
+        private bool physicsArrivedNotified;
+
+        private SimVec3 physicsStartPosition;
+
+        private SimVec3 physicsLastHeading;
+
         public int LastRequestedBehavior = -1;
 
         public string LastUnsupportedDecision = string.Empty;
@@ -298,6 +335,12 @@ namespace UBlade3.Native
             ImageCache[key] = cached;
 
             return cached;
+        }
+
+        /// <summary>Enables the exact N11 target-steering physics for GlideToObject behaviours.</summary>
+        public void EnableTargetPhysics(bool enabled)
+        {
+            UseTargetPhysics = enabled;
         }
 
         /// <summary>Binds a persistent roster instance now (called once when the roster is attached).</summary>
@@ -1260,6 +1303,49 @@ namespace UBlade3.Native
             switch (current.Kind)
             {
                 case BehaviorKindGlideToObject:
+                    // N11: the exact shipped target steering for this behaviour kind. The plan Target
+                    // drives the real body through CSteerToTarget (bank) + CAdjustAcceleration (thrust);
+                    // the simulation's ported CGlideOnSurface integrates it. No held mask is involved.
+                    if (UseTargetPhysics && target >= 0)
+                    {
+                        SimVec3 targetPosition;
+                        SimVec3 targetVelocity;
+                        float targetSpeed;
+                        int sourceSlot;
+
+                        if (TryTargetSource(target, out targetPosition, out targetVelocity, out targetSpeed,
+                                out sourceSlot))
+                        {
+                            PlanTargetMotionTelemetry motion = MatchPlanAiMotion.Apply(actor, targetPosition,
+                                targetVelocity, targetSpeed, target, sim.Rules.Clock);
+                            LastMotion = motion;
+                            PlanPhysicsTicks++;
+
+                            if (motion.Banked)
+                            {
+                                PhysicsBankedTicks++;
+                            }
+
+                            AccumulatePhysics(actor, motion, nowMs);
+
+                            if (motion.Arrived && !physicsArrivedNotified)
+                            {
+                                physicsArrivedNotified = true;
+                                PhysicsArrivalEvents++;
+                                InjectSceneMessage(MatchPlanAiMotion.MessageGotThere, 0, Slot);
+                            }
+                            else if (!motion.Arrived)
+                            {
+                                physicsArrivedNotified = false;
+                            }
+
+                            held = HeldBinding.None;
+                            return HeldBinding.None;
+                        }
+                    }
+
+                    break;
+
                 case BehaviorKindGlide:
                     break;
 
@@ -1289,7 +1375,125 @@ namespace UBlade3.Native
                           + " note=labelled-input-mask-bridge");
             }
 
+            BridgeFallbackTicks++;
             return SteerToward(actor, position);
+        }
+
+        private bool TryTargetSource(int target, out SimVec3 position, out SimVec3 velocity, out float speed,
+            out int sourceSlot)
+        {
+            position = SimVec3.Zero;
+            velocity = SimVec3.Zero;
+            speed = 0.0f;
+            sourceSlot = target;
+
+            if (target >= 0 && target < PlanConstants.PlayerObjectCount)
+            {
+                PlayerState player = sim.Players[target];
+                position = player.Body.Pos;
+                velocity = player.Body.Vel;
+                speed = player.Body.Speed;
+
+                return true;
+            }
+
+            if (target == PlanConstants.SlotNgoal || target == PlanConstants.SlotSgoal)
+            {
+                position = MatchAiController.GoalPosition(sim, target);
+
+                return true;
+            }
+
+            if (target == PlanConstants.SlotRok && !sim.Rok.IsCarried)
+            {
+                position = sim.Rok.Body.Pos;
+                velocity = sim.Rok.Body.Vel;
+                speed = sim.Rok.Body.Speed;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void AccumulatePhysics(PlayerState actor, PlanTargetMotionTelemetry motion, uint nowMs)
+        {
+            if (!physicsStarted)
+            {
+                physicsStarted = true;
+                physicsStartPosition = actor.Body.Pos;
+                PhysicsDistanceStart = motion.TargetDistance;
+                physicsLastHeading = motion.ActorHeadingBefore;
+                lastPhysicsTarget = motion.TargetSlot;
+            }
+
+            if (motion.TargetSlot != lastPhysicsTarget)
+            {
+                PhysicsTargetChanges++;
+                PhysicsTargetTrace.Add("t=" + nowMs + " target " + lastPhysicsTarget + "->" + motion.TargetSlot
+                                       + " dist=" + F(motion.TargetDistance)
+                                       + " headingErrorDeg=" + F((float)(motion.HeadingErrorRad * 180.0 / Math.PI)));
+                PhysicsDistanceStart = motion.TargetDistance;
+                physicsLastHeading = motion.ActorHeadingBefore;
+                lastPhysicsTarget = motion.TargetSlot;
+                physicsArrivedNotified = false;
+            }
+
+            PhysicsDistanceLast = motion.TargetDistance;
+
+            if (motion.TargetDistance < PhysicsDistanceMin)
+            {
+                PhysicsDistanceMin = motion.TargetDistance;
+            }
+
+            float dx = actor.Body.Pos.x - physicsStartPosition.x;
+            float dy = actor.Body.Pos.y - physicsStartPosition.y;
+            PhysicsDisplacement = (float)Math.Sqrt(dx * dx + dy * dy);
+
+            float dot = physicsLastHeading.x * motion.ActorHeadingBefore.x
+                        + physicsLastHeading.y * motion.ActorHeadingBefore.y
+                        + physicsLastHeading.z * motion.ActorHeadingBefore.z;
+            dot = Math.Max(-1.0f, Math.Min(1.0f, dot));
+            PhysicsHeadingTravelRad += (float)Math.Acos(dot);
+            physicsLastHeading = motion.ActorHeadingBefore;
+        }
+
+        /// <summary>The per-slot N11 motion telemetry line (desired heading/velocity and applied physics).</summary>
+        public string MotionLine()
+        {
+            PlanTargetMotionTelemetry motion = LastMotion;
+
+            return "UBLADE3_PLAN_AI_MOTION slot=" + Slot
+                   + " physicsTicks=" + PlanPhysicsTicks
+                   + " bridgeFallbackTicks=" + BridgeFallbackTicks
+                   + " target=" + motion.TargetSlot
+                   + " dist=" + F(motion.TargetDistance)
+                   + " startDist=" + F(PhysicsDistanceStart)
+                   + " minDist=" + F(PhysicsDistanceMin)
+                   + " lastDist=" + F(PhysicsDistanceLast)
+                   + " displacement=" + F(PhysicsDisplacement)
+                   + " headingTravelDeg=" + F((float)(PhysicsHeadingTravelRad * 180.0 / Math.PI))
+                   + " headingErrorDeg=" + F((float)(motion.HeadingErrorRad * 180.0 / Math.PI))
+                   + " targetPos=(" + F(motion.TargetPosition.x) + "," + F(motion.TargetPosition.y) + ")"
+                   + " actorPos=(" + F(motion.ActorPositionBefore.x) + "," + F(motion.ActorPositionBefore.y) + ")"
+                   + " targetVel=(" + F(motion.TargetVelocity.x) + "," + F(motion.TargetVelocity.y) + ")"
+                   + " desiredHeading=(" + F(motion.DesiredHeading.x) + "," + F(motion.DesiredHeading.y) + ")"
+                   + " actorHeading=(" + F(motion.ActorHeadingBefore.x) + "," + F(motion.ActorHeadingBefore.y) + ")"
+                   + " predictedVel=(" + F(motion.PredictedStepVelocity.x) + "," + F(motion.PredictedStepVelocity.y) + ")"
+                   + " bankForce=" + F(motion.BankForceMagnitude)
+                   + " accel=" + F(motion.AccelStep.x) + "," + F(motion.AccelStep.y)
+                   + " lead=" + F(motion.Lead)
+                   + " gate=" + F(motion.Gate)
+                   + " arrived=" + (motion.Arrived ? "True" : "False")
+                   + " targetChanges=" + PhysicsTargetChanges
+                   + " bankedTicks=" + PhysicsBankedTicks
+                   + " arrivalEvents=" + PhysicsArrivalEvents;
+
+        }
+
+        private static string F(float value)
+        {
+            return value.ToString("0.####", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private bool TargetPosition(PlayerState actor, int target, int behaviorKind, out SimVec3 position)
@@ -1453,6 +1657,14 @@ namespace UBlade3.Native
                 text.Append(" relayBudgetHits=").Append(RelayBudgetHits);
                 text.Append(" animationBridge=").Append(AnimationBridge ? "True" : "False");
                 text.Append(" animationBridgeEvents=").Append(AnimationBridgeEvents);
+                text.Append(" planPhysicsTicks=").Append(PlanPhysicsTicks);
+                text.Append(" bridgeFallbackTicks=").Append(BridgeFallbackTicks);
+                text.Append(" physicsTargetChanges=").Append(PhysicsTargetChanges);
+                text.Append(" physicsDisplacement=").Append(F(PhysicsDisplacement));
+                text.Append(" physicsHeadingTravelDeg=")
+                    .Append(F((float)(PhysicsHeadingTravelRad * 180.0 / Math.PI)));
+                text.Append(" physicsDistanceStart=").Append(F(PhysicsDistanceStart));
+                text.Append(" physicsDistanceMin=").Append(F(PhysicsDistanceMin));
             }
 
             if (!string.IsNullOrEmpty(Failure))
