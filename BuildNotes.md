@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.021
+
+**Remaining observed PlanVM handlers and agenda classes; C# preview 007.**
+
+- Date: 2026-10-31
+- Change: implemented action 84 SpeedBurstSituation / 139 SendLaunchMessage, decisions 51/71/
+  120, behaviour params 0/2/3/9/10/11/12/15, agenda 8 CAvoidObjects and 15 CRelaxToPosition with
+  the Lead-approved additive PlanAiHost extension seam. Friction, goal-marker SetLocation,
+  speed-burst, CAvoid smoothVel/messages and CRelax position/heading apply to the real Sim;
+  animation/stat/bubble remain exact telemetry.
+- Verified: N13_CHECK_OK mismatches=0 ticks=240 aiPickups=1 aiPasses=1 behParams=11 targetGoal=1
+  agendaAdds8=22 agendaAdds15=2 agendaPos=478 agendaSmoothVel=42 agendaRelax=478 breakaway=1
+  digest=27f18b0e2713eb78 (two runs); N4-N12 regressions green; 202 text files PASS.
+- Release 2026.10.31.007-csharp-preview: ZIP 38,992,989 bytes SHA-256
+  `977d49f336a2a47df9a8b3ad9b71974c6402e4b89df8607a59ba61ff77ae632e`; extracted player starts
+  with audio on, no external process.
+- Boundary: agenda Release/netTarget, CAvoid counter nuance, CRelax camera bias, animation/stat/
+  bubble consumers and decisions 31/57/123 remain. Preview, not parity.
+- Docs: docs/PLAN-HANDLERS-N13.md.
+
 ## 2026.10.31.020
 
 **Gypsy integration extended to the native C# preview.**

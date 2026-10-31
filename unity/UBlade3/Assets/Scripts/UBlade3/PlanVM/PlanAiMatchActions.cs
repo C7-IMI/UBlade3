@@ -122,6 +122,7 @@ namespace UBlade3.PlanVM
 
             effects.LastSoundIndex = index;
             effects.SoundEvents++;
+            effects.PendingSounds.Add(index);
             host.RecordAction(PlanOpcodes.ActionIds.PlaySound, node, nArg,
                 "sound=" + index + " (no sound bank in the match mock; request recorded)");
         }
@@ -174,7 +175,10 @@ namespace UBlade3.PlanVM
             }
             else
             {
-                int marker = node.Args[1].Word.Value == PlanWord.TokenMessageData ? nArg : node.Args[1].IntValue;
+                PlanWord markerWord = node.Args[1].Word;
+                int marker = markerWord.Value == PlanWord.TokenMessageData ? nArg
+                    : markerWord.IsPronoun ? host.ArgResolver.ResolvePronoun(markerWord.Low, markerWord)
+                    : node.Args[1].IntValue;
 
                 if (PlanAiMatchContext.MarkerPosition == null || !PlanAiMatchContext.MarkerResolver(marker))
                 {

@@ -176,6 +176,39 @@ namespace UBlade3.Native
 
         public int PlanActionFrictionApplications;
 
+        // N13: real audio playback of action PlaySound (AudioService.PlayIndex), and the remaining
+        // engine-path outcomes. Animation/stat/bubble have no match-side consumer in the allowed scope.
+        public int PlanActionSoundApplied;
+
+        public int PlanActionSoundUnavailable;
+
+        public int PlanActionAnimationApplied;
+
+        public int PlanActionStatApplied;
+
+        public int PlanActionBubbleApplied;
+
+        // N13: executed behaviour parameters and agenda-item effects applied to the real body.
+        public int BehaviorParamApplications;
+
+        public int TargetGoalApplications;
+
+        public int AgendaPositionApplications;
+
+        public int AgendaHeadingApplications;
+
+        public int AgendaSmoothVelApplications;
+
+        public int AgendaBlockedEvents;
+
+        public int AgendaBreakawayEvents;
+
+        public int AgendaRelaxAdvanceEvents;
+
+        public int AgendaAddsAvoidObjects;
+
+        public int AgendaAddsRelaxToPosition;
+
         public float PhysicsDistanceStart = -1.0f;
 
         public float PhysicsDistanceMin = float.MaxValue;
@@ -327,7 +360,12 @@ namespace UBlade3.Native
 
             // N12: decision/action bodies and the engine state they read from the live match.
             PlanAiMatchDecisions.EnsureRegistered();
+            PlanAiMatchDecisionsN13.EnsureRegistered();
             PlanAiMatchContext.TerrainZ = (x, y) => EllipsoidStatics.Arena.GetZ(x, y);
+            PlanAiMatchContext.MarkerResolver = index => index == 8 || index == 9;
+            PlanAiMatchContext.MarkerPosition = index => index == 8
+                ? new PlanAiVec3(config.NorthGoalPosition.x, config.NorthGoalPosition.y, config.NorthGoalPosition.z)
+                : new PlanAiVec3(config.SouthGoalPosition.x, config.SouthGoalPosition.y, config.SouthGoalPosition.z);
         }
 
         public static PlanFileImage LoadPlanImage(string dataPath, string planName)
@@ -417,7 +455,9 @@ namespace UBlade3.Native
             SyncMirror(nowMs);
             world.ClockMs = (int)nowMs;
             world.TickAgenda();
+            SyncAgendaEffects();
             world.DrainPendingMessages(256);
+            SyncBehaviorEffects();
             ScanPlanEvents(nowMs);
             TrackBehavior(nowMs);
             held = ResolveMotion(nowMs);
@@ -447,6 +487,7 @@ namespace UBlade3.Native
             try
             {
                 world.TickAgenda();
+                SyncAgendaEffects();
             }
             catch (PlanAiUnportedHandlerException exception)
             {
@@ -462,6 +503,7 @@ namespace UBlade3.Native
             PublishMatchContext();
             DrainPlanMessages(nowMs, 256);
             SyncPlanActionEffects();
+            SyncBehaviorEffects();
             ScanPlanEvents(nowMs);
             TrackBehavior(nowMs);
             ProcessPlanChanges(nowMs);
@@ -795,11 +837,14 @@ namespace UBlade3.Native
         private void PublishMatchContext()
         {
             PlanAiMatchContext.SetScores(sim.Rules.ScoreHome, sim.Rules.ScoreAway);
+            PlanAiMatchContext.SetClock(sim.Rules.Clock.InvDelta, sim.Rules.Clock.DeltaSquared);
 
             for (int index = 0; index < PlanConstants.PlayerObjectCount; index++)
             {
                 PlayerState player = sim.Players[index];
                 PlanAiMatchContext.SetSpeedRatio(index, player.Stats.SpeedRatio);
+                PlanAiMatchContext.SetForwardSpeedDt(index, player.Body.ForwardSpeedDt);
+                PlanAiMatchContext.SetTargetGoal(index, player.TargetGoalSlot);
             }
         }
 
@@ -930,6 +975,119 @@ namespace UBlade3.Native
             PlanActionStatEvents = effects.StatEvents;
             PlanActionBubbleEvents = effects.BubbleScaleEvents;
             PlanActionSpeedBurstEvents = effects.SpeedBurstEvents;
+            ApplyPlanActionAudio(effects);
+        }
+
+        private void SyncBehaviorEffects()
+        {
+            PlanBehavior behavior = state == null ? null : state.Current;
+
+            if (behavior == null)
+            {
+                return;
+            }
+
+            PlanAiBehaviorState behaviorState = PlanAiBehaviorStateStore.Get(behavior);
+            BehaviorParamApplications = Math.Max(BehaviorParamApplications, behaviorState.Applied);
+
+            if (behaviorState.TargetGoalDirty)
+            {
+                sim.Players[Slot].TargetGoalSlot = (short)behaviorState.TargetGoal;
+                behaviorState.TargetGoalDirty = false;
+                TargetGoalApplications++;
+            }
+        }
+
+        private void SyncAgendaEffects()
+        {
+            if (host == null || host.Actor == null)
+            {
+                return;
+            }
+
+            PlanAiAgendaState agenda = PlanAiAgendaStateStore.Get(host.Actor);
+            PlayerState player = sim.Players[Slot];
+
+            if (host.AgendaAdds != null)
+            {
+                int adds;
+
+                if (host.AgendaAdds.TryGetValue(8, out adds))
+                {
+                    AgendaAddsAvoidObjects = adds;
+                }
+
+                if (host.AgendaAdds.TryGetValue(15, out adds))
+                {
+                    AgendaAddsRelaxToPosition = adds;
+                }
+            }
+
+            if (agenda.PositionDirty)
+            {
+                SimVec3 position = new SimVec3(agenda.Position.X, agenda.Position.Y, agenda.Position.Z);
+                player.Body.Pos = position;
+                player.Body.PrevPos = position;
+                player.AimPosition = new SimVec3(position.x, position.y, position.z + MatchWorldData.HeadHeight);
+                SimVec3 normal;
+
+                if (EllipsoidStatics.Arena.NormalAtPoint(position, out normal))
+                {
+                    player.Body.SurfNormal = normal;
+                }
+
+                agenda.PositionDirty = false;
+                AgendaPositionApplications++;
+            }
+
+            if (agenda.HeadingDirty)
+            {
+                PlanAiVec3 heading = agenda.Heading;
+                float length = (float)Math.Sqrt(PlanAiVec3.Dot(heading, heading));
+
+                if (length > 1e-7f)
+                {
+                    player.Body.VelDir = new SimVec3(heading.X / length, heading.Y / length, heading.Z / length);
+                    player.Body.VelDirLatched = player.Body.VelDir;
+                    AgendaHeadingApplications++;
+                }
+
+                agenda.HeadingDirty = false;
+            }
+
+            if (agenda.SmoothVelAccum.X != 0.0f || agenda.SmoothVelAccum.Y != 0.0f
+                || agenda.SmoothVelAccum.Z != 0.0f)
+            {
+                player.Body.SmoothVel += new SimVec3(
+                    agenda.SmoothVelAccum.X, agenda.SmoothVelAccum.Y, agenda.SmoothVelAccum.Z);
+                agenda.SmoothVelAccum = new PlanAiVec3(0.0f, 0.0f, 0.0f);
+                AgendaSmoothVelApplications++;
+            }
+
+            AgendaBlockedEvents = Math.Max(AgendaBlockedEvents, agenda.BlockedEvents);
+            AgendaBreakawayEvents = Math.Max(AgendaBreakawayEvents, agenda.BreakawayEvents);
+            AgendaRelaxAdvanceEvents = Math.Max(AgendaRelaxAdvanceEvents, agenda.RelaxAdvanceEvents);
+        }
+
+        /// <summary>N13: action PlaySound ids are SNDFILES.LST positions; PlayIndex is the source PlaySpecific route.</summary>
+        private void ApplyPlanActionAudio(PlanAiActionState effects)
+        {
+            for (int index = 0; index < effects.PendingSounds.Count; index++)
+            {
+                int sound = effects.PendingSounds[index];
+
+                if (Control != null && Control.Audio != null && Control.Audio.Ready
+                    && Control.Audio.Service.PlayIndex(sound))
+                {
+                    PlanActionSoundApplied++;
+                }
+                else
+                {
+                    PlanActionSoundUnavailable++;
+                }
+            }
+
+            effects.PendingSounds.Clear();
         }
 
         private void RecordUnsupportedDecision(PlanAiUnportedHandlerException exception)
@@ -1190,6 +1348,8 @@ namespace UBlade3.Native
             target.Stats.Set(34, source.Stats.GetScalar(34));
             target.Stats.Set(35, source.Stats.GetScalar(35));
             target.Stats.Set(36, source.Stats.GetScalar(36));
+            target.Stats.Set(37, source.Stats.GetScalar(37));
+            target.Stats.Set(38, source.Stats.GetScalar(38));
         }
 
         private void CopyRok(PlanAiObject target)
@@ -1847,7 +2007,22 @@ namespace UBlade3.Native
                     .Append(",stat=").Append(PlanActionStatEvents)
                     .Append(",bubble=").Append(PlanActionBubbleEvents).Append(']');
                 text.Append(" applied=[friction=").Append(PlanActionFrictionApplications)
-                    .Append(",location=").Append(PlanActionLocationApplications).Append(']');
+                    .Append(",location=").Append(PlanActionLocationApplications)
+                    .Append(",sound=").Append(PlanActionSoundApplied)
+                    .Append(",soundUnavailable=").Append(PlanActionSoundUnavailable)
+                    .Append(",animation=").Append(PlanActionAnimationApplied)
+                    .Append(",stat=").Append(PlanActionStatApplied)
+                    .Append(",bubble=").Append(PlanActionBubbleApplied).Append(']');
+                text.Append(" n13=[behParams=").Append(BehaviorParamApplications)
+                    .Append(",targetGoal=").Append(TargetGoalApplications)
+                    .Append(",agendaAdds8=").Append(AgendaAddsAvoidObjects)
+                    .Append(",agendaAdds15=").Append(AgendaAddsRelaxToPosition)
+                    .Append(",agendaPos=").Append(AgendaPositionApplications)
+                    .Append(",agendaHeading=").Append(AgendaHeadingApplications)
+                    .Append(",agendaSmoothVel=").Append(AgendaSmoothVelApplications)
+                    .Append(",agendaBlocked=").Append(AgendaBlockedEvents)
+                    .Append(",agendaBreakaway=").Append(AgendaBreakawayEvents)
+                    .Append(",agendaRelax=").Append(AgendaRelaxAdvanceEvents).Append(']');
             }
 
             if (!string.IsNullOrEmpty(Failure))

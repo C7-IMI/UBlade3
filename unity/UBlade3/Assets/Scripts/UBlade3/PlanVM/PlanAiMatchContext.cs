@@ -32,6 +32,50 @@ namespace UBlade3.PlanVM
 
         public static Func<int, bool> MarkerResolver = index => false;
 
+        public const float DefaultInvDelta = 30.0f;
+
+        public const float DefaultDeltaSquared = 1.0f / 900.0f;
+
+        public static float EngineInvDelta = DefaultInvDelta;
+
+        public static float EngineDeltaSquared = DefaultDeltaSquared;
+
+        private static readonly float[] forwardSpeedDt = new float[PlayerObjectCount];
+
+        private static readonly int[] targetGoalSlot = new int[PlayerObjectCount];
+
+        public static void SetClock(float invDelta, float deltaSquared)
+        {
+            EngineInvDelta = invDelta;
+            EngineDeltaSquared = deltaSquared;
+        }
+
+        public static void SetForwardSpeedDt(int slot, float value)
+        {
+            if (slot >= 0 && slot < PlayerObjectCount)
+            {
+                forwardSpeedDt[slot] = value;
+            }
+        }
+
+        public static float GetForwardSpeedDt(int slot)
+        {
+            return slot >= 0 && slot < PlayerObjectCount ? forwardSpeedDt[slot] : 0.0f;
+        }
+
+        public static void SetTargetGoal(int slot, int value)
+        {
+            if (slot >= 0 && slot < PlayerObjectCount)
+            {
+                targetGoalSlot[slot] = value;
+            }
+        }
+
+        public static int GetTargetGoal(int slot)
+        {
+            return slot >= 0 && slot < PlayerObjectCount ? targetGoalSlot[slot] : PlanOpcodes.SlotNgoal;
+        }
+
         public static Func<int, PlanAiVec3> MarkerPosition;
 
 

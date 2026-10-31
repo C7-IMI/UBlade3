@@ -933,11 +933,16 @@ namespace UBlade3.Native
             Ai.Enabled = true;
             Ai.SuppressSlot = slot => PlanRoster != null && PlanRoster.Handles(slot);
 
+            // N13 handlers must be live before the roster instantiates its first plans: the plan's
+            // behaviour-parameter pass runs during instantiation/initial activation.
+            UBlade3.PlanVM.PlanAiMatchBehaviorParams.Enabled = true;
+            UBlade3.PlanVM.PlanAiMatchAgendaItems.Enabled = true;
             PlanRoster = new MatchPlanAiRoster(this, Sim, Config, dataPath, world, true,
                 ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3,
                 ObjectConstants.GoalieSlotA, ObjectConstants.GoalieSlotB);
             PlanRoster.EnableAnimationBridge(true);
             PlanRoster.EnableTargetPhysics(true);
+            PlanRoster.EnableN13Handlers(true);
             DefaultPlanAi = true;
             AiEnabled = true;
 

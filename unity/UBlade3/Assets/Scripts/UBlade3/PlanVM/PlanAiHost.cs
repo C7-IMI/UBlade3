@@ -137,7 +137,8 @@ namespace UBlade3.PlanVM
         {
             Increment(BehaviorParamCalls, behaviorParamId);
 
-            if (!PlanAiBehaviorParams.TryApply(this, behaviorParamId, node, behavior))
+            if (!PlanAiBehaviorParams.TryApply(this, behaviorParamId, node, behavior)
+                && !PlanAiMatchBehaviorParams.TryApply(this, behaviorParamId, node, behavior))
             {
                 RecordUnsupported("behavior-parameter", behaviorParamId);
                 World.Log("unsupported.behavior-param id=" + behaviorParamId + " " + PlanOpcodes.BehaviorParamName(behaviorParamId));
@@ -196,6 +197,11 @@ namespace UBlade3.PlanVM
                 return;
             }
 
+            if (PlanAiMatchAgendaItems.TryAdd(this, agendaItemId, node, behavior, nArg))
+            {
+                return;
+            }
+
             RecordUnsupported("agenda-item", agendaItemId);
             World.Log("unsupported.agenda-add id=" + agendaItemId + " " + PlanOpcodes.AgendaItemName(agendaItemId));
         }
@@ -235,6 +241,11 @@ namespace UBlade3.PlanVM
 
                 World.Log("agenda-remove timer kind=" + agendaItemId + " removed=" + removed);
 
+                return;
+            }
+
+            if (PlanAiMatchAgendaItems.TryRemove(this, agendaItemId))
+            {
                 return;
             }
 

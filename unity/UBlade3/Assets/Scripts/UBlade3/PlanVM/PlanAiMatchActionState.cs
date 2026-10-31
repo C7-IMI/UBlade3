@@ -42,6 +42,8 @@ namespace UBlade3.PlanVM
 
         public int SoundEvents;
 
+        public readonly List<int> PendingSounds = new List<int>();
+
         public int LastStatSlot = -1;
 
         public int LastStatId = -1;

@@ -170,6 +170,13 @@ namespace UBlade3.Native
 
         /// <summary>Enables the documented N10 animation bridge for every plan instance (default match only).</summary>
         /// <summary>Enables the exact N11 target-steering physics for every plan instance (default match).</summary>
+        public void EnableN13Handlers(bool enabled)
+        {
+            PlanVM.PlanAiMatchBehaviorParams.Enabled = enabled;
+            PlanVM.PlanAiMatchAgendaItems.Enabled = enabled;
+            Trace.Add("n13-handlers enabled=" + (enabled ? "True" : "False"));
+        }
+
         public void EnableTargetPhysics(bool enabled)
         {
             TargetPhysicsEnabled = enabled;

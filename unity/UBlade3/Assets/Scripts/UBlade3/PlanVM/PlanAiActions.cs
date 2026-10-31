@@ -43,6 +43,10 @@ namespace UBlade3.PlanVM
             table.Add(PlanOpcodes.ActionIds.SetAnimation, PlanAiMatchActions.SetAnimation);
             table.Add(PlanOpcodes.ActionIds.ScaleBubToRating, PlanAiMatchActions.ScaleBubToRating);
 
+            // N13: remaining observed default-roster action bodies.
+            table.Add(PlanOpcodes.ActionIds.SpeedBurstSituation, PlanAiMatchActionsN13.SpeedBurstSituation);
+            table.Add(PlanOpcodes.ActionIds.SendLaunchMessage, PlanAiMatchActionsN13.SendLaunchMessage);
+
             return table;
         }
 

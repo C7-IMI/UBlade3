@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T10:29:06.408Z",
+  "generatedAt": "2026-10-31T10:46:15.500Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -484,18 +484,36 @@
       "routes": "pickup Sxrctha3, shot Sxthrwc4, pass Sxthrwc5, impact group0, goal/crowd/menu/ambient",
       "hud": "speed01 live meter, goalie row G, score/clock/period verified, 1080p/4K captures",
       "doc": "docs/NATIVE-AUDIO-MATCH.md"
+    },
+    "planHandlersN13": {
+      "status": "N13 remaining observed PlanVM handlers/agenda verified",
+      "actions": "84,139",
+      "decisions": "51,71,120",
+      "behaviorParams": "0,2,3,9,10,11,12,15",
+      "agenda": "8 CAvoidObjects, 15 CRelaxToPosition",
+      "match": "ticks=240 aiPickups=1 aiPasses=1 effects=[behParams=11,targetGoal=1,agendaAdds8=22,agendaAdds15=2,agendaPos=478,agendaSmoothVel=42,agendaBreakaway=1,agendaRelax=478] digest=27f18b0e2713eb78",
+      "applied": "friction, goal-marker SetLocation, speed-burst velocity/axis, CAvoid smoothVel/messages, CRelax position 478",
+      "recordedOnly": "animation/stat/bubble effects; action 7 audio wired headless record-only",
+      "doc": "docs/PLAN-HANDLERS-N13.md",
+      "gaps": [
+        "agenda Release/netTarget",
+        "CAvoid persistent counter nuance",
+        "CRelax camera bias omitted",
+        "only goal markers 8/9",
+        "decisions 31/57/123 remain"
+      ]
     }
   },
   "csharpRelease": {
-    "version": "2026.10.31.006-csharp-preview",
-    "status": "native C# playable preview with default audio/HUD/handlers packaged/verified",
-    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.006-csharp-preview-win64.zip",
-    "bytes": 38986577,
-    "sha256": "f95902eef1773f3c13c7233f396a975dbfa1554100b3f2ef0233d175f4cc474b",
+    "version": "2026.10.31.007-csharp-preview",
+    "status": "native C# playable preview with N13 PlanVM handlers packaged/verified",
+    "zip": "dist/UBlade3-CSharpPreview-2026.10.31.007-csharp-preview-win64.zip",
+    "bytes": 38992989,
+    "sha256": "977d49f336a2a47df9a8b3ad9b71974c6402e4b89df8607a59ba61ff77ae632e",
     "externalProcess": false,
     "preview": true,
     "audioDefault": true,
-    "verification": "extracted ZIP launched --play-autostart; audio ready=True, original HUD font/art, UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX",
+    "verification": "extracted ZIP launched --play-autostart; audio ready=True, UBLADE3_NATIVE_PLAY_READY; no hyperblade_20XX process",
     "gaps": [
       "many plan handler bodies",
       "exact steering/collision physics",

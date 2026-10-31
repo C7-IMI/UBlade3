@@ -212,3 +212,14 @@ Prompt and decision log for UBlade3.
 - Boundary: C# release partial; exact native release remains parity build. Goal active.
 - Version: 2026.10.31.020
 
+## 20 - 2026-10-31
+
+- Request: close remaining observed PlanVM gaps.
+- Work: actions 84/139, decisions 51/71/120, behaviour params 0/2/3/9/10/11/12/15, agenda 8/15;
+  real effects for friction/location/speed-burst/CAvoid/CRelax; preview 007.
+- Evidence: N13_CHECK_OK digest=27f18b0e2713eb78 ticks=240 behParams=11 agendaPos=478
+  agendaSmoothVel=42; regressions green; release 007 38992989 bytes hash 977d49f3...
+- Boundary: Release/netTarget, CAvoid nuance, CRelax camera bias, animation/stat/bubble, decisions
+  31/57/123. Goal active.
+- Version: 2026.10.31.021
+

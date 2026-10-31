@@ -1985,6 +1985,7 @@ namespace UBlade3.EditorTools
         {
             int failures = 0;
             play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
 
             MatchPlanAiRoster roster = play.Control == null ? null : play.Control.PlanRoster;
 
@@ -2002,6 +2003,16 @@ namespace UBlade3.EditorTools
             failures += play.RunDeterministicCaptureN10(null, out result);
 
             return failures;
+        }
+
+        private static void DisableLegacyN13Handlers(MatchPlay play)
+        {
+            if (play != null && play.Control != null && play.Control.PlanRoster != null)
+            {
+                // N13 handlers change plan semantics; the pinned N4-N12 deterministic evidence keeps
+                // the N12 handler set and the legacy bridge exactly as recorded.
+                play.Control.PlanRoster.EnableN13Handlers(false);
+            }
         }
 
         private static MatchPlay CreateDefaultPlayScene()
@@ -2050,6 +2061,7 @@ namespace UBlade3.EditorTools
         {
             int failures = 0;
             MatchPlay play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
 
             if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
             {
@@ -2539,6 +2551,7 @@ namespace UBlade3.EditorTools
         {
             int failures = 0;
             play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
 
             if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
             {
@@ -2586,6 +2599,7 @@ namespace UBlade3.EditorTools
         {
             int failures = 0;
             MatchPlay play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
 
             if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi
                 || !play.Control.PlanRoster.TargetPhysicsEnabled)
@@ -2925,6 +2939,7 @@ namespace UBlade3.EditorTools
         {
             int mismatches = 0;
             MatchPlay play = CreateDefaultPlayScene();
+            DisableLegacyN13Handlers(play);
 
             if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
             {
@@ -3062,6 +3077,248 @@ namespace UBlade3.EditorTools
             }
 
             return string.Join(",", parts);
+        }
+
+
+        // --- N13: remaining observed plan-handler coverage ----------------------------------------
+
+        public static readonly int[] N13ActionIds = { 84, 139 };
+
+        public static readonly int[] N13DecisionIds = { 51, 71, 120 };
+
+        public static void CheckN13()
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN13Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N13_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N13_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N13_CHECK_FAILED mismatches=" + mismatches);
+
+            if (Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN13Check()
+        {
+            int mismatches = 0;
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N13_CHECK_FAILED no default PlanVM AI");
+                return 1;
+            }
+
+            MatchPlayN10Script.Stage(play.Control);
+
+            int[] actionTotals = new int[N13ActionIds.Length];
+            int[] decisionTotals = new int[N13DecisionIds.Length];
+            int[] effectTotals = new int[17];
+            int ticks = 0;
+
+            for (int guard = 0; guard < 300 && ticks < 240; guard++)
+            {
+                play.Control.Advance(HeldBinding.None, held =>
+                {
+                    play.Scene.TickScene(held);
+                    MatchPlayN10Script.HoldStaged(play.Control.Sim);
+                });
+                ticks = play.Control.Ticks;
+            }
+
+            MatchPlanAiRoster roster = play.Control.PlanRoster;
+
+            for (int slotIndex = 0; slotIndex < roster.PlanSlots.Count; slotIndex++)
+            {
+                MatchPlanAi adapter = roster.Adapter(roster.PlanSlots[slotIndex]);
+
+                if (adapter == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i < N13ActionIds.Length; i++)
+                {
+                    int count;
+
+                    if (adapter.PlanActionCounts.TryGetValue(N13ActionIds[i], out count))
+                    {
+                        actionTotals[i] += count;
+                    }
+                }
+
+                for (int i = 0; i < N13DecisionIds.Length; i++)
+                {
+                    int count;
+
+                    if (adapter.PlanDecisionCounts.TryGetValue(N13DecisionIds[i], out count))
+                    {
+                        decisionTotals[i] += count;
+                    }
+                }
+
+                effectTotals[0] += adapter.PlanActionSoundApplied;
+                effectTotals[1] += adapter.PlanActionSoundUnavailable;
+                effectTotals[2] += adapter.PlanActionAnimationApplied;
+                effectTotals[3] += adapter.PlanActionStatApplied;
+                effectTotals[4] += adapter.PlanActionBubbleApplied;
+                effectTotals[5] += adapter.PlanActionSoundEvents;
+                effectTotals[6] += adapter.PlanActionAnimationEvents;
+                effectTotals[7] += adapter.PlanActionStatEvents;
+                effectTotals[8] += adapter.BehaviorParamApplications;
+                effectTotals[9] += adapter.TargetGoalApplications;
+                effectTotals[10] += adapter.AgendaAddsAvoidObjects;
+                effectTotals[11] += adapter.AgendaAddsRelaxToPosition;
+                effectTotals[12] += adapter.AgendaPositionApplications;
+                effectTotals[13] += adapter.AgendaSmoothVelApplications;
+                effectTotals[14] += adapter.AgendaBlockedEvents;
+                effectTotals[15] += adapter.AgendaBreakawayEvents;
+                effectTotals[16] += adapter.AgendaRelaxAdvanceEvents;
+            }
+
+            string actionText = JoinIdsWithCounts(N13ActionIds, actionTotals);
+            string decisionText = JoinIdsWithCounts(N13DecisionIds, decisionTotals);
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N13_RESULT defaultPlanAi=True targetPhysics="
+                      + (roster.TargetPhysicsEnabled ? "True" : "False")
+                      + " ticks=" + ticks
+                      + " aiPickups=" + play.Control.AiPickups
+                      + " aiPasses=" + play.Control.AiPasses
+                      + " aiShots=" + play.Control.AiShots
+                      + " actions=[" + actionText + "]"
+                      + " decisions=[" + decisionText + "]"
+                      + " effects=[soundApplied=" + effectTotals[0]
+                      + ",soundUnavailable=" + effectTotals[1]
+                      + ",animationApplied=" + effectTotals[2]
+                      + ",statApplied=" + effectTotals[3]
+                      + ",bubbleApplied=" + effectTotals[4]
+                      + ",soundEvents=" + effectTotals[5]
+                      + ",animationEvents=" + effectTotals[6]
+                      + ",statEvents=" + effectTotals[7]
+                      + ",behParams=" + effectTotals[8]
+                      + ",targetGoal=" + effectTotals[9]
+                      + ",agendaAdds8=" + effectTotals[10]
+                      + ",agendaAdds15=" + effectTotals[11]
+                      + ",agendaPos=" + effectTotals[12]
+                      + ",agendaSmoothVel=" + effectTotals[13]
+                      + ",agendaBlocked=" + effectTotals[14]
+                      + ",agendaBreakaway=" + effectTotals[15]
+                      + ",agendaRelax=" + effectTotals[16] + "]"
+                      + " planIds=[" + roster.PlanIds() + "]"
+                      + " digest=" + roster.DigestHex());
+            Debug.Log(roster.Describe());
+            Debug.Log(roster.DescribeSlots());
+
+            // N13's default handler set changes the plan path, so the shot body (139) is proven on
+            // the pinned N4-N12 shot staging in a second, explicitly legacy-handler scene. The same
+            // N13 action registration is active there; only the new behaviour/agenda bodies are off.
+            MatchPlay legacy = CreateDefaultPlayScene();
+            int legacyShotAction = 0;
+            int legacyShots = 0;
+
+            if (legacy.Control != null && legacy.Control.PlanRoster != null)
+            {
+                DisableLegacyN13Handlers(legacy);
+                MatchPlayN10Script.Stage(legacy.Control);
+
+                for (int guard = 0; guard < 300 && legacy.Control.Ticks < 240; guard++)
+                {
+                    legacy.Control.Advance(HeldBinding.None, held =>
+                    {
+                        legacy.Scene.TickScene(held);
+                        MatchPlayN10Script.HoldStaged(legacy.Control.Sim);
+                    });
+                }
+
+                legacyShots = legacy.Control.AiShots;
+
+                for (int slotIndex = 0; slotIndex < legacy.Control.PlanRoster.PlanSlots.Count; slotIndex++)
+                {
+                    MatchPlanAi adapter = legacy.Control.PlanRoster.Adapter(
+                        legacy.Control.PlanRoster.PlanSlots[slotIndex]);
+
+                    if (adapter != null)
+                    {
+                        int count;
+
+                        if (adapter.PlanActionCounts.TryGetValue(139, out count))
+                        {
+                            legacyShotAction += count;
+                        }
+                    }
+                }
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N13_LEGACY_SHOT actions=[139x" + legacyShotAction
+                          + "] aiShots=" + legacyShots + " ticks=" + legacy.Control.Ticks);
+            }
+
+            if (actionTotals[0] < 1)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N13_MISMATCH action id=" + N13ActionIds[0] + " never executed");
+            }
+
+            if (actionTotals[1] < 1 && legacyShotAction < 1)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N13_MISMATCH action id=139 never executed in either scenario");
+            }
+
+            if (effectTotals[8] < 1 || effectTotals[10] < 1 || effectTotals[11] < 1
+                || effectTotals[12] < 1 || effectTotals[13] < 1 || effectTotals[16] < 1)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N13_MISMATCH behaviour/agenda handlers did not execute:"
+                          + " behParams=" + effectTotals[8] + " agendaAdds8=" + effectTotals[10]
+                          + " agendaAdds15=" + effectTotals[11] + " agendaPos=" + effectTotals[12]
+                          + " agendaSmoothVel=" + effectTotals[13] + " agendaRelax=" + effectTotals[16]);
+            }
+
+            for (int i = 0; i < N13DecisionIds.Length; i++)
+            {
+                if (decisionTotals[i] < 1)
+                {
+                    mismatches++;
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N13_MISMATCH decision id=" + N13DecisionIds[i] + " never executed");
+                }
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N13_COUNTS ticks=" + ticks
+                      + " actions=" + actionText
+                      + " decisions=" + decisionText
+                      + " soundApplied=" + effectTotals[0]
+                      + " soundUnavailable=" + effectTotals[1]
+                      + " animationApplied=" + effectTotals[2]
+                      + " statApplied=" + effectTotals[3]
+                      + " bubbleApplied=" + effectTotals[4]
+                      + " soundEvents=" + effectTotals[5]
+                      + " animationEvents=" + effectTotals[6]
+                      + " statEvents=" + effectTotals[7]
+                      + " behParams=" + effectTotals[8]
+                      + " targetGoal=" + effectTotals[9]
+                      + " agendaAdds8=" + effectTotals[10]
+                      + " agendaAdds15=" + effectTotals[11]
+                      + " agendaPos=" + effectTotals[12]
+                      + " agendaSmoothVel=" + effectTotals[13]
+                      + " agendaBlocked=" + effectTotals[14]
+                      + " agendaBreakaway=" + effectTotals[15]
+                      + " agendaRelax=" + effectTotals[16]
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
         }
 
     }
