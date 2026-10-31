@@ -29,3 +29,12 @@ Prompt and decision log for UBlade3.
 - Version: 2026.10.31.003
 - Commit: this change (final hash/push/CI in the final report).
 
+## 3 - 2026-10-31
+
+- Request: after the playable build, plan for 60 fps, smoother character animation at higher fps, camera jitter
+  fixes, and 1080p/2K/4K resolution options.
+- Status: Completed as a plan - docs/PERFORMANCE-RESOLUTION-PLAN.md. No runtime behavior changed; no measured
+  performance/resolution claims are made.
+- Version: 2026.10.31.004
+- Commit: this change.
+

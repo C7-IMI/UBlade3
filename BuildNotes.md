@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.004
+
+**Add the 60 fps, camera/animation smoothness and 1080p/2K/4K resolution plan.**
+
+- Date: 2026-10-31
+- Change: wrote `docs/PERFORMANCE-RESOLUTION-PLAN.md`, grounded in the 20XX source: current 30 Hz simulation,
+  uncapped render default, hard-30 `FrameTimer::Pace` outside matches, whole-matrix camera interpolation,
+  integer animation frame sampling, 1920x1080 start window, 4096x2160 back-buffer clamps and the existing Uncapped
+  switch. The plan defines a display-settings contract (1920x1080, 2560x1440, 3840x2160, native/custom; windowed,
+  borderless, exclusive; 30/60/120/uncapped; VSync; render scale), pose-based camera interpolation with smoothing,
+  sub-tick animation sampling (with optional 60 Hz baked clips), settings persistence/UX, acceptance gates for
+  frame pacing/camera jitter/animation/resolutions, effort, risks and a definition of done.
+- No runtime behavior changed. The playable release remains 2026.10.31.001; this is a plan only.
+- Verification: plan reviewed against source citations; docs link added; no performance or resolution claims made.
+- Not done yet: source-build toolchain for 20XX, implementation phases P0-P5, measured 60 fps/camera/4K evidence.
+- Note: 'extra animation frames' are animation-clip sample points, not skinned-mesh geometry; sub-tick
+  interpolation is the preferred path, with baked 60 Hz clips as an optional asset-pipeline fallback.
+
 ## 2026.10.31.003
 
 **Integrate the updated Gypsy P1 surfaces and ship a fully playable UBlade3 release: Unity host + exact 20XX runtime,

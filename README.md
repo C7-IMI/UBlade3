@@ -36,6 +36,8 @@ original data formats. **Current verified milestone:**
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
 [docs/PORT-LEDGER.md](./docs/PORT-LEDGER.md), [docs/PORT-LEDGER.json](./docs/PORT-LEDGER.json) and
 [docs/EXACTNESS.md](./docs/EXACTNESS.md).
+- Gypsy integration: [docs/GYPSY-UPGRADE-INTEGRATION.md](./docs/GYPSY-UPGRADE-INTEGRATION.md).
+- Performance/resolution plan: [docs/PERFORMANCE-RESOLUTION-PLAN.md](./docs/PERFORMANCE-RESOLUTION-PLAN.md).
 
 ## Requirements
 
