@@ -73,3 +73,15 @@ Prompt and decision log for UBlade3.
   exact engine. Goal active.
 - Version: 2026.10.31.007
 
+## 7 - 2026-10-31
+
+- Request: continue the pure-C# engine after the skater milestone.
+- Work: native C# match scene using original CHIDRO drome, Chicago home and Seattle away skaters,
+  existing UBlade3.Sim at 30 Hz, CTrack camera and deterministic capture. Headless/Editor/player
+  evidence all green; no 20XX processes.
+- Evidence: UBLADE3_NATIVE_MATCH_CHECK ticks=150 seconds=5 mismatches=0 digest=f54169057f5800dd;
+  player build 103900532 bytes, captures 1280x720 frames 45/105/150.
+- Boundary: fallback AI, no rok/goals/score, no HUD, single clip per char; not release path.
+  Goal active.
+- Version: 2026.10.31.008
+

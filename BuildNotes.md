@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.008
+
+**C# native match scene with original drome and skaters.**
+
+- Date: 2026-10-31
+- Change: added `UBlade3.Native` MatchData/MatchSimulation/MatchSkaterView/MatchScene/MatchProbe
+  and the Editor capture/build entry. The C# match loads CHIDRO, home Chicago (CHIOMX/CHIDMX/
+  CHIGMX) and away Seattle (SEADMX x2/SEAGMX) original WBM/BMP assets, binds the existing
+  UBlade3.Sim simulation, runs 30 Hz ticks, poses six original skaters with their WBA skate/goalie
+  clips, drives a CTrack camera and captures deterministic frames. No 20XX process is started.
+- Verified: headless check ticks=150 seconds=5 mismatches=0 digest=f54169057f5800dd; Editor
+  capture frames 45/105/150 (1280x720) and Windows player `UBLADE3_NATIVE_MATCH_PLAYER_BUILD_OK`
+  bytes=103,900,532 with player frames byte-identical to the Editor; no20xxProcesses=0.
+- Boundary: plan VM/AI not wired (labelled fallback), no rok/goal/score, HUD pending, one clip per
+  character, camera shake/tilt incomplete; this is a C# milestone, not the playable release.
+  Native exact release remains 2026.10.31.002.
+- Docs: docs/NATIVE-MATCH.md.
+
 ## 2026.10.31.007
 
 **C# original skater model, skeleton and animation milestone.**

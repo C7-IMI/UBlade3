@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T06:53:55.425Z",
+  "generatedAt": "2026-10-31T07:22:07.050Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -119,6 +119,33 @@
         "artifacts/skater-preview-lineup-frame009.png"
       ],
       "doc": "docs/SKATER-PREVIEW.md"
+    },
+    "match": {
+      "status": "N4 native C# match milestone verified",
+      "drome": "CHIDRO.ENV 29 defs / 25 model objects / 25 meshes / 2034 triangles / 32 textures / 0 missing",
+      "skaters": "CHIOMX+CHIDMX+CHIGMX home, SEADMX x2+SEAGMX away, 1572 triangles, 0 missing refs",
+      "ticks": 150,
+      "seconds": 5,
+      "mismatches": 0,
+      "digest": "f54169057f5800dd",
+      "playerBuild": "UBLADE3_NATIVE_MATCH_PLAYER_BUILD_OK bytes=103900532; player frames byte-identical to Editor",
+      "captures": [
+        "artifacts/native-match-frame-045.png",
+        "artifacts/native-match-frame-105.png",
+        "artifacts/native-match-frame-150.png",
+        "artifacts/native-match-drome.png"
+      ],
+      "no20xxProcesses": 0,
+      "gaps": [
+        "planVM/AI not wired",
+        "fallback AI labelled",
+        "no rok/goals/score",
+        "no original HUD",
+        "single clip per char",
+        "camera shake/tilt incomplete",
+        "not release path"
+      ],
+      "doc": "docs/NATIVE-MATCH.md"
     }
   }
 }
