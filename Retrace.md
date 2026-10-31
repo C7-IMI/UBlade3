@@ -107,3 +107,14 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.010
 
+## 10 - 2026-10-31
+
+- Request: continue toward a fully playable C# match.
+- Work: N6 playable match loop - shipped ROK pickup/attach, carry, charged launch, pass, real shot
+  goal -> shipped goals -> HUD score; match audio routing; seven Editor/player capture beats.
+- Evidence: native-play start/pickup/charge/shot/goal/score/pass captures; player frames identical;
+  N4/N5 regressions preserved; no 20XX processes.
+- Boundary: fallback AI for other skaters, no face-off/restart/celebration, interim HUD, not release
+  path. Goal active.
+- Version: 2026.10.31.011
+

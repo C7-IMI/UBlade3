@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T07:59:41.238Z",
+  "generatedAt": "2026-10-31T08:26:48.970Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -233,6 +233,32 @@
         "mock match world",
         "not wired into native match"
       ]
+    },
+    "play": {
+      "status": "N6 first playable native C# match loop verified",
+      "possession": "shipped RokInRange/Attach/AttachPak path",
+      "shot": "PlanAction::Launch",
+      "pass": "PlanAction::Throw",
+      "goal": "real shot enters goal -> shipped goal rules -> HUD score",
+      "audio": "match events routed to UBlade3.Audio AudioService",
+      "captures": [
+        "artifacts/native-play-00-start.png",
+        "artifacts/native-play-01-pickup.png",
+        "artifacts/native-play-02-charge.png",
+        "artifacts/native-play-03-shot.png",
+        "artifacts/native-play-04-goal.png",
+        "artifacts/native-play-05-score.png",
+        "artifacts/native-play-06-pass.png"
+      ],
+      "playerFramesIdentical": true,
+      "gaps": [
+        "other skaters fallback AI",
+        "no face-off/restart/celebration",
+        "HUD interim font/details",
+        "no pixel parity",
+        "not release path"
+      ],
+      "doc": "docs/NATIVE-PLAY.md"
     }
   }
 }

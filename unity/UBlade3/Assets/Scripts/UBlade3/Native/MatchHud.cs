@@ -147,6 +147,10 @@ namespace UBlade3.Native
 
         public string LastModelText { get; private set; }
 
+        // Optional N6 status line (possession/shot-power/controls). Empty by default so the N5 HUD
+        // capture frames keep their exact layout and bytes.
+        public string StatusLine = string.Empty;
+
         public bool GuiDrawn { get; private set; }
 
         private sealed class HudArt
@@ -391,6 +395,12 @@ namespace UBlade3.Native
             // which is not shipped art, and the AI is the labelled plan-VM fallback.
             float noteWidth = TextWidth(model.StateLine, 1f);
             AddText(texts, model.StateLine, width - noteWidth - 8f, height - 10f, 1f, grey);
+
+            if (!string.IsNullOrEmpty(StatusLine))
+            {
+                float statusWidth = TextWidth(StatusLine, 2f);
+                AddText(texts, StatusLine, (width - statusWidth) * 0.5f, height - 42f, 2f, yellow);
+            }
         }
 
         private static void AddSprite(List<HudSprite> sprites, HudArt art, float x, float y, float width, float height)

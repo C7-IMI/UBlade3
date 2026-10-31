@@ -68,6 +68,11 @@ namespace UBlade3.Native
 
         public bool RuntimeInput { get; set; }
 
+        // The N6 play layer owns the fixed tick when it is present; this component then only owns
+        // the ROK/HUD/goal-detector construction and the presentation sync. Default false keeps the
+        // N5 deterministic capture and its regression byte-identical.
+        public bool ExternalTickDriver { get; set; }
+
         public HeldBinding LastHumanInput { get; private set; }
 
         public int GoalsScored
@@ -658,7 +663,7 @@ namespace UBlade3.Native
 
         private void Update()
         {
-            if (!IsBuilt || captureCommand || Scene == null)
+            if (!IsBuilt || captureCommand || ExternalTickDriver || Scene == null)
             {
                 return;
             }

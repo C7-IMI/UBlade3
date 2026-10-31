@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.011
+
+**First playable native C# match loop: pickup, shoot, real goal, HUD score and audio routing.**
+
+- Date: 2026-10-31
+- Change: added MatchPlay/MatchPossession/MatchAudioDirector and the Editor play gate. The human
+  home skater now picks up the ROK through the shipped RokInRange/Attach/AttachPak path, carries,
+  charges and shoots via PlanAction::Launch, passes via Throw, and a real shot into the goal
+  triggers the shipped goal rules, HUD score update and original-wave audio routing. Other skaters
+  remain the N4/N5 fallback AI.
+- Verified: seven Editor and seven player captures (start, pickup, charge, shot, goal, score,
+  pass); player frames byte-identical; N4/N5 regressions preserved; no 20XX processes; controls
+  and evidence documented in docs/NATIVE-PLAY.md.
+- Boundary: fallback AI for non-human skaters, no face-off/restart/celebration, HUD interim
+  font/details, no pixel-parity gate; this is not the final release path. Native exact release
+  remains 2026.10.31.002.
+- Docs: docs/NATIVE-PLAY.md.
+
 ## 2026.10.31.010
 
 **Original audio data path and first PlanVM-driven AI flow.**
