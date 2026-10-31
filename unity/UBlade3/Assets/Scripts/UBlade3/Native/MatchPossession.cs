@@ -797,8 +797,11 @@ namespace UBlade3.Native
         // N8: the real C# PlanVM-driven AI for one slot; null keeps the N7 heuristic path untouched.
         public MatchPlanAi PlanAi;
 
-        // N9: the whole-match PlanVM roster (one persistent plan instance per non-human slot).
+        // N9/N10: the whole-match PlanVM roster (one persistent plan instance per non-human slot).
         public MatchPlanAiRoster PlanRoster;
+
+        // N10: true when the roster was attached by the normal MatchPlay build path (default AI).
+        public bool DefaultPlanAi;
 
         public bool AiEnabled;
 
@@ -901,6 +904,55 @@ namespace UBlade3.Native
         public void AttachPlanRoster(MatchPlanAiRoster roster)
         {
             PlanRoster = roster;
+        }
+
+        /// <summary>
+        /// N10: attach the default whole-match PlanVM AI. The normal MatchPlay build calls this, so a
+        /// player session - not only a capture suite - runs the shipped plans on every non-human slot.
+        /// The heuristic controller stays attached only as the explicit fallback (pickup approach and any
+        /// slot whose plan cannot bind); heuristic update/requests for roster slots are suppressed.
+        /// </summary>
+        public MatchPlanAiRoster AttachDefaultPlanAi(MatchWorldData world, string dataPath)
+        {
+            if (PlanRoster != null)
+            {
+                DefaultPlanAi = true;
+
+                return PlanRoster;
+            }
+
+            if (Ai == null)
+            {
+                AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3);
+            }
+
+            Ai.Slots.Clear();
+            Ai.Slots.Add(ObjectConstants.SlotDromer1);
+            Ai.Slots.Add(ObjectConstants.SlotDromer2);
+            Ai.Slots.Add(ObjectConstants.SlotDromer3);
+            Ai.Enabled = true;
+            Ai.SuppressSlot = slot => PlanRoster != null && PlanRoster.Handles(slot);
+
+            PlanRoster = new MatchPlanAiRoster(this, Sim, Config, dataPath, world, true,
+                ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3,
+                ObjectConstants.GoalieSlotA, ObjectConstants.GoalieSlotB);
+            PlanRoster.EnableAnimationBridge(true);
+            DefaultPlanAi = true;
+            AiEnabled = true;
+
+            return PlanRoster;
+        }
+
+        /// <summary>Removes the roster for an explicit test path (N6/N7/N8 captures); default play keeps it.</summary>
+        public void DetachPlanRoster()
+        {
+            PlanRoster = null;
+            DefaultPlanAi = false;
+
+            if (Ai != null)
+            {
+                Ai.SuppressSlot = null;
+            }
         }
 
         public void AttachAi(params int[] slots)
@@ -1527,6 +1579,8 @@ namespace UBlade3.Native
             if (PlanRoster != null)
             {
                 text.Append(" planRoster=\"").Append(PlanRoster.Describe()).Append('"');
+                text.Append(" defaultPlanAi=").Append(DefaultPlanAi ? "True" : "False");
+                text.Append(" heuristicFallbackTicks=").Append(PlanRoster.HeuristicFallbackTicks);
             }
 
             return text.ToString();

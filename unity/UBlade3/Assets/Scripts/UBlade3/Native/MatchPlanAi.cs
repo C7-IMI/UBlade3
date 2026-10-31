@@ -61,6 +61,11 @@ namespace UBlade3.Native
 
         public const int MessageRokIsFree = 13;
 
+        // id_MSG_Extra0 (DATA/ENUMIDS.H order; the N8 trace logs it as message=123). CARRYROK's
+        // Throwing behaviour authors SET_BEHAVIOR_PARAM id_SET_AnimationEvent ... and its Extra0
+        // handler runs DO_ACTION SendLaunchMessage.
+        public const int MessageExtra0 = 123;
+
         // EngineObject::SelectAndActivatePlan maps a non-goalie AI skater to "Defense" behaviour 0 and
         // a goalie to plan table index 0 behaviour 0 (docs/NATIVE-MATCH-N9.md section 2).
         public const string InitialSkaterPlan = "Defense";
@@ -102,6 +107,18 @@ namespace UBlade3.Native
 
         public readonly bool RosterMode;
 
+        /// <summary>
+        /// N10 default-match animation bridge: the animation port supplies no cell events, so a carried
+        /// "Throwing" behaviour's authored Extra0 would never arrive. When enabled (default match roster
+        /// only) the adapter delivers that plan message after a fixed documented bridge delay, which lets
+        /// the plan's own Extra0 handler execute SendLaunchMessage (action 139) and map it to the match's
+        /// shipped LaunchAiShot. The plan's action id is the shot intent; the match shot math is the
+        /// existing N6/N7 port. Labelled bridge, not engine animation timing.
+        /// </summary>
+        public bool AnimationBridge;
+
+        public int AnimationBridgeEvents;
+
         public readonly string[] PlanTableNames;
 
         public readonly int EntryBehavior;
@@ -124,6 +141,8 @@ namespace UBlade3.Native
         public int RelayedMessages;
 
         public int RelayBudgetHits;
+
+        public int HeuristicFallbackTicks;
 
         public int LastRequestedBehavior = -1;
 
@@ -203,6 +222,10 @@ namespace UBlade3.Native
 
         private int lastRelayInjectionCount;
 
+        private int animationBridgeDueMs = -1;
+
+        private bool animationBridgeFired;
+
         private PlanAiWorld world;
 
         private PlanAiHost host;
@@ -275,6 +298,17 @@ namespace UBlade3.Native
             ImageCache[key] = cached;
 
             return cached;
+        }
+
+        /// <summary>Binds a persistent roster instance now (called once when the roster is attached).</summary>
+        public bool EnsureBound(uint nowMs)
+        {
+            if (Bound)
+            {
+                return true;
+            }
+
+            return Persistent && Bind(nowMs);
         }
 
         /// <summary>Called once per live control tick, before the match's own pending AI requests run.</summary>
@@ -364,6 +398,7 @@ namespace UBlade3.Native
             TrackBehavior(nowMs);
             ProcessPlanChanges(nowMs);
             TrackBehavior(nowMs);
+            TryAnimationBridge(nowMs);
             held = ResolveMotion(nowMs);
         }
 
@@ -491,6 +526,8 @@ namespace UBlade3.Native
             RebindCount++;
             PlanChangeRequestsAdopted++;
             LastRequestedBehavior = requestedBehavior;
+            animationBridgeDueMs = -1;
+            animationBridgeFired = false;
             LastBehaviorIndex = -1;
             LastBehaviorName = string.Empty;
             LastBehaviorKind = -1;
@@ -632,6 +669,59 @@ namespace UBlade3.Native
             }
         }
 
+        private void TryAnimationBridge(uint nowMs)
+        {
+            if (!AnimationBridge || !Bound || state == null || state.Current == null)
+            {
+                animationBridgeDueMs = -1;
+                animationBridgeFired = false;
+
+                return;
+            }
+
+            bool carrying = sim.Rok.IsCarried && sim.Rok.AttachedSlot == Slot;
+
+            if (!carrying)
+            {
+                animationBridgeDueMs = -1;
+                animationBridgeFired = false;
+
+                return;
+            }
+
+            if (!string.Equals(state.Current.Name, "Throwing", StringComparison.Ordinal))
+            {
+                animationBridgeDueMs = -1;
+
+                return;
+            }
+
+            if (animationBridgeFired)
+            {
+                return;
+            }
+
+            if (animationBridgeDueMs < 0)
+            {
+                animationBridgeDueMs = (int)nowMs + 100;
+                Trace.Add("t=" + nowMs + " animation-bridge schedule behavior=Throwing extra0=+100ms");
+                digestDirty = true;
+
+                return;
+            }
+
+            if ((int)nowMs >= animationBridgeDueMs)
+            {
+                animationBridgeDueMs = -1;
+                animationBridgeFired = true;
+                AnimationBridgeEvents++;
+                InjectSceneMessage(MessageExtra0, 0, Slot);
+                Trace.Add("t=" + nowMs + " animation-bridge fire message=Extra0 behavior=Throwing"
+                          + " (plan SendLaunchMessage -> match shot mapping)");
+                digestDirty = true;
+            }
+        }
+
         private void RecordUnsupportedDecision(PlanAiUnportedHandlerException exception)
         {
             UnsupportedDecisionErrors++;
@@ -695,6 +785,8 @@ namespace UBlade3.Native
 
             if (!Bound)
             {
+                HeuristicFallbackTicks++;
+
                 return Control != null && Control.Ai != null ? Control.Ai.GetInput(liveSim, slot) : HeldBinding.None;
             }
 
@@ -1359,6 +1451,8 @@ namespace UBlade3.Native
                 text.Append(" injectedDropped=").Append(InjectedMessagesDropped);
                 text.Append(" relayed=").Append(RelayedMessages);
                 text.Append(" relayBudgetHits=").Append(RelayBudgetHits);
+                text.Append(" animationBridge=").Append(AnimationBridge ? "True" : "False");
+                text.Append(" animationBridgeEvents=").Append(AnimationBridgeEvents);
             }
 
             if (!string.IsNullOrEmpty(Failure))

@@ -23,6 +23,9 @@ namespace UBlade3.Native
         // shot/pass requests; the plan's own decisions drive those.
         public Func<int, bool> SuppressSlot;
 
+        // N10: how many heuristic update passes were skipped because a slot is PlanVM-driven.
+        public int SuppressedUpdateTicks;
+
         public int LastActiveSlot = -1;
 
         public HeldBinding GetInput(Simulation sim, int slot)
@@ -73,6 +76,7 @@ namespace UBlade3.Native
 
                 if (SuppressSlot != null && SuppressSlot(slot))
                 {
+                    SuppressedUpdateTicks++;
                     continue;
                 }
 

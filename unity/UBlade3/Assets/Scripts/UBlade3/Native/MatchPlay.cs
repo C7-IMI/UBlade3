@@ -117,6 +117,19 @@ namespace UBlade3.Native
             "00-start", "01-plans-bound", "02-ai-pickup", "03-plan-switch", "04-plan-pass", "05-result"
         };
 
+        public const string N10CapturePrefix = "native-match-n10";
+
+        public static readonly string[] N10CaptureBeats =
+        {
+            "start", "plans-active", "ai-pickup", "plan-switch", "plan-pass", "plan-shot", "result"
+        };
+
+        public static readonly string[] N10CaptureLabels =
+        {
+            "00-start", "01-plans-active", "02-ai-pickup", "03-plan-switch", "04-plan-pass",
+            "05-plan-shot", "06-result"
+        };
+
         public MatchScene Scene { get; private set; }
 
         public MatchGameplay Gameplay { get; private set; }
@@ -158,16 +171,19 @@ namespace UBlade3.Native
         private bool n7CaptureCommand;
         private bool n8CaptureCommand;
         private bool n9CaptureCommand;
+        private bool n10CaptureCommand;
         private bool autoStartCommand;
         private string captureBasePath;
         private string n7CaptureBasePath;
         private string n8CaptureBasePath;
         private string n9CaptureBasePath;
+        private string n10CaptureBasePath;
 
         private static readonly Dictionary<string, int> BeatIndex = BuildBeatIndex();
         private static readonly Dictionary<string, int> N7BeatIndex = BuildN7BeatIndex();
         private static readonly Dictionary<string, int> N8BeatIndex = BuildN8BeatIndex();
         private static readonly Dictionary<string, int> N9BeatIndex = BuildN9BeatIndex();
+        private static readonly Dictionary<string, int> N10BeatIndex = BuildN10BeatIndex();
 
         private static Dictionary<string, int> BuildBeatIndex()
         {
@@ -217,6 +233,18 @@ namespace UBlade3.Native
             return map;
         }
 
+        private static Dictionary<string, int> BuildN10BeatIndex()
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < N10CaptureBeats.Length; i++)
+            {
+                map[N10CaptureBeats[i]] = i;
+            }
+
+            return map;
+        }
+
         private void Awake()
         {
             ParseCommandLine();
@@ -258,6 +286,10 @@ namespace UBlade3.Native
                 {
                     RunCommandCaptureN9();
                 }
+                else if (n10CaptureCommand)
+                {
+                    RunCommandCaptureN10();
+                }
                 else if (captureCommand)
                 {
                     RunCommandCapture();
@@ -292,6 +324,12 @@ namespace UBlade3.Native
                     n7CaptureCommand = true;
                     autoStartCommand = true;
                     n7CaptureBasePath = argument.Substring("--n7-capture=".Length);
+                }
+                else if (argument.StartsWith("--n10-capture=", StringComparison.Ordinal))
+                {
+                    n10CaptureCommand = true;
+                    autoStartCommand = true;
+                    n10CaptureBasePath = argument.Substring("--n10-capture=".Length);
                 }
                 else if (argument.StartsWith("--n9-capture=", StringComparison.Ordinal))
                 {
@@ -412,10 +450,34 @@ namespace UBlade3.Native
             Audio = new MatchAudioDirector(service);
             Control = new MatchPlayControl(scene.Sim.Sim, Config, Audio);
 
-            // N7 fallback AI possession: the two non-goalie AI skaters pursue the free ROK, and the
-            // sim's input map now resolves every slot through the control (the human's held mask or
-            // the AI controller's steering).
-            Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2);
+            // N10: the normal build path runs the whole-match PlanVM AI. Every non-human slot gets a
+            // persistent shipped-plan instance; the heuristic controller stays attached as the
+            // explicit fallback (pickup approach and a slot whose plan cannot bind), never as the
+            // default driver.
+            Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3);
+
+            bool defaultPlanAi = false;
+
+            try
+            {
+                string planDataPath = scene.World != null && scene.World.Root != null
+                    ? scene.World.Root.DataPath
+                    : null;
+
+                if (string.IsNullOrEmpty(planDataPath))
+                {
+                    planDataPath = MatchScene.ResolveRoot().DataPath;
+                }
+
+                Control.AttachDefaultPlanAi(scene.World, planDataPath);
+                defaultPlanAi = true;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_PLAN_AI_DEFAULT_FAILED " + exception.GetType().Name + ": "
+                                 + exception.Message + " (heuristic fallback stays active)");
+            }
+
             scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
 
             MatchScoreFixture.PlaceRokAtSpawn(scene.Sim.Sim);
@@ -449,7 +511,8 @@ namespace UBlade3.Native
 
         private void Update()
         {
-            if (!IsBuilt || captureCommand || n7CaptureCommand || n8CaptureCommand || n9CaptureCommand || Scene == null)
+            if (!IsBuilt || captureCommand || n7CaptureCommand || n8CaptureCommand || n9CaptureCommand
+                || n10CaptureCommand || Scene == null)
             {
                 return;
             }
@@ -513,6 +576,10 @@ namespace UBlade3.Native
             int failures = 0;
 
             // The N6 suite is the human-only loop; the N7 suite below exercises the fallback AI.
+            // N10 makes the PlanVM roster the default, so the explicit human/AI test paths detach it and
+            // restore the pre-N10 plan RNG state for byte-identical legacy capture evidence.
+            Control.DetachPlanRoster();
+            UBlade3.PlanVM.PlanAiRandom.Seed(0);
             Control.AiEnabled = false;
             Control.HumanPickupEnabled = true;
 
@@ -557,6 +624,15 @@ namespace UBlade3.Native
         public int RunDeterministicCaptureN7(string[] paths, out MatchPlayN7ScriptResult result)
         {
             int failures = 0;
+            Control.DetachPlanRoster();
+            UBlade3.PlanVM.PlanAiRandom.Seed(0);
+
+            if (Control.Ai != null)
+            {
+                Control.Ai.Slots.Clear();
+                Control.Ai.Slots.Add(ObjectConstants.SlotDromer1);
+                Control.Ai.Slots.Add(ObjectConstants.SlotDromer2);
+            }
 
             if (Control.Ai == null)
             {
@@ -620,6 +696,8 @@ namespace UBlade3.Native
         public int RunDeterministicCaptureN8(string[] paths, out MatchPlayN8ScriptResult result)
         {
             int failures = 0;
+            Control.DetachPlanRoster();
+            UBlade3.PlanVM.PlanAiRandom.Seed(0);
 
             if (Control.Ai == null)
             {
@@ -801,6 +879,111 @@ namespace UBlade3.Native
             }
         }
 
+        // --- N10: default PlanVM AI in the normal match build ---------------------------------
+
+        public int RunDeterministicCaptureN10(string[] paths, out MatchPlayN10ScriptResult result)
+        {
+            int failures = 0;
+
+            if (Control.Ai == null)
+            {
+                Control.AttachAi(ObjectConstants.SlotDromer1, ObjectConstants.SlotDromer2, ObjectConstants.SlotDromer3);
+            }
+
+            Control.AiEnabled = true;
+            Control.Ai.Enabled = true;
+            Control.HumanPickupEnabled = false;
+            Scene.Sim.Sim.InputForSlot = slot => Control.InputForSlot(slot);
+
+            if (Control.PlanRoster == null || !Control.DefaultPlanAi)
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N10_DEFAULT_MISSING the normal build did not attach the default PlanVM AI");
+            }
+
+            result = MatchPlayN10Script.Run(Control, beat => CaptureBeatN10(beat, paths),
+                held => Scene.TickScene(held));
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_RESULT defaultPlanAi=" + (Control.DefaultPlanAi ? "True" : "False")
+                      + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                      + " aiShots=" + result.AiShots
+                      + " pickupTick=" + result.PickupTick + " passTick=" + result.PassTick
+                      + " planPassRequests=" + result.PlanPassRequests
+                      + " planShotRequests=" + result.PlanShotRequests
+                      + " maxActiveSlots=" + result.MaxActiveSlots
+                      + " activeAtEnd=" + result.ActiveAtEnd
+                      + " planIds=[" + result.PlanIdList + "]"
+                      + " rebinds=" + result.Rebinds
+                      + " relays=" + result.Relays
+                      + " relayBudgetHits=" + result.RelayBudgetHits
+                      + " unsupportedDecisions=" + result.UnsupportedDecisions
+                      + " heuristicFallbackTicks=" + result.HeuristicFallbackTicks
+                      + " suppressedUpdateTicks=" + result.SuppressedUpdateTicks
+                      + " digest=" + result.Digest
+                      + " failures=" + result.Failures + " reason=" + result.FailureText);
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.RosterSlots);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_CONTROL " + Control.Describe());
+
+            if (result.Failures != 0)
+            {
+                failures += result.Failures;
+            }
+
+            if (paths != null && Captures.Count != N10CaptureBeats.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED captured " + Captures.Count
+                               + " of " + N10CaptureBeats.Length + " beats");
+            }
+
+            SyncPresentation();
+            return failures;
+        }
+
+        private void RunCommandCaptureN10()
+        {
+            string baseName = string.IsNullOrEmpty(n10CaptureBasePath)
+                ? System.IO.Path.Combine("artifacts", N10CapturePrefix + "-player.png")
+                : n10CaptureBasePath;
+
+            string directory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(baseName));
+            string stem = System.IO.Path.GetFileNameWithoutExtension(baseName);
+
+            if (string.IsNullOrEmpty(directory))
+            {
+                directory = System.IO.Directory.GetCurrentDirectory();
+            }
+
+            string[] paths = new string[N10CaptureLabels.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = System.IO.Path.Combine(directory, stem + "-" + N10CaptureLabels[i] + ".png");
+            }
+
+            MatchPlayN10ScriptResult result;
+            int failures = RunDeterministicCaptureN10(paths, out result);
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N10_CAPTURES_OK frames=" + paths.Length
+                  + " defaultPlanAi=" + (Control.DefaultPlanAi ? "True" : "False")
+                  + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                  + " aiShots=" + result.AiShots
+                  + " maxActiveSlots=" + result.MaxActiveSlots
+                  + " activeAtEnd=" + result.ActiveAtEnd
+                  + " planIds=[" + result.PlanIdList + "]"
+                  + " planPassRequests=" + result.PlanPassRequests
+                  + " heuristicFallbackTicks=" + result.HeuristicFallbackTicks
+                  + " suppressedUpdateTicks=" + result.SuppressedUpdateTicks
+                  + " planDigest=" + result.Digest
+                : "UBLADE3_NATIVE_MATCH_N10_CAPTURES_FAILED failures=" + failures);
+
+            if (Application.isBatchMode || !Application.isEditor)
+            {
+                Application.Quit(failures == 0 ? 0 : 1);
+            }
+        }
+
         private void RunCommandCaptureN7()
         {
             string baseName = string.IsNullOrEmpty(n7CaptureBasePath)
@@ -909,6 +1092,25 @@ namespace UBlade3.Native
             if (!N9BeatIndex.TryGetValue(beat, out index))
             {
                 Debug.LogWarning("UBLADE3_NATIVE_MATCH_N9_CAPTURE_UNKNOWN beat=" + beat);
+                return;
+            }
+
+            if (paths == null || index >= paths.Length || string.IsNullOrEmpty(paths[index]))
+            {
+                return;
+            }
+
+            SyncPresentation();
+            Capture(paths[index], index, beat, false);
+        }
+
+        private void CaptureBeatN10(string beat, string[] paths)
+        {
+            int index;
+
+            if (!N10BeatIndex.TryGetValue(beat, out index))
+            {
+                Debug.LogWarning("UBLADE3_NATIVE_MATCH_N10_CAPTURE_UNKNOWN beat=" + beat);
                 return;
             }
 

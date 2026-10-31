@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T09:21:02.386Z",
+  "generatedAt": "2026-10-31T09:33:43.831Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -378,6 +378,40 @@
         "interactive default remains heuristic"
       ],
       "doc": "docs/NATIVE-MATCH-N9.md"
+    },
+    "defaultPlanAi": {
+      "status": "N10 default PlanVM AI in normal native C# match verified",
+      "defaultPlanAi": true,
+      "slots": 5,
+      "active": 5,
+      "planIds": [
+        "CarryRok",
+        "Defense",
+        "Goalie"
+      ],
+      "ticks": 160,
+      "planTicks": 800,
+      "rebinds": 4,
+      "relays": 8,
+      "aiPickups": 2,
+      "aiPasses": 1,
+      "aiShots": 1,
+      "planPassRequests": 1,
+      "planShotRequests": 1,
+      "heuristicFallbackTicks": 0,
+      "suppressedUpdateTicks": 480,
+      "digest": "67159e33ed58442d",
+      "captures": 7,
+      "playerFramesIdentical": true,
+      "gaps": [
+        "most PlanCond/PlanAction bodies",
+        "exact steering/collision/agenda classes",
+        "relay approximation",
+        "offwing/sideln not exercised",
+        "shot animation bridge",
+        "not full parity/release"
+      ],
+      "doc": "docs/NATIVE-MATCH-N10.md"
     }
   }
 }

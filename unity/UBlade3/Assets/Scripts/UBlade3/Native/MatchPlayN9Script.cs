@@ -241,12 +241,22 @@ namespace UBlade3.Native
             control.Ai.Enabled = true;
             control.Ai.SuppressSlot = slot => control.PlanRoster != null && control.PlanRoster.Handles(slot);
 
-            if (control.PlanRoster == null)
+            // The N9 suite is the explicit capture path; detach a default roster from the build and
+            // create the N9 roster with its original semantics (no initial free-ROK message).
+            if (control.PlanRoster != null)
             {
-                MatchPlanAiRoster roster = new MatchPlanAiRoster(control, sim, control.Config, dataPath,
-                    world, PlanSlots);
-                control.AttachPlanRoster(roster);
+                control.DetachPlanRoster();
             }
+
+            // The default N10 roster seeds PlanAiRandom; the explicit N9 suite restores its pre-N10
+            // starting state so its deterministic evidence is unchanged by the default-AI work.
+            PlanAiRandom.Seed(0);
+
+            MatchPlanAiRoster roster = new MatchPlanAiRoster(control, sim, control.Config, dataPath,
+                world, PlanSlots);
+            control.AttachPlanRoster(roster);
+            // DetachPlanRoster cleared the heuristic suppression; restore it for the explicit suite.
+            control.Ai.SuppressSlot = slot => control.PlanRoster != null && control.PlanRoster.Handles(slot);
 
             for (int slot = 0; slot < sim.Players.Length; slot++)
             {

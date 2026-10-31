@@ -59,8 +59,11 @@ original data formats. **Current verified milestone:**
   aiPickups=1 aiPasses=1 digest=4fb06b4458419444`. See [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
 - C# N9 whole-match PlanVM roster: every non-human slot runs a persistent shipped plan (Defense/CarryRok/Goalie)
   with plan changes on possession; `N9_CHECK_OK slots=5 active=5 planTicks=700 aiPickups=1 aiPasses=1
-  digest=1ab07ec24368547e`; six Editor/player frames byte-identical. Many handler bodies/motion physics remain.
-  See [docs/NATIVE-MATCH-N9.md](./docs/NATIVE-MATCH-N9.md).
+  digest=1ab07ec24368547e`; six Editor/player frames byte-identical. See [docs/NATIVE-MATCH-N9.md](./docs/NATIVE-MATCH-N9.md).
+- C# N10 default PlanVM AI: the normal player now runs plan-driven slots 1-5 by default, with heuristic fallback
+  suppressed; plan pass and plan shot (`action 139 -> LaunchAiShot`) execute. `N10_CHECK_OK defaultPlanAi=True
+  aiPickups=2 aiPasses=1 aiShots=1 heuristicFallbackTicks=0 digest=67159e33ed58442d`; seven Editor/player
+  frames byte-identical. Many plan handler bodies/steering remain. See [docs/NATIVE-MATCH-N10.md](./docs/NATIVE-MATCH-N10.md).
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -76,6 +79,7 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - C# N7 playable follow-up: [docs/NATIVE-MATCH-N7.md](./docs/NATIVE-MATCH-N7.md).
 - C# N8 PlanVM AI: [docs/NATIVE-MATCH-N8.md](./docs/NATIVE-MATCH-N8.md).
 - C# N9 PlanVM roster: [docs/NATIVE-MATCH-N9.md](./docs/NATIVE-MATCH-N9.md).
+- C# N10 default PlanVM AI: [docs/NATIVE-MATCH-N10.md](./docs/NATIVE-MATCH-N10.md).
 - C# audio: [docs/NATIVE-AUDIO.md](./docs/NATIVE-AUDIO.md).
 - C# PlanVM AI: [docs/PLAN-AI.md](./docs/PLAN-AI.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).

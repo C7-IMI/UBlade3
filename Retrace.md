@@ -151,3 +151,14 @@ Prompt and decision log for UBlade3.
   Goal active.
 - Version: 2026.10.31.014
 
+## 14 - 2026-10-31
+
+- Request: make PlanVM AI the default interactive AI in the C# match.
+- Work: default roster attached by MatchPlay.Build for slots 1-5; heuristic suppressed; plan shot
+  path via CARRYROK Throwing -> action 139 -> LaunchAiShot; seven capture beats.
+- Evidence: N10_CHECK_OK defaultPlanAi=True aiPickups=2 aiPasses=1 aiShots=1 planPassRequests=1
+  planShotRequests=1 heuristicFallbackTicks=0 digest=67159e33ed58442d; Editor/player frames
+  byte-identical; N4-N9 regressions green.
+- Boundary: most plan handler bodies/steering remain; not parity/release. Goal active.
+- Version: 2026.10.31.015
+

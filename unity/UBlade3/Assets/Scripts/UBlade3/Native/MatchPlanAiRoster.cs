@@ -25,6 +25,10 @@ namespace UBlade3.Native
 
         public const int RelayTotalBudget = 2048;
 
+        // The default match starts the plan RNG from a fixed seed so two normal-build runs replay the
+        // same plan decisions; the explicit N9 roster keeps the pre-existing sequence (bridge disabled).
+        public const uint DefaultRandomSeed = 0x4E313020;
+
         public readonly MatchPlanAi[] Slots = new MatchPlanAi[ObjectConstants.PlayerObjectCount];
 
         public readonly List<int> PlanSlots = new List<int>();
@@ -57,6 +61,14 @@ namespace UBlade3.Native
 
         public int LastAttachedSlot = -1;
 
+        public int HeuristicFallbackTicks;
+
+        public int AnimationBridgeEvents;
+
+        public bool InjectInitialRokEvent;
+
+        private bool possessionInitialised;
+
         public string Failure = string.Empty;
 
         public readonly List<string> Trace = new List<string>();
@@ -70,8 +82,14 @@ namespace UBlade3.Native
         private bool digestDirty = true;
 
         public MatchPlanAiRoster(MatchPlayControl control, Simulation sim, MatchPlayConfig config, string dataPath,
-            MatchWorldData world, params int[] planSlots)
+            MatchWorldData world, bool injectInitialRokEvent, params int[] planSlots)
         {
+            InjectInitialRokEvent = injectInitialRokEvent;
+
+            if (injectInitialRokEvent)
+            {
+                PlanAiRandom.Seed(DefaultRandomSeed);
+            }
             this.control = control;
             this.sim = sim;
 
@@ -121,6 +139,7 @@ namespace UBlade3.Native
 
                 Slots[slot] = adapter;
                 PlanSlots.Add(slot);
+                adapter.EnsureBound(0);
                 Trace.Add("slot-plan slot=" + slot + " role=" + (goalie ? "goalie" : "skater")
                           + " table=[" + string.Join(",", plans) + "] initial=" + initialPlan + ":" + behavior);
             }
@@ -129,9 +148,32 @@ namespace UBlade3.Native
             digestDirty = true;
         }
 
+        /// <summary>The existing N9-style constructor: no initial free-ROK message.</summary>
+        public MatchPlanAiRoster(MatchPlayControl control, Simulation sim, MatchPlayConfig config, string dataPath,
+            MatchWorldData world, params int[] planSlots)
+            : this(control, sim, config, dataPath, world, false, planSlots)
+        {
+        }
+
         public bool Handles(int slot)
         {
             return slot >= 0 && slot < Slots.Length && Slots[slot] != null;
+        }
+
+        /// <summary>Enables the documented N10 animation bridge for every plan instance (default match only).</summary>
+        public void EnableAnimationBridge(bool enabled)
+        {
+            AnimationBridgeEvents = 0;
+
+            for (int index = 0; index < PlanSlots.Count; index++)
+            {
+                MatchPlanAi adapter = Slots[PlanSlots[index]];
+
+                if (adapter != null)
+                {
+                    adapter.AnimationBridge = enabled;
+                }
+            }
         }
 
         public MatchPlanAi Adapter(int slot)
@@ -196,6 +238,12 @@ namespace UBlade3.Native
         private void InjectPossessionEvents(uint nowMs)
         {
             int attached = sim.Rok.IsCarried ? sim.Rok.AttachedSlot : -1;
+
+            if (!possessionInitialised)
+            {
+                possessionInitialised = true;
+                LastAttachedSlot = InjectInitialRokEvent ? int.MinValue : attached;
+            }
 
             if (attached == LastAttachedSlot)
             {
@@ -300,6 +348,7 @@ namespace UBlade3.Native
             TotalPlanShotRequests = 0;
             TotalUnsupportedDecisions = 0;
             TotalRuntimeErrors = 0;
+            HeuristicFallbackTicks = 0;
 
             for (int index = 0; index < PlanSlots.Count; index++)
             {
@@ -314,6 +363,8 @@ namespace UBlade3.Native
                 TotalPlanShotRequests += adapter.PlanShotRequests;
                 TotalUnsupportedDecisions += adapter.UnsupportedDecisionErrors;
                 TotalRuntimeErrors += adapter.RuntimeErrors;
+                HeuristicFallbackTicks += adapter.HeuristicFallbackTicks;
+                AnimationBridgeEvents += adapter.AnimationBridgeEvents;
                 adapter.RelayedMessages = RelayCount;
             }
 
@@ -429,6 +480,9 @@ namespace UBlade3.Native
             text.Append(" planShotRequests=").Append(TotalPlanShotRequests);
             text.Append(" unsupportedDecisions=").Append(TotalUnsupportedDecisions);
             text.Append(" runtimeErrors=").Append(TotalRuntimeErrors);
+            text.Append(" heuristicFallbackTicks=").Append(HeuristicFallbackTicks);
+            text.Append(" animationBridgeEvents=").Append(AnimationBridgeEvents);
+            text.Append(" initialRokEvent=").Append(InjectInitialRokEvent ? "True" : "False");
             text.Append(" maxRebindsPerSlot=").Append(MaxRebindsPerSlot());
 
             if (!string.IsNullOrEmpty(Failure))
@@ -489,6 +543,7 @@ namespace UBlade3.Native
                 text.Append(" shotRequests=").Append(adapter.PlanShotRequests);
                 text.Append(" targets=").Append(adapter.TargetChanges);
                 text.Append(" fallbackMotion=").Append(adapter.FallbackMotionTicks);
+                text.Append(" heuristicFallback=").Append(adapter.HeuristicFallbackTicks);
                 text.Append(" unsupportedDecisions=").Append(adapter.UnsupportedDecisionErrors);
                 text.Append(" unsupported=[").Append(DescribeSet(adapter.UnsupportedIds)).Append(']');
                 text.Append(" digest=").Append(PlanVmDigest.Hex(adapter.TraceDigest()));

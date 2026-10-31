@@ -663,6 +663,34 @@ namespace UBlade3.EditorTools
             "artifacts/native-match-n9-05-result.png",
         };
 
+        // --- N10: default whole-match PlanVM AI in the normal build -------------------------------
+
+        public static readonly string[] N10CaptureFiles =
+        {
+            "artifacts/native-match-n10-00-start.png",
+            "artifacts/native-match-n10-01-plans-active.png",
+            "artifacts/native-match-n10-02-ai-pickup.png",
+            "artifacts/native-match-n10-03-plan-switch.png",
+            "artifacts/native-match-n10-04-plan-pass.png",
+            "artifacts/native-match-n10-05-plan-shot.png",
+            "artifacts/native-match-n10-06-result.png",
+        };
+
+        public static void CheckN10()
+        {
+            CheckN10(true);
+        }
+
+        public static void CaptureAllN10()
+        {
+            CaptureAllN10(true);
+        }
+
+        public static void BuildAndRunWindowsN10()
+        {
+            BuildAndRunWindowsN10(true);
+        }
+
         public static void CheckN9()
         {
             CheckN9(true);
@@ -1784,6 +1812,378 @@ namespace UBlade3.EditorTools
             catch (Exception exception)
             {
                 Debug.LogError("UBLADE3_NATIVE_MATCH_N9_PLAYER_CAPTURE_FAILED " + exception);
+                exitCode = 1;
+            }
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(exitCode);
+            }
+        }
+
+        // --- N10: default whole-match PlanVM AI in the normal build -------------------------------
+
+        private static void CheckN10(bool exitWhenBatch)
+        {
+            int mismatches = 0;
+
+            try
+            {
+                mismatches += RunN10Check();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CHECK_FAILED " + exception);
+                Debug.LogException(exception);
+                mismatches++;
+            }
+
+            Debug.Log(mismatches == 0
+                ? "UBLADE3_NATIVE_MATCH_N10_CHECK_OK"
+                : "UBLADE3_NATIVE_MATCH_N10_CHECK_FAILED mismatches=" + mismatches);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(mismatches == 0 ? 0 : 1);
+            }
+        }
+
+        private static int RunN10Check()
+        {
+            int mismatches = 0;
+            OriginalAssetRoot root = MatchScene.ResolveRoot();
+            MatchWorldData world = MatchWorldData.Load(root);
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_CHECK root=" + root.DataPath
+                      + " unity=" + Application.unityVersion + " captureFlag=False no20xx=True");
+            mismatches += RunAudioProbe();
+
+            MatchPlay firstPlay;
+            int firstFailures = RunN10DefaultScenario(out firstPlay, out MatchPlayN10ScriptResult first);
+            mismatches += firstFailures;
+
+            Debug.Log(first.RosterDescribe);
+            Debug.Log(first.RosterSlots);
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_CHECK_RESULT defaultPlanAi="
+                      + (firstPlay.Control != null && firstPlay.Control.DefaultPlanAi ? "True" : "False")
+                      + " aiPickups=" + first.AiPickups + " aiPasses=" + first.AiPasses
+                      + " aiShots=" + first.AiShots
+                      + " pickupTick=" + first.PickupTick + " passTick=" + first.PassTick
+                      + " planPassRequests=" + first.PlanPassRequests
+                      + " planShotRequests=" + first.PlanShotRequests
+                      + " maxActiveSlots=" + first.MaxActiveSlots
+                      + " activeAtEnd=" + first.ActiveAtEnd
+                      + " planIds=[" + first.PlanIdList + "]"
+                      + " rebinds=" + first.Rebinds
+                      + " relays=" + first.Relays
+                      + " relayBudgetHits=" + first.RelayBudgetHits
+                      + " unsupportedDecisions=" + first.UnsupportedDecisions
+                      + " heuristicFallbackTicks=" + first.HeuristicFallbackTicks
+                      + " suppressedUpdateTicks=" + first.SuppressedUpdateTicks
+                      + " ticks=" + first.TicksRun
+                      + " planDigest=" + first.Digest
+                      + " failures=" + first.Failures + " reason=" + first.FailureText);
+
+            bool defaultWired = firstPlay.Control != null && firstPlay.Control.DefaultPlanAi
+                                && firstPlay.Control.PlanRoster != null;
+
+            if (first.Failures != 0 || !defaultWired || first.AiPickups < 1 || first.AiPasses < 1
+                || first.PlanPassRequests < 1 || first.MaxActiveSlots != MatchPlayN10Script.PlanSlots.Length
+                || first.PlanIds < 2 || first.Rebinds < 1
+                || first.HeuristicFallbackTicks > MatchPlayN10Script.PlanSlots.Length * 2
+                || first.SuppressedUpdateTicks < first.TicksRun
+                || first.RelayBudgetHits != 0 || first.TicksRun > MatchPlayN10Script.MaxTicks
+                || string.IsNullOrEmpty(first.Digest))
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N10_MISMATCH defaultWired=" + defaultWired
+                          + " roster=" + first.RosterDescribe + " reason=" + first.FailureText);
+            }
+
+            string ids = "," + first.PlanIdList + ",";
+
+            if (ids.IndexOf(",Defense,", StringComparison.OrdinalIgnoreCase) < 0 ||
+                ids.IndexOf(",CarryRok,", StringComparison.OrdinalIgnoreCase) < 0 ||
+                ids.IndexOf(",Goalie,", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                mismatches++;
+                Debug.Log("UBLADE3_NATIVE_MATCH_N10_MISMATCH plan id coverage=[" + first.PlanIdList + "]");
+            }
+
+            MatchPlay secondPlay;
+            int secondFailures = RunN10DefaultScenario(out secondPlay, out MatchPlayN10ScriptResult second);
+            mismatches += secondFailures;
+
+            bool deterministic = string.Equals(first.Digest, second.Digest, StringComparison.Ordinal)
+                                 && first.AiPasses == second.AiPasses
+                                 && first.AiPickups == second.AiPickups
+                                 && first.PlanPassRequests == second.PlanPassRequests
+                                 && first.MaxActiveSlots == second.MaxActiveSlots
+                                 && first.Rebinds == second.Rebinds
+                                 && first.HeuristicFallbackTicks == second.HeuristicFallbackTicks;
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_DETERMINISM ok=" + (deterministic ? "True" : "False")
+                      + " digest1=" + first.Digest + " digest2=" + second.Digest);
+
+            if (!deterministic)
+            {
+                mismatches++;
+            }
+
+            int processes = CountTwentyXxProcesses();
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_NO_20XX running20xxProcesses=" + processes + " no20xx=True");
+
+            if (processes != 0)
+            {
+                mismatches++;
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_COUNTS defaultPlanAi=" + (defaultWired ? "True" : "False")
+                      + " aiPickups=" + first.AiPickups + " aiPasses=" + first.AiPasses
+                      + " aiShots=" + first.AiShots
+                      + " pickupTick=" + first.PickupTick + " passTick=" + first.PassTick
+                      + " planPassRequests=" + first.PlanPassRequests
+                      + " maxActiveSlots=" + first.MaxActiveSlots
+                      + " activeAtEnd=" + first.ActiveAtEnd
+                      + " planIds=[" + first.PlanIdList + "]"
+                      + " rebinds=" + first.Rebinds
+                      + " relays=" + first.Relays
+                      + " relayBudgetHits=" + first.RelayBudgetHits
+                      + " unsupportedDecisions=" + first.UnsupportedDecisions
+                      + " heuristicFallbackTicks=" + first.HeuristicFallbackTicks
+                      + " suppressedUpdateTicks=" + first.SuppressedUpdateTicks
+                      + " ticks=" + first.TicksRun
+                      + " planDigest=" + first.Digest
+                      + " mismatches=" + mismatches);
+
+            return mismatches;
+        }
+
+        private static int RunN10DefaultScenario(out MatchPlay play, out MatchPlayN10ScriptResult result)
+        {
+            int failures = 0;
+            play = CreateDefaultPlayScene();
+
+            MatchPlanAiRoster roster = play.Control == null ? null : play.Control.PlanRoster;
+
+            if (play.Control == null || roster == null)
+            {
+                failures++;
+                result = new MatchPlayN10ScriptResult();
+                result.Failures = 1;
+                result.FailureText = "normal build did not attach the default PlanVM AI roster; ";
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CHECK_FAILED " + result.FailureText);
+
+                return failures;
+            }
+
+            failures += play.RunDeterministicCaptureN10(null, out result);
+
+            return failures;
+        }
+
+        private static MatchPlay CreateDefaultPlayScene()
+        {
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+            GameObject rootObject = new GameObject("UBlade3 Native N10 Default Plan AI Match");
+            MatchScene scene = rootObject.AddComponent<MatchScene>();
+            MatchGameplay gameplay = rootObject.AddComponent<MatchGameplay>();
+            MatchPlay play = rootObject.AddComponent<MatchPlay>();
+
+            scene.Build();
+            gameplay.Build(scene);
+            play.Build(scene, gameplay);
+
+            return play;
+        }
+
+        private static void CaptureAllN10(bool exitWhenBatch)
+        {
+            int failures = 0;
+
+            try
+            {
+                failures += CaptureSceneN10();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED " + exception);
+                Debug.LogException(exception);
+                failures++;
+            }
+
+            Debug.Log(failures == 0
+                ? "UBLADE3_NATIVE_MATCH_N10_CAPTURES_OK frames=" + N10CaptureFiles.Length
+                  + " width=" + MatchPlay.CaptureWidth + " height=" + MatchPlay.CaptureHeight
+                : "UBLADE3_NATIVE_MATCH_N10_CAPTURES_FAILED failures=" + failures);
+
+            if (exitWhenBatch && Application.isBatchMode)
+            {
+                EditorApplication.Exit(failures == 0 ? 0 : 1);
+            }
+        }
+
+        private static int CaptureSceneN10()
+        {
+            int failures = 0;
+            MatchPlay play = CreateDefaultPlayScene();
+
+            if (play.Control == null || play.Control.PlanRoster == null || !play.Control.DefaultPlanAi)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED the normal build did not attach the default PlanVM AI");
+            }
+
+            string[] paths = new string[N10CaptureFiles.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = ResolveArtifactPath(N10CaptureFiles[i]);
+
+                if (File.Exists(paths[i]))
+                {
+                    File.Delete(paths[i]);
+                }
+            }
+
+            MatchPlayN10ScriptResult result;
+            failures += play.RunDeterministicCaptureN10(paths, out result);
+
+            Debug.Log(MatchProbe.DescribeScene(play.Scene));
+            Debug.Log(play.Describe());
+            Debug.Log(result.RosterDescribe);
+            Debug.Log(result.RosterSlots);
+
+            for (int i = 0; i < play.Captures.Count; i++)
+            {
+                MatchPlayCapture capture = play.Captures[i];
+
+                if (!File.Exists(capture.Path))
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED missing " + capture.Path);
+                    continue;
+                }
+
+                FileInfo info = new FileInfo(capture.Path);
+
+                if (info.Length != capture.Bytes || info.Length < 1024)
+                {
+                    failures++;
+                    Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED " + capture.Path + " bytes "
+                                   + info.Length + " != " + capture.Bytes);
+                }
+            }
+
+            if (play.Captures.Count != N10CaptureFiles.Length)
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED captured " + play.Captures.Count
+                               + " of " + N10CaptureFiles.Length);
+            }
+
+            if (result.Failures != 0 || result.AiPickups < 1 || result.AiPasses < 1
+                || result.MaxActiveSlots != MatchPlayN10Script.PlanSlots.Length
+                || result.PlanPassRequests < 1)
+
+            {
+                failures++;
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_CAPTURE_FAILED roster=" + result.RosterDescribe
+                               + " reason=" + result.FailureText);
+            }
+
+            Debug.Log("UBLADE3_NATIVE_MATCH_N10_CAPTURE_EVIDENCE frames=" + play.Captures.Count
+                      + " defaultPlanAi=" + (play.Control.DefaultPlanAi ? "True" : "False")
+                      + " aiPickups=" + result.AiPickups + " aiPasses=" + result.AiPasses
+                      + " aiShots=" + result.AiShots
+                      + " planPassRequests=" + result.PlanPassRequests
+                      + " maxActiveSlots=" + result.MaxActiveSlots
+                      + " activeAtEnd=" + result.ActiveAtEnd
+                      + " planIds=[" + result.PlanIdList + "]"
+                      + " rebinds=" + result.Rebinds
+                      + " relays=" + result.Relays
+                      + " unsupportedDecisions=" + result.UnsupportedDecisions
+                      + " heuristicFallbackTicks=" + result.HeuristicFallbackTicks
+                      + " suppressedUpdateTicks=" + result.SuppressedUpdateTicks
+                      + " planDigest=" + result.Digest);
+
+            return failures;
+        }
+
+        private static void BuildAndRunWindowsN10(bool exitWhenBatch)
+        {
+            int exitCode = 0;
+
+            try
+            {
+                string playerPath = BuildPlayer();
+                string captureBase = ResolveArtifactPath(Path.Combine("artifacts", "native-match-n10-player.png"));
+                string logPath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "ublade3-native-match-n10-player.log"));
+                string directory = Path.GetDirectoryName(captureBase);
+
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                string stem = Path.GetFileNameWithoutExtension(captureBase);
+                string[] expected = new string[MatchPlay.N10CaptureLabels.Length];
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    expected[i] = Path.Combine(directory, stem + "-" + MatchPlay.N10CaptureLabels[i] + ".png");
+
+                    if (File.Exists(expected[i]))
+                    {
+                        File.Delete(expected[i]);
+                    }
+                }
+
+                ProcessStartInfo start = new ProcessStartInfo();
+                start.FileName = playerPath;
+                start.Arguments = "-batchmode -screen-width " + MatchPlay.CaptureWidth
+                                  + " -screen-height " + MatchPlay.CaptureHeight
+                                  + " -screen-fullscreen 0 --n10-capture=\"" + captureBase + "\""
+                                  + " -logFile \"" + logPath + "\"";
+                start.WorkingDirectory = Path.GetDirectoryName(playerPath);
+                start.UseShellExecute = false;
+                start.CreateNoWindow = true;
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N10_PLAYER_START " + start.Arguments);
+
+                using (Process process = Process.Start(start))
+                {
+                    if (!process.WaitForExit(300000))
+                    {
+                        process.Kill();
+                        throw new TimeoutException("The Windows N10 player did not finish in 300 s.");
+                    }
+
+                    if (process.ExitCode != 0)
+                    {
+                        throw new InvalidOperationException("The Windows N10 player exited "
+                                                            + process.ExitCode + "; log " + logPath);
+                    }
+                }
+
+                for (int i = 0; i < expected.Length; i++)
+                {
+                    if (!File.Exists(expected[i]))
+                    {
+                        throw new FileNotFoundException("The Windows N10 player did not write " + expected[i], expected[i]);
+                    }
+
+                    FileInfo info = new FileInfo(expected[i]);
+                    Debug.Log("UBLADE3_NATIVE_MATCH_N10_PLAYER_CAPTURE path=" + expected[i] + " bytes=" + info.Length);
+                }
+
+                Debug.Log("UBLADE3_NATIVE_MATCH_N10_PLAYER_CAPTURES_OK frames=" + expected.Length
+                          + " output=" + playerPath + " log=" + logPath);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("UBLADE3_NATIVE_MATCH_N10_PLAYER_CAPTURE_FAILED " + exception);
                 exitCode = 1;
             }
 

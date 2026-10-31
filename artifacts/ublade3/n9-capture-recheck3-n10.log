@@ -1,0 +1,1267 @@
+VBCSCompilerPreWarmer: watching VBCSCompiler (PID 25180)
+VBCSCompilerPreWarmer: pre-warm launched (dotnet PID 5660)
+VBCSCompiler prewarm took 15.54 ms
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.6/staging' branch; Version is '6000.6.7f1 (b22767f04f04) revision 11675495'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-StephenSimmons doesn't exist
+OS: 'Windows 11  (10.0.26300) Professional' Language: 'en' Physical Memory: 65220 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-10-31T09:31:53Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 39528)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Unity.exe
+-batchmode
+-quit
+-projectPath
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+-executeMethod
+UBlade3.EditorTools.UBlade3MatchPlay.CaptureAllN9
+-logFile
+C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\ublade3\n9-capture-recheck3-n10.log
+Successfully changed project path to: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3
+C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-remapper-allocator-initial-capacity=32768"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=1"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Logging is directed to a specific file, skipping project log.
+Player connection [16852]  Target information:
+
+Player connection [16852]  * "[IP] 192.168.56.1 [Port] 55504 [Flags] 2 [Guid] 335788195 [EditorId] 335788195 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [16852]  * "[IP] 172.18.176.1 [Port] 55504 [Flags] 2 [Guid] 335788195 [EditorId] 335788195 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [16852]  * "[IP] 172.29.224.1 [Port] 55504 [Flags] 2 [Guid] 335788195 [EditorId] 335788195 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [16852]  * "[IP] 172.16.4.25 [Port] 55504 [Flags] 2 [Guid] 335788195 [EditorId] 335788195 [Version] 1048832 [Id] WindowsEditor(7,PREC-3571) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Unable to join player connection multicast group (err: 10013).
+Player connection [16852] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Starting IPC server.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons" at "2026-10-31T09:31:54.1894971Z"
+Waiting for clients to connect on \\.\pipe\Unity-LicenseClient-StephenSimmons, press Ctrl-C to exit.
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 39528, path: "C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              5ce1fc6c124540a09d8578722a1d44ce
+  Correlation Id:          de20f8af211365fa01c547af967293b6
+  External correlation Id: 8689255829800548069
+  Machine Id:              1Bt83mJDiMleMuAMUegGTrLHPqI=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-StephenSimmons" (connect: 0.25s, validation: 0.13s, handshake: 0.04s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-StephenSimmons-notifications" at "2026-10-31T09:31:54.3573505Z"
+[Licensing::Module] Connected to LicensingClient (PId: 39528, launch time: 0.01, total connection time: 0.41s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 20067671438473-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 0.46s
+[Package Manager] Connected to IPC stream "Upm-17452" after 0.3 seconds.
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+Initialising UDS system complete:
+  - System type: Client
+  - Resource namespace: d141e32e2286273497e925fa359ca53a
+  - Shared memory size: 1073741824
+  - Command buffer id: 1052576
+  - Command buffer size: 8192
+  - Hashmap size: 4194304
+  - Service connected: false
+Launching Unity Data Store - C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Tools/Unity.DataStore.exe 
+Unity Data Store artifact dir = Library/DataStore, working dir = C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3Unity Data Store running and initialised
+Refreshing native plugins compatible for Editor in 2.21 ms, found 2 plugins.
+[Physics::Module] Selected backend (deferred post-plugins).
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+[EntityIdStore] init: VM path (explicit commit), pageSize=4096, blockCount=262144, entitiesPerBlock=1024, blocksPerSlotPage=0, slots reserved=4294967296 bytes
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+d3d12: failed to query info queue interface (0x80004002).
+Direct3D:
+    Version:         Direct3D 12 [level 12.1]
+    Renderer:        NVIDIA T600 Laptop GPU (ID=0x1fb6)
+    Vendor:          NVIDIA
+    VRAM:            3938 MB
+    App VRAM Budget: 3347 MB
+    Driver:          32.0.15.9730
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56452
+CodeReloadManager initialized
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.6.7f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+Registered in 0.006564 seconds.
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Package Manager log level set to [2]
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:False
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.756 seconds
+Domain Reload Profiling: 1344ms
+	BeginReloadAssembly (147ms)
+		CreateAndSetChildDomain (5ms)
+	RebuildCommonClasses (5ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (79ms)
+	LoadAllAssembliesAndSetupDomain (342ms)
+		LoadAssemblies (137ms)
+		TypeCache.Refresh (233ms)
+			TypeCache.ScanAssembly (217ms)
+		AnalyzeDomain (1ms)
+	FinalizeReload (757ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			BeforeProcessingInitializeOnLoad (100ms)
+			ProcessInitializeOnLoadAttributes (146ms)
+			ProcessInitializeOnLoadMethodAttributes (250ms)
+			EditorAssembliesLoaded (3ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 42 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.ide.rider@3.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.rider@570989d4a882)
+    com.unity.ide.visualstudio@2.0.26 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ide.visualstudio@a99d56dec63f)
+  Built-in packages:
+    com.unity.modules.accessibility@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.adaptiveperformance@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.adaptiveperformance)
+    com.unity.modules.ai@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.physicscore2d@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.physicscore2d)
+    com.unity.modules.screencapture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tetgen@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tetgen)
+    com.unity.modules.tilemap@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.timelinefoundation@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.timelinefoundation)
+    com.unity.modules.ui@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vectorgraphics@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vectorgraphics)
+    com.unity.modules.vehicles@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.wind@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.modules.hierarchycore)
+    com.unity.test-framework@1.8.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.test-framework@ee3fe9477490)
+    com.unity.ext.nunit@2.1.0 (location: C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\unity\UBlade3\Library\PackageCache\com.unity.ext.nunit@0198eae3b53e)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.02 seconds
+[ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.6.7f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 4s572ms
+[209/224    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+[216/224    3s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+Assets\Scripts\UBlade3\App\PortLab.cs(26,25): warning CS0618: 'Object.FindObjectOfType<T>()' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindAnyObjectByType instead.'
+
+Assets\Scripts\UBlade3\Audio\AudioBootstrap.cs(36,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\Scripts\UBlade3\Audio\AudioBootstrap.cs(72,37): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\Scripts\UBlade3\App\PortLab.cs(137,48): warning CS0618: 'Object.FindObjectOfType<T>()' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindAnyObjectByType instead.'
+
+Assets\Scripts\UBlade3\Audio\AudioService.cs(379,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+
+Assets\Scripts\UBlade3\Native\MatchPlanAi.cs(293,30): warning CS0168: The variable 'exception' is declared but never used
+
+Assets\Scripts\UBlade3\Native\MatchPlay.cs(459,18): warning CS0219: The variable 'defaultPlanAi' is assigned but its value is never used
+[218/224    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll, with 148 defines and 290 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+1 processor(s) skipped this assembly
+[219/224    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 146 defines and 304 references
+
+processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+
+1 processor(s) skipped this assembly
+[221/224    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[222/224    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+*** Tundra build success (4.54 seconds), 6 items updated, 224 evaluated
+Total cache size 50613152
+Assets\Scripts\UBlade3\App\PortLab.cs(26,25): warning CS0618: 'Object.FindObjectOfType<T>()' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindAnyObjectByType instead.'
+Assets\Scripts\UBlade3\Audio\AudioBootstrap.cs(36,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\Scripts\UBlade3\Audio\AudioBootstrap.cs(72,37): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\Scripts\UBlade3\App\PortLab.cs(137,48): warning CS0618: 'Object.FindObjectOfType<T>()' is obsolete: 'Object.FindObjectOfType has been deprecated. Use Object.FindAnyObjectByType instead.'
+Assets\Scripts\UBlade3\Audio\AudioService.cs(379,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'
+Assets\Scripts\UBlade3\Native\MatchPlanAi.cs(293,30): warning CS0168: The variable 'exception' is declared but never used
+Assets\Scripts\UBlade3\Native\MatchPlay.cs(459,18): warning CS0219: The variable 'defaultPlanAi' is assigned but its value is never used
+Total cache size after purge 50613152, took 00:00:00.0276279
+AssetDatabase: script compilation time: 5.126683s
+Begin MonoManager ReloadAssembly
+Native extension for Android target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
+Scripting: successfully reloaded assembly
+- Finished resetting the current domain, in  0.505 seconds
+Domain Reload Profiling: 1081ms
+	BeginReloadAssembly (248ms)
+		DisableScriptedObjects (33ms)
+		CreateAndSetChildDomain (38ms)
+	RebuildCommonClasses (8ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (52ms)
+	LoadAllAssembliesAndSetupDomain (254ms)
+		LoadAssemblies (217ms)
+		TypeCache.Refresh (24ms)
+			TypeCache.ScanAssembly (18ms)
+		AnalyzeDomain (7ms)
+			BuildScriptInfoCaches (6ms)
+	FinalizeReload (507ms)
+		SetupLoadedEditorAssemblies (0ms)
+			LogAssemblyErrors (4ms)
+			InitializePlatformSupportModulesInManaged (9ms)
+			BeforeProcessingInitializeOnLoad (97ms)
+			ProcessInitializeOnLoadAttributes (134ms)
+			ProcessInitializeOnLoadMethodAttributes (37ms)
+			AfterProcessingInitializeOnLoad (15ms)
+		AwakeInstancesAfterBackupRestoration (23ms)
+Starting new worker id: 0 with log in C:/OneDrive/OneDrive - Cyber 7 Group/GHRepo/Games/UBlade3/unity/UBlade3/Logs/AssetImportWorkerHW0.log
+
+Asset Pipeline Refresh (id=fb2b4930b69492b4fa6fbaa59bab6f36): Total: 6.583 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	(Values over 0.05ms)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=718 ms
+		Asset DB Callback time: managed=74 ms, native=26 ms
+		Scripting: domain reloads=1, domain reload time=617 ms, compile time=5131 ms, other=14 ms
+		Project Asset Count: scripts=184, non-scripts=69
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokePackagesCallback: 24.905ms
+	ApplyChangesToAssetFolders: 1.168ms
+	Scan: 38.688ms
+	Collect global state as custom dependencies: 14.625ms
+	OnSourceAssetsModified: 0.639ms
+	CategorizeScriptCompilationAssets: 5.131ms
+	ProcessAssetsWithTransientArtifactChanges: 6.241ms
+	CategorizeAssets: 1.677ms
+	CompileScripts: 5131.384ms
+	ImportOutOfDateAssets: 527.238ms (508.153ms without children)
+		UnloadImportedAssets: 1.182ms
+		ImportSchedulerStart: 17.853ms
+	PostProcessAllAssets: 75.184ms
+		VCAutoAddAssetPostprocess 0.893ms
+		XRBuildSystem.XRAssetImported 0.156ms
+		MonoPostProcessAllAssets: 73.532ms
+			AssetPostprocessor.OnPostprocessAllAssets 28.742ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 9.768ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 7.418ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 6.445ms
+			AssetChangedListener.OnPostprocessAllAssets 2.906ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 2.186ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 1.216ms
+			EditModeScopePostprocessor.OnPostprocessAllAssets 0.965ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.618ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.593ms
+			AudioMixerPostprocessor.OnPostprocessAllAssets 0.347ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.335ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.280ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.272ms
+			AssetEvents.OnPostprocessAllAssets 0.247ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.197ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.171ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.156ms
+			ThemePostprocessor.OnPostprocessAllAssets 0.153ms
+			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.149ms
+			SyncVS.PostprocessSyncProject 0.104ms
+			AudioContainerPostProcessor.OnPostprocessAllAssets 0.075ms
+	PostAssetChangesProfiler: 2.860ms
+	UnloadStreamsBegin: 1.482ms
+	Untracked: 717.523ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Scanning for USB devices : 3.288ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-UBlade3
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 621 unused Assets / (0.5 MB). Loaded Objects now: 1351.
+Memory consumption went from 231.4 MB to 230.9 MB.
+Total: 4.914000 ms (FindLiveObjects: 0.341400 ms CreateObjectMapping: 0.035000 ms MarkObjects: 4.136400 ms  DeleteObjects: 0.280000 ms)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (0 B). Loaded Objects now: 1353.
+Memory consumption went from 230.8 MB to 230.8 MB.
+Total: 4.360400 ms (FindLiveObjects: 0.183600 ms CreateObjectMapping: 0.012800 ms MarkObjects: 4.018800 ms  DeleteObjects: 0.010700 ms)
+
+UBLADE3_NATIVE_MATCH_START unity=6000.6.7f1 install=D:\Games\HyperBlade\HYB data=D:\Games\HyperBlade\HYB\data assetSet=Mdltxt no20xx=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:208)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 208)
+
+UBLADE3_NATIVE_MATCH_DATA root=D:\Games\HyperBlade\HYB\data drome=CHIDRO.ENV objects=29 modelObjects=25 noModelObjects=4 meshes=25 triangles=2034 textures=32 missingTextures=0 placements=25 rokDefinition=Rokmix digest=f54169057f5800dd
+UBLADE3_NATIVE_MATCH_TEAM side=home file=Chico.htm name="The Machine" environment=chidro.env dromers=3 modelIds=0,2,4 warnings=0
+UBLADE3_NATIVE_MATCH_TEAM side=away file=Seattle.htm name="The Fury" environment=seadro.env dromers=3 modelIds=1,3,5 warnings=0
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=0 rosterSlot=0 role=home-skater-human team="The Machine" model=CHIOMX assembly=AA_Skate_Std remapPalette=False spawn=(40,75,0) ratings=63 ratingRow=0
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=1 rosterSlot=0 role=away-skater-ai team="The Fury" model=SEADMX assembly=AA_Skate_Std remapPalette=True spawn=(40,-75,0) ratings=63 ratingRow=0
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=2 rosterSlot=1 role=home-skater-ai team="The Machine" model=CHIDMX assembly=AA_Skate_Std remapPalette=False spawn=(-20,75,0) ratings=63 ratingRow=1
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=3 rosterSlot=1 role=away-skater-ai team="The Fury" model=SEADMX assembly=AA_Skate_Std remapPalette=True spawn=(-50,-65,0) ratings=63 ratingRow=1
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=4 rosterSlot=2 role=home-goalie team="The Machine" model=CHIGMX assembly=AA_Goalidle remapPalette=False spawn=(0,192.5,-20.8) ratings=16 ratingRow=-1
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=5 rosterSlot=2 role=away-goalie team="The Fury" model=SEAGMX assembly=AA_Goalidle remapPalette=True spawn=(0,-192.5,-20.8) ratings=16 ratingRow=-1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:213)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 213)
+
+UBLADE3_DROME_PREVIEW_START mode=textured drome=CHIDRO.ENV install=D:\Games\HyperBlade\HYB data=D:\Games\HyperBlade\HYB\data
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.DromePreviewScene:Build () (at Assets/Scripts/UBlade3/Native/DromePreviewScene.cs:275)
+UBlade3.Native.MatchScene:BuildDrome () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:284)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:215)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/DromePreviewScene.cs Line: 275)
+
+UBLADE3_DROME_PREVIEW_DATA root=D:\Games\HyperBlade\HYB\data env=CHIDRO.ENV(D:\Games\HyperBlade\HYB\data\chidro.env) mode=textured
+UBLADE3_DROME_PREVIEW_PALETTE source=D:\Games\HyperBlade\HYB\data\custom.pal gif=D:\Games\HyperBlade\HYB\data\palette.gif entries=256 wbpFiles=1 wbpEntries=64 ramp=32..223 smallRamp=96..223 largeRamp=32..95 remap=128..159
+UBLADE3_DROME_PREVIEW_SCENE objects=29 meshes=25 sourceVerts=1818 sourceFaces=1398 builtVerts=6102 triangles=2034 submeshes=67 twoSidedFaces=100 textures=32/63
+UBLADE3_DROME_PREVIEW_DIGEST 9ae8e80de7ec06c8
+UBLADE3_DROME_PREVIEW_OBJECT name="king" type=Drome model=CHIDRO set=Mdltxt slot=10 pos=0,0,0 lods=1 lod0Blocks=3 sourceVerts=775 sourceFaces=682 verts=3216 tris=1072 submeshes=6
+UBLADE3_DROME_PREVIEW_OBJECT name="AndRoll" type=Rok model=Rokmix set=Mdltxt slot=6 pos=0,0,0 lods=1 lod0Blocks=9 sourceVerts=267 sourceFaces=257 verts=771 tris=257 submeshes=1
+UBLADE3_DROME_PREVIEW_OBJECT name="goal0" type=NGoal model=goalStub set=Mdltxt slot=7 pos=0,192.5,-14.8 lods=1 lod0Blocks=1 sourceVerts=3 sourceFaces=1 verts=3 tris=1 submeshes=1
+UBLADE3_DROME_PREVIEW_OBJECT name="goal1" type=SGoal model=goalStub set=Mdltxt slot=8 pos=0,-192.5,-14.8 lods=1 lod0Blocks=1 sourceVerts=3 sourceFaces=1 verts=3 tris=1 submeshes=1
+UBLADE3_DROME_PREVIEW_OBJECT name="NRamp1" type=Ramp model=RAMP set=Mdltxt slot=12 pos=-59,23,0 lods=1 lod0Blocks=1 sourceVerts=6 sourceFaces=4 verts=18 tris=6 submeshes=2
+UBLADE3_DROME_PREVIEW_OBJECT name="SRamp1" type=Ramp model=RAMP set=Mdltxt slot=13 pos=59,-23,0 lods=1 lod0Blocks=1 sourceVerts=6 sourceFaces=4 verts=18 tris=6 submeshes=2
+UBLADE3_DROME_PREVIEW_OBJECT name="Multip1" type=Multiplier model=MULTIP set=Mdltxt slot=27 pos=-78,-23,0 lods=1 lod0Blocks=1 sourceVerts=31 sourceFaces=22 verts=108 tris=36 submeshes=4
+UBLADE3_DROME_PREVIEW_OBJECT name="Multip2" type=Multiplier model=MULTIP set=Mdltxt slot=28 pos=78,23,0 lods=1 lod0Blocks=1 sourceVerts=31 sourceFaces=22 verts=108 tris=36 submeshes=4
+UBLADE3_DROME_PREVIEW_OBJECT name="Turnst1" type=Turnstile model=TRNSTL set=Mdltxt slot=33 pos=-52,56,0 lods=1 lod0Blocks=1 sourceVerts=35 sourceFaces=21 verts=81 tris=27 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="Turnst2" type=Turnstile model=TRNSTL set=Mdltxt slot=34 pos=52,-56,0 lods=1 lod0Blocks=1 sourceVerts=35 sourceFaces=21 verts=81 tris=27 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="Turnst3" type=Turnstile model=TRNSTL set=Mdltxt slot=35 pos=46,-80,0 lods=1 lod0Blocks=1 sourceVerts=35 sourceFaces=21 verts=81 tris=27 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="Turnst4" type=Turnstile model=TRNSTL set=Mdltxt slot=36 pos=-46,80,0 lods=1 lod0Blocks=1 sourceVerts=35 sourceFaces=21 verts=81 tris=27 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="BangBang" type=StartGun model=STRTGN set=Mdltxt slot=26 pos=-40,70,0 lods=1 lod0Blocks=3 sourceVerts=45 sourceFaces=48 verts=192 tris=64 submeshes=4
+UBLADE3_DROME_PREVIEW_OBJECT name="Hurdle1" type=Hurdle model=HURDLE set=Mdltxt slot=66 pos=20,50,0 lods=1 lod0Blocks=1 sourceVerts=32 sourceFaces=22 verts=132 tris=44 submeshes=2
+UBLADE3_DROME_PREVIEW_OBJECT name="Hurdle2" type=Hurdle model=HURDLE set=Mdltxt slot=67 pos=-20,50,0 lods=1 lod0Blocks=1 sourceVerts=32 sourceFaces=22 verts=132 tris=44 submeshes=2
+UBLADE3_DROME_PREVIEW_OBJECT name="LimBoPo1" type=LimboPole model=KILBAL set=Mdltxt slot=40 pos=0,69,0 lods=1 lod0Blocks=1 sourceVerts=29 sourceFaces=28 verts=102 tris=34 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="LimBoPo2" type=LimboPole model=KILBAL set=Mdltxt slot=41 pos=0,-69,0 lods=1 lod0Blocks=1 sourceVerts=29 sourceFaces=28 verts=102 tris=34 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="GRandom1" type=GreenRandomizer model=GRNRND set=Mdltxt slot=72 pos=93,69,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=9 verts=33 tris=11 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="GRandom2" type=GreenRandomizer model=GRNRND set=Mdltxt slot=73 pos=-93,69,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=9 verts=33 tris=11 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="GRandom3" type=GreenRandomizer model=GRNRND set=Mdltxt slot=74 pos=-93,-69,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=9 verts=33 tris=11 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="GRandom4" type=GreenRandomizer model=GRNRND set=Mdltxt slot=75 pos=93,-69,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=9 verts=33 tris=11 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="RRandom" type=RedRandomizer model=REDRND set=Mdltxt slot=80 pos=-150,40,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=9 verts=33 tris=11 submeshes=3
+UBLADE3_DROME_PREVIEW_OBJECT name="Boom" type=Mine model=MINE set=Mdltxt slot=54 pos=-40,40,0 lods=1 lod0Blocks=1 sourceVerts=17 sourceFaces=16 verts=72 tris=24 submeshes=2
+UBLADE3_DROME_PREVIEW_OBJECT name="Explosion1" type=Explosion model=EXPLODE set=Mdltxt slot=60 pos=0,0,0 lods=1 lod0Blocks=1 sourceVerts=300 sourceFaces=100 verts=600 tris=200 submeshes=1
+UBLADE3_DROME_PREVIEW_OBJECT name="Swarf" type=Swarf model=SWARF set=Mdltxt slot=55 pos=-40,-40,0 lods=1 lod0Blocks=1 sourceVerts=12 sourceFaces=12 verts=36 tris=12 submeshes=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.DromePreviewScene:Build () (at Assets/Scripts/UBlade3/Native/DromePreviewScene.cs:293)
+UBlade3.Native.MatchScene:BuildDrome () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:284)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:215)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/DromePreviewScene.cs Line: 293)
+
+UBLADE3_DROME_PREVIEW_SCENE_OK mode=textured objects=29 meshes=25 builtVerts=6102 triangles=2034 textures=32 missingTextures=0 digest=9ae8e80de7ec06c8
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.DromePreviewScene:Build () (at Assets/Scripts/UBlade3/Native/DromePreviewScene.cs:294)
+UBlade3.Native.MatchScene:BuildDrome () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:284)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:215)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/DromePreviewScene.cs Line: 294)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=0 role=home-skater-human model=CHIOMX set=Mdltxt assembly=AA_Skate_Std wba=azkskat2 frames=27 bones=16 triangles=314 verts=942 textures=13 missingTextures=0 previewDigest=6105da36d764ebf8
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=1 role=away-skater-ai model=SEADMX set=Mdltxt assembly=AA_Skate_Std wba=azkskat2 frames=27 bones=16 triangles=291 verts=873 textures=16 missingTextures=0 previewDigest=c97ff1318e7d2202
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=2 role=home-skater-ai model=CHIDMX set=Mdltxt assembly=AA_Skate_Std wba=azkskat2 frames=27 bones=16 triangles=314 verts=942 textures=13 missingTextures=0 previewDigest=d7aac7594dd9f7bf
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=3 role=away-skater-ai model=SEADMX set=Mdltxt assembly=AA_Skate_Std wba=azkskat2 frames=27 bones=16 triangles=291 verts=873 textures=16 missingTextures=0 previewDigest=c97ff1318e7d2202
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=4 role=home-goalie model=CHIGMX set=Mdltxt assembly=AA_Goalidle wba=aplread2 frames=81 bones=16 triangles=165 verts=495 textures=12 missingTextures=0 previewDigest=5ca0880ac18d1aa9
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SKATER_LOADED slot=5 role=away-goalie model=SEAGMX set=Mdltxt assembly=AA_Goalidle wba=aplread2 frames=81 bones=16 triangles=197 verts=591 textures=11 missingTextures=0 previewDigest=10a2191ee01624a2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:220)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 220)
+
+UBLADE3_NATIVE_MATCH_SCENE_OK slots=6 drome="CHIDRO.ENV" objects=29 dromeTriangles=2034 skaters=6 skaterTriangles=1572 missingRefs=0 digest=f54169057f5800dd
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:248)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 248)
+
+UBLADE3_NATIVE_MATCH_AI_FALLBACK active=True note="placeholder AI (plan VM not ported): non-human skaters hold Forward; goalies hold no input"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:255)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 255)
+
+UBLADE3_NATIVE_MATCH_GOALIE_PLACEMENT note="goalies stand at the InitMatchMarkers goal-mouth markers; the plan-VM goalie agenda is not ported"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:256)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 256)
+
+UBLADE3_NATIVE_MATCH_HUD_PENDING data=teamNames,score,period available; original HUD bitmap fonts/art not ported (N6)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:257)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 257)
+
+UBLADE3_NATIVE_MATCH_NO_ENGINE_PROCESS no20xx=True engines=csharp
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchScene:Build () (at Assets/Scripts/UBlade3/Native/MatchScene.cs:259)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1667)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchScene.cs Line: 259)
+
+UBLADE3_NATIVE_GAMEPLAY_ROK model=Rokmix name="AndRoll" set=Mdltxt lod=0 bones=9 meshSlots=9 materials=6 submeshes=1 triangles=257 verts=771 textures=0 missingTextures=0 warnings=0 boneTriangles=0:20,1:40,2:48,3:24,4:32,5:20,6:33,7:20,8:20
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:203)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchGameplay.cs Line: 203)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_ART frper=83x60(frper.bmp) frdamgA=220x47(frdamga.bmp) frdamgB=220x47(frdamgb.bmp) homeLogo=73x21(hudchi.bmp) awayLogo=73x21(hudsea.bmp) missing=0 textFont=interim3x5 originalTextFont="MS Sans Serif"(not shipped)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:209)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchGameplay.cs Line: 209)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_SPRITE role=frper size=83x60 colourKey=255,255,255 keyedPixels=3923 wrapped=mdm1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:CreateArt (string,UBlade3.Assets.BmpTexture) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:302)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:234)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 302)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_SPRITE role=frdamgA size=220x47 colourKey=255,255,255 keyedPixels=8364 wrapped=mdm1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:CreateArt (string,UBlade3.Assets.BmpTexture) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:302)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:235)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 302)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_SPRITE role=frdamgB size=220x47 colourKey=255,255,255 keyedPixels=8451 wrapped=mdm1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:CreateArt (string,UBlade3.Assets.BmpTexture) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:302)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:236)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 302)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_SPRITE role=homeLogo size=73x21 colourKey=255,255,255 keyedPixels=1216 wrapped=mdm1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:CreateArt (string,UBlade3.Assets.BmpTexture) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:302)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:237)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 302)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_SPRITE role=awayLogo size=73x21 colourKey=255,255,255 keyedPixels=1197 wrapped=mdm1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:CreateArt (string,UBlade3.Assets.BmpTexture) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:302)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:238)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 302)
+
+UBLADE3_NATIVE_GAMEPLAY_HUD_BUILT art=UBLADE3_NATIVE_GAMEPLAY_HUD_ART frper=83x60(frper.bmp) frdamgA=220x47(frdamga.bmp) frdamgB=220x47(frdamgb.bmp) homeLogo=73x21(hudchi.bmp) awayLogo=73x21(hudsea.bmp) missing=0 textFont=interim3x5 originalTextFont="MS Sans Serif"(not shipped) frameScale=2 font=interim3x5 glyphs=45 draw=gui-interactive+cpu-capture-composite
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchHud:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay,UBlade3.Native.MatchHudData) (at Assets/Scripts/UBlade3/Native/MatchHud.cs:244)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:218)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchHud.cs Line: 244)
+
+UBLADE3_NATIVE_GAMEPLAY_SCENE_OK model=Rokmix rokTriangles=257 rokBones=9 rokTextures=0 hudArt=ok renderBones=plain=0 double=7 quad=8 kill=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:227)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchGameplay.cs Line: 227)
+
+UBLADE3_NATIVE_GAMEPLAY_RULES note="goal mouth: collisioncheck.cpp 0x004521d0 GoalFrame.Mouth; port: CollisionCheck::BouncedInGoal 0x00469ef0; value: PlanCond::RokScoreValue 0x00465150; points: goal plan arm counts; north goal -> away, south goal -> home (NGoal.PBN/SGoal.PBN + INSCRTBL.PBN + InfoBar::IncrementScore 0x0047ae70)"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:233)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchGameplay.cs Line: 233)
+
+UBLADE3_NATIVE_GAMEPLAY_AI_FALLBACK note="placeholder AI (plan VM not ported): non-human skaters hold Forward; goalies hold no input"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchGameplay:Build (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchGameplay.cs:237)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1668)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchGameplay.cs Line: 237)
+
+UBLADE3_MATCH_AUDIO_UNAVAILABLE reason=no-service (record-only event plan)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:.ctor (UBlade3.Audio.AudioService) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:45)
+UBlade3.Native.MatchPlay:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:450)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1669)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 45)
+
+UBLADE3_NATIVE_PLAY_SCENE_OK humanSlot=0 rokModel=Rokmix goalNorth=(0,192.5,-14.8) goalSouth=(0,-192.5,-14.8) audio=record-only postGoalResetTicks=45
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:495)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1669)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 495)
+
+UBLADE3_NATIVE_PLAY_RULES note="RokInRange 0x00468c40 + RokState.Attach; PlanAction::Launch 0x00403290; PlanAction::Throw 0x00403a30; CProjectAndBounce subset 0x0040d510; goal rules MatchGoalDetector (collisioncheck 0x004521d0 / RokScoreValue 0x00465150)"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Build (UBlade3.Native.MatchScene,UBlade3.Native.MatchGameplay) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:505)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1669)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 505)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=0 beat=start tick=0 seconds=0 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-00-start.png width=1280 height=720 bytes=17665 score=0-0 carrying=False flight=False shotPower=0 rokRenderBone=0 status=""
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:97)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-rok-pickup audioRole=impact-first/second played=False tickMs=33
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1397)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1308)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1041)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:105)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=2 beat=ai-pickup tick=1 seconds=0.033 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-02-ai-pickup.png width=1280 height=720 bytes=23041 score=0-0 carrying=True flight=False shotPower=0 rokRenderBone=0 status="ROK CARRIED BY AI SLOT 1"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:116)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=3 beat=plan-switch tick=2 seconds=0.067 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-03-plan-switch.png width=1280 height=720 bytes=23435 score=0-0 carrying=True flight=False shotPower=0 rokRenderBone=0 status="ROK CARRIED BY AI SLOT 1"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:153)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=1 beat=plans-bound tick=20 seconds=0.667 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-01-plans-bound.png width=1280 height=720 bytes=43887 score=0-0 carrying=True flight=False shotPower=0 rokRenderBone=0 status="ROK CARRIED BY AI SLOT 1"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:159)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-pass-release audioRole=impact-first/second played=False tickMs=1633
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:ProcessAiRequests (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1214)
+UBlade3.Native.MatchPlayControl:BeforeTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1162)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1034)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:105)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=4 beat=plan-pass tick=50 seconds=1.667 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-04-plan-pass.png width=1280 height=720 bytes=109464 score=0-0 carrying=False flight=True shotPower=0 rokRenderBone=0 status="ROK IN FLIGHT"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:127)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_MATCH_AUDIO_EVENT kind=impact reason=ai-rok-pickup audioRole=impact-first/second played=False tickMs=2499
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchAudioDirector:Log (string) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:168)
+UBlade3.Native.MatchAudioDirector:Impact (string,uint) (at Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs:109)
+UBlade3.Native.MatchPlayControl:TryPickup (uint) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1397)
+UBlade3.Native.MatchPlayControl:AfterTick (UBlade3.Sim.HeldBinding) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1308)
+UBlade3.Native.MatchPlayControl:Advance (UBlade3.Sim.HeldBinding,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPossession.cs:1041)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:134)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchAudioDirector.cs Line: 168)
+
+UBLADE3_NATIVE_PLAY_CAPTURE index=5 beat=result tick=140 seconds=4.667 path=C:\OneDrive\OneDrive - Cyber 7 Group\GHRepo\Games\UBlade3\artifacts\native-match-n9-05-result.png width=1280 height=720 bytes=111970 score=0-0 carrying=True flight=False shotPower=0 rokRenderBone=0 status="ROK CARRIED BY AI SLOT 3"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:Capture (string,int,string,bool) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1261)
+UBlade3.Native.MatchPlay:CaptureBeatN9 (string,string[]) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:1104)
+UBlade3.Native.MatchPlay/<>c__DisplayClass93_0:<RunDeterministicCaptureN9>b__1 (string) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:791)
+UBlade3.Native.MatchPlayN9Script:Run (UBlade3.Native.MatchPlayControl,UBlade3.Native.MatchWorldData,string,System.Action`1<string>,System.Action`1<UBlade3.Sim.HeldBinding>) (at Assets/Scripts/UBlade3/Native/MatchPlayN9Script.cs:203)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:790)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 1261)
+
+UBLADE3_NATIVE_MATCH_N9_RESULT aiPickups=2 aiPasses=1 aiShots=0 planPassRequests=1 maxActiveSlots=5 planIds=[CarryRok,Defense,Goalie] rebinds=3 maxRebindsPerSlot=2 relays=8 relayBudgetHits=0 possessionEvents=3 unsupportedDecisions=12 digest=d005d0a80fcc5436 failures=0 reason=
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:793)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 793)
+
+UBLADE3_PLAN_AI_ROSTER slots=5 active=5 maxActive=5 planIds=[CarryRok,Defense,Goalie] ticks=140 planTicks=700 rebinds=3 relays=8 relayBudgetHits=0 possessionEvents=3 gotIt=2 lostIt=1 rokIsFree=1 planPassRequests=1 planShotRequests=0 unsupportedDecisions=12 runtimeErrors=0 heuristicFallbackTicks=0 animationBridgeEvents=0 initialRokEvent=False maxRebindsPerSlot=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:806)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 806)
+
+UBLADE3_PLAN_AI_SLOT slot=1 plan=Defense bound=True planIds=[Defense,CarryRok] behaviors=[ManOnMan>TurnToMate>PassingPlay>PassingPlayPass>ManOnMan] planTicks=140 rebinds=2 planChangesAdopted=2 actions=[5x6,93x3,103x3] decisions=[6x2,15x4,18x1,23x2,50x1,78x1,97x2,98x2,111x3] passRequests=1 shotRequests=0 targets=4 fallbackMotion=91 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,action:7,action:9,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:11,behavior-parameter:12,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,unsupported.decision id=23,unsupported.decision id=6] digest=e22e94e6c59367b8
+UBLADE3_PLAN_AI_SLOT slot=2 plan=Defense bound=True planIds=[Defense] behaviors=[ManOnMan>LooseRokAttackOpponent] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[5x2,93x2,103x2] decisions=[6x2,15x2,23x1,68x1,97x2,98x2] passRequests=0 shotRequests=0 targets=2 fallbackMotion=50 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,decision:68,unsupported.decision id=23,unsupported.decision id=6,unsupported.decision id=68] digest=92149a4bcb0bb2e0
+UBLADE3_PLAN_AI_SLOT slot=3 plan=CarryRok bound=True planIds=[Defense,CarryRok] behaviors=[ManOnMan>LooseRokAttackOpponent>TurnToMate>PassingPlay>Throwing] planTicks=140 rebinds=1 planChangesAdopted=1 actions=[5x5,93x2,103x4] decisions=[6x2,15x4,23x1,68x1,78x1,97x2,98x2,111x1] passRequests=0 shotRequests=0 targets=4 fallbackMotion=50 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,action:7,action:9,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:11,behavior-parameter:12,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,decision:68,unsupported.decision id=23,unsupported.decision id=6,unsupported.decision id=68] digest=5d58e4e0d02da722
+UBLADE3_PLAN_AI_SLOT slot=4 plan=Goalie bound=True planIds=[Goalie] behaviors=[SitInGoal] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[] decisions=[14x1] passRequests=0 shotRequests=0 targets=1 fallbackMotion=0 heuristicFallback=0 unsupportedDecisions=0 unsupported=[action:18,action:71,agenda-item:15,behavior-parameter:10,behavior-parameter:15,behavior-parameter:2,behavior-parameter:3,behavior-parameter:9] digest=08b4517d1afe137d
+UBLADE3_PLAN_AI_SLOT slot=5 plan=Goalie bound=True planIds=[Goalie] behaviors=[SitInGoal] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[] decisions=[14x1] passRequests=0 shotRequests=0 targets=1 fallbackMotion=0 heuristicFallback=0 unsupportedDecisions=0 unsupported=[action:18,action:71,agenda-item:15,behavior-parameter:10,behavior-parameter:15,behavior-parameter:2,behavior-parameter:3,behavior-parameter:9] digest=0cfefd3e6ea32520
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:807)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 807)
+
+UBLADE3_NATIVE_MATCH_N9_CONTROL UBLADE3_NATIVE_PLAY_COUNTS ticks=140 phase=Live pickups=2 humanPickups=0 aiPickups=2 shots=0 humanShots=0 aiShots=0 passes=1 humanPasses=0 aiPasses=1 goals=0 humanGoals=0 aiGoals=0 bounces=0 scoreHome=0 scoreAway=0 carrying=True flight=False shotPower=0 headCam="eye=(0,0,0) forward=(0,0,0) fovDegrees=85 halfFovRad=0.7417649 viewFrac=(0.5,0.5)" lastHumanShotWord=0x00000000 lastHumanShotVel=(0,0,0) lastAiShotVel=(0,0,0) audio="UBLADE3_MATCH_AUDIO_COUNTS requested=3 played=0 failed=0 goal=0 crowd=0 impact=3 menu=0 ambient=0 service=none events=3 warnings=0" notes=7 planRoster="UBLADE3_PLAN_AI_ROSTER slots=5 active=5 maxActive=5 planIds=[CarryRok,Defense,Goalie] ticks=140 planTicks=700 rebinds=3 relays=8 relayBudgetHits=0 possessionEvents=3 gotIt=2 lostIt=1 rokIsFree=1 planPassRequests=1 planShotRequests=0 unsupportedDecisions=12 runtimeErrors=0 heuristicFallbackTicks=0 animationBridgeEvents=0 initialRokEvent=False maxRebindsPerSlot=2" defaultPlanAi=False heuristicFallbackTicks=0
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchPlay:RunDeterministicCaptureN9 (string[],UBlade3.Native.MatchPlayN9ScriptResult&) (at Assets/Scripts/UBlade3/Native/MatchPlay.cs:808)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1684)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchPlay.cs Line: 808)
+
+UBLADE3_NATIVE_MATCH_DATA root=D:\Games\HyperBlade\HYB\data drome=CHIDRO.ENV objects=29 modelObjects=25 noModelObjects=4 meshes=25 triangles=2034 textures=32 missingTextures=0 placements=25 rokDefinition=Rokmix digest=f54169057f5800dd
+UBLADE3_NATIVE_MATCH_TEAM side=home file=Chico.htm name="The Machine" environment=chidro.env dromers=3 modelIds=0,2,4 warnings=0
+UBLADE3_NATIVE_MATCH_TEAM side=away file=Seattle.htm name="The Fury" environment=seadro.env dromers=3 modelIds=1,3,5 warnings=0
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=0 rosterSlot=0 role=home-skater-human team="The Machine" model=CHIOMX assembly=AA_Skate_Std remapPalette=False spawn=(40,75,0) ratings=63 ratingRow=0
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=1 rosterSlot=0 role=away-skater-ai team="The Fury" model=SEADMX assembly=AA_Skate_Std remapPalette=True spawn=(40,-75,0) ratings=63 ratingRow=0
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=2 rosterSlot=1 role=home-skater-ai team="The Machine" model=CHIDMX assembly=AA_Skate_Std remapPalette=False spawn=(-20,75,0) ratings=63 ratingRow=1
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=3 rosterSlot=1 role=away-skater-ai team="The Fury" model=SEADMX assembly=AA_Skate_Std remapPalette=True spawn=(-50,-65,0) ratings=63 ratingRow=1
+UBLADE3_NATIVE_MATCH_PLAYER side=home slot=4 rosterSlot=2 role=home-goalie team="The Machine" model=CHIGMX assembly=AA_Goalidle remapPalette=False spawn=(0,192.5,-20.8) ratings=16 ratingRow=-1
+UBLADE3_NATIVE_MATCH_PLAYER side=away slot=5 rosterSlot=2 role=away-goalie team="The Fury" model=SEAGMX assembly=AA_Goalidle remapPalette=True spawn=(0,-192.5,-20.8) ratings=16 ratingRow=-1
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchProbe:DescribeScene (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchProbe.cs:390)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1686)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchProbe.cs Line: 390)
+
+UBLADE3_NATIVE_MATCH_SIM ticks=140 seconds=4.667 clockMs=4666 period=1 runState=1 delta=0.0333 scoreHome=0 scoreAway=0 events=1 viewedSlot=0 humanDisplacement=83.5941
+UBLADE3_NATIVE_MATCH_AI_FALLBACK active=True note="placeholder AI (plan VM not ported): non-human skaters hold Forward; goalies hold no input"
+UBLADE3_NATIVE_MATCH_GOALIE_PLACEMENT note="goalies stand at the InitMatchMarkers goal-mouth markers; the plan-VM goalie agenda is not ported"
+UBLADE3_NATIVE_MATCH_CAMERA pos=(-17.1905,28.3232,-99.1945) dir=(-0.832,-0.0249,0.5542) bungee=12 countdown=0 fovDegrees=85 tracked=0
+UBLADE3_NATIVE_MATCH_STATE slot=0 role=home-skater-human model=CHIOMX pos=(-28,28,-99.9757) speed=0 velDir=(0,1,0) facing=1.5708 aimPos=(-28,28,-93.9935)
+UBLADE3_NATIVE_MATCH_STATE slot=1 role=away-skater-ai model=SEADMX pos=(0,124.1332,-78.6939) speed=1.0111 velDir=(0,0.8963,0.4434) facing=4.7124 aimPos=(0,124.1332,-72.7117)
+UBLADE3_NATIVE_MATCH_STATE slot=2 role=home-skater-ai model=CHIDMX pos=(-28.1714,-98.4327,-84.811) speed=1.2376 velDir=(0.2838,-0.9275,0.2433) facing=1.5708 aimPos=(-28.1714,-98.4327,-78.8288)
+UBLADE3_NATIVE_MATCH_STATE slot=3 role=away-skater-ai model=SEADMX pos=(0,120,-80.6794) speed=0 velDir=(0,1,0) facing=1.5708 aimPos=(0,120,-74.6972)
+UBLADE3_NATIVE_MATCH_STATE slot=4 role=home-goalie model=CHIGMX pos=(0,-180,-29.4) speed=0 velDir=(0,0.4619,-0.8869) facing=0 aimPos=(0,-180,-23.4178)
+UBLADE3_NATIVE_MATCH_STATE slot=5 role=away-goalie model=SEAGMX pos=(0,180,-29.4) speed=0 velDir=(0,-0.4619,-0.8869) facing=3.1416 aimPos=(0,180,-23.4178)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchProbe:DescribeScene (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchProbe.cs:391)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1686)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchProbe.cs Line: 391)
+
+UBLADE3_NATIVE_MATCH_VIEW slot=0 role=home-skater-human model=CHIOMX frame=5 seconds=4.667 unityPos=(-28,-99.9757,-28) yawRadians=-0.0228 clip=azkskat2 frames=27 triangles=314
+UBLADE3_NATIVE_MATCH_VIEW slot=1 role=away-skater-ai model=SEADMX frame=5 seconds=4.667 unityPos=(0,-78.6939,-124.1332) yawRadians=0 clip=azkskat2 frames=27 triangles=291
+UBLADE3_NATIVE_MATCH_VIEW slot=2 role=home-skater-ai model=CHIDMX frame=5 seconds=4.667 unityPos=(-28.1714,-84.811,98.4327) yawRadians=-2.8446 clip=azkskat2 frames=27 triangles=314
+UBLADE3_NATIVE_MATCH_VIEW slot=3 role=away-skater-ai model=SEADMX frame=5 seconds=4.667 unityPos=(0,-80.6794,-120) yawRadians=0 clip=azkskat2 frames=27 triangles=291
+UBLADE3_NATIVE_MATCH_VIEW slot=4 role=home-goalie model=CHIGMX frame=59 seconds=4.667 unityPos=(0,-29.4,180) yawRadians=0 clip=aplread2 frames=81 triangles=165
+UBLADE3_NATIVE_MATCH_VIEW slot=5 role=away-goalie model=SEAGMX frame=59 seconds=4.667 unityPos=(0,-29.4,-180) yawRadians=-3.1416 clip=aplread2 frames=81 triangles=197
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchProbe:DescribeScene (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchProbe.cs:392)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1686)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchProbe.cs Line: 392)
+
+UBLADE3_NATIVE_MATCH_PROBE captureState=complete frames=0 ticks=140 seconds=4.667 missingRefs=0 digest=f54169057f5800dd
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.Native.MatchProbe:DescribeScene (UBlade3.Native.MatchScene) (at Assets/Scripts/UBlade3/Native/MatchProbe.cs:421)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1686)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Scripts/UBlade3/Native/MatchProbe.cs Line: 421)
+
+UBLADE3_NATIVE_MATCH_PROBE captureState=complete frames=0 ticks=140 seconds=4.667 missingRefs=0 digest=f54169057f5800dd
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1686)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1686)
+
+UBLADE3_NATIVE_PLAY built=True home=0 away=0 control="UBLADE3_NATIVE_PLAY_COUNTS ticks=140 phase=Live pickups=2 humanPickups=0 aiPickups=2 shots=0 humanShots=0 aiShots=0 passes=1 humanPasses=0 aiPasses=1 goals=0 humanGoals=0 aiGoals=0 bounces=0 scoreHome=0 scoreAway=0 carrying=True flight=False shotPower=0 headCam="eye=(0,0,0) forward=(0,0,0) fovDegrees=85 halfFovRad=0.7417649 viewFrac=(0.5,0.5)" lastHumanShotWord=0x00000000 lastHumanShotVel=(0,0,0) lastAiShotVel=(0,0,0) audio="UBLADE3_MATCH_AUDIO_COUNTS requested=3 played=0 failed=0 goal=0 crowd=0 impact=3 menu=0 ambient=0 service=none events=3 warnings=0" notes=7 planRoster="UBLADE3_PLAN_AI_ROSTER slots=5 active=5 maxActive=5 planIds=[CarryRok,Defense,Goalie] ticks=140 planTicks=700 rebinds=3 relays=8 relayBudgetHits=0 possessionEvents=3 gotIt=2 lostIt=1 rokIsFree=1 planPassRequests=1 planShotRequests=0 unsupportedDecisions=12 runtimeErrors=0 heuristicFallbackTicks=0 animationBridgeEvents=0 initialRokEvent=False maxRebindsPerSlot=2" defaultPlanAi=False heuristicFallbackTicks=0" audio="UBLADE3_MATCH_AUDIO_COUNTS requested=3 played=0 failed=0 goal=0 crowd=0 impact=3 menu=0 ambient=0 service=none events=3 warnings=0" captures=6 status="ROK CARRIED BY AI SLOT 3"
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1687)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1687)
+
+UBLADE3_PLAN_AI_ROSTER slots=5 active=5 maxActive=5 planIds=[CarryRok,Defense,Goalie] ticks=140 planTicks=700 rebinds=3 relays=8 relayBudgetHits=0 possessionEvents=3 gotIt=2 lostIt=1 rokIsFree=1 planPassRequests=1 planShotRequests=0 unsupportedDecisions=12 runtimeErrors=0 heuristicFallbackTicks=0 animationBridgeEvents=0 initialRokEvent=False maxRebindsPerSlot=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1688)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1688)
+
+UBLADE3_PLAN_AI_SLOT slot=1 plan=Defense bound=True planIds=[Defense,CarryRok] behaviors=[ManOnMan>TurnToMate>PassingPlay>PassingPlayPass>ManOnMan] planTicks=140 rebinds=2 planChangesAdopted=2 actions=[5x6,93x3,103x3] decisions=[6x2,15x4,18x1,23x2,50x1,78x1,97x2,98x2,111x3] passRequests=1 shotRequests=0 targets=4 fallbackMotion=91 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,action:7,action:9,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:11,behavior-parameter:12,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,unsupported.decision id=23,unsupported.decision id=6] digest=e22e94e6c59367b8
+UBLADE3_PLAN_AI_SLOT slot=2 plan=Defense bound=True planIds=[Defense] behaviors=[ManOnMan>LooseRokAttackOpponent] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[5x2,93x2,103x2] decisions=[6x2,15x2,23x1,68x1,97x2,98x2] passRequests=0 shotRequests=0 targets=2 fallbackMotion=50 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,decision:68,unsupported.decision id=23,unsupported.decision id=6,unsupported.decision id=68] digest=92149a4bcb0bb2e0
+UBLADE3_PLAN_AI_SLOT slot=3 plan=CarryRok bound=True planIds=[Defense,CarryRok] behaviors=[ManOnMan>LooseRokAttackOpponent>TurnToMate>PassingPlay>Throwing] planTicks=140 rebinds=1 planChangesAdopted=1 actions=[5x5,93x2,103x4] decisions=[6x2,15x4,23x1,68x1,78x1,97x2,98x2,111x1] passRequests=0 shotRequests=0 targets=4 fallbackMotion=50 heuristicFallback=0 unsupportedDecisions=4 unsupported=[action:29,action:30,action:6,action:7,action:9,agenda-item:8,behavior-parameter:0,behavior-parameter:10,behavior-parameter:11,behavior-parameter:12,behavior-parameter:15,behavior-parameter:3,behavior-parameter:9,decision:23,decision:6,decision:68,unsupported.decision id=23,unsupported.decision id=6,unsupported.decision id=68] digest=5d58e4e0d02da722
+UBLADE3_PLAN_AI_SLOT slot=4 plan=Goalie bound=True planIds=[Goalie] behaviors=[SitInGoal] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[] decisions=[14x1] passRequests=0 shotRequests=0 targets=1 fallbackMotion=0 heuristicFallback=0 unsupportedDecisions=0 unsupported=[action:18,action:71,agenda-item:15,behavior-parameter:10,behavior-parameter:15,behavior-parameter:2,behavior-parameter:3,behavior-parameter:9] digest=08b4517d1afe137d
+UBLADE3_PLAN_AI_SLOT slot=5 plan=Goalie bound=True planIds=[Goalie] behaviors=[SitInGoal] planTicks=140 rebinds=0 planChangesAdopted=0 actions=[] decisions=[14x1] passRequests=0 shotRequests=0 targets=1 fallbackMotion=0 heuristicFallback=0 unsupportedDecisions=0 unsupported=[action:18,action:71,agenda-item:15,behavior-parameter:10,behavior-parameter:15,behavior-parameter:2,behavior-parameter:3,behavior-parameter:9] digest=0cfefd3e6ea32520
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1689)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1689)
+
+UBLADE3_NATIVE_MATCH_N9_CAPTURE_EVIDENCE frames=6 aiPickups=2 aiPasses=1 aiShots=0 planPassRequests=1 maxActiveSlots=5 planIds=[CarryRok,Defense,Goalie] rebinds=3 relays=8 unsupportedDecisions=12 planDigest=d005d0a80fcc5436
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureSceneN9 () (at Assets/Editor/UBlade3MatchPlay.cs:1728)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1636)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1728)
+
+UBLADE3_NATIVE_MATCH_N9_CAPTURES_OK frames=6 width=1280 height=720
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 (bool) (at Assets/Editor/UBlade3MatchPlay.cs:1645)
+UBlade3.EditorTools.UBlade3MatchPlay:CaptureAllN9 () (at Assets/Editor/UBlade3MatchPlay.cs:701)
+
+(Filename: Assets/Editor/UBlade3MatchPlay.cs Line: 1645)
+
+MonoPathRemapper: Attempts to remap: 3205; Successful remaps: 0
+Serialized file version minimum: 23, current 23
+Worker ready: AssetImportWorkerHW0 0
+Killing ADB server in 2.0851336 seconds.
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-StephenSimmons channel disconnected successfully.
+Shut down.
+Lingering sessions upon destruction of worker manager
+Unity Data Store service was successfully shut down
+UDS shutting down local client system
+Shut down UDS service system complete
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+CodeReloadManager destroyed
+abort_threads: Failed aborting id: 000000000000A10C, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000001560, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 000000000000A10C, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000001560, mono_thread_manage will ignore it
+
+debugger-agent: Unable to listen on 4840
+VBCSCompilerPreWarmer: requested VBCSCompiler shutdown
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1793439127472,"processId":17452,"allocatedMemory":11295719,"memoryLabels":[{"Default":178232},{"Permanent":15516},{"NewDelete":69247},{"Thread":4205680},{"Manager":35357},{"VertexData":8},{"Geometry":824},{"Texture":24},{"Shader":842829},{"Material":132},{"GfxDevice":58128},{"Animation":952},{"Audio":1272},{"FreeType":8},{"FontEngine":736},{"Physics":1970},{"Physics2D":16},{"Serialization":16704},{"Input":42840},{"JobScheduler":256},{"TextLib":280},{"Mono":48},{"ScriptingNativeRuntime":1225616},{"BaseObject":48848},{"Resource":1444},{"Renderer":2504},{"Transform":4781},{"File":4416},{"WebCam":616},{"Culling":32},{"Terrain":11442},{"Wind":24},{"STL":40},{"String":741159},{"StaticString":3808},{"Utility":2675350},{"Curl":2559},{"PoolAlloc":2168},{"AI":80},{"TypeTree":20997},{"ScriptManager":12656},{"CodeReload":448},{"RuntimeInitializeOnLoadManager":64},{"Sprites":102},{"SpriteAtlas":120},{"GI":7816},{"Director":8296},{"CloudService":7296},{"WebRequest":13823},{"VR":49650},{"SceneManager":608},{"Video":64},{"LazyScriptCache":32},{"Camera":729},{"Secure":2377},{"SerializationCache":9256},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":592},{"Hierarchy":1188},{"UIElements":40},{"CoreStats":14456},{"Identifiers":7152},{"EntityIdStore":33088},{"Gui":128},{"EditorUtility":99122},{"VersionControl":8},{"Undo":931},{"AssetDatabase":403409},{"AssetImporter":40},{"EditorGi":328},{"UnityConnect":40441},{"Upm":1912},{"UpmDiagnostics":8},{"AssetCompliance":96},{"DrivenProperties":72},{"LocalIPC":220},{"ProfilerEditor":9746},{"CoreBusinessMetrics":3606},{"Windowing":456},{"Licensing":1264},{"AssetReference":32},{"IPCStream":32}]}
+~StackAllocator(ALLOC_TEMP_MAIN) m_LastAlloc not NULL. Did you forget to call FreeAllStackAllocations()? To get more information, run app with -diag-temp-memory-leak-validation cmd line argument

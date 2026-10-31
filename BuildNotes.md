@@ -4,6 +4,25 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.015
+
+**Default interactive native C# match now runs PlanVM AI; plan shot path added.**
+
+- Date: 2026-10-31
+- Change: MatchPlay.Build now attaches the persistent MatchPlanAiRoster for slots 1-5 on the
+  normal player path. Every non-human skater and goalie runs its shipped Defense/CarryRok/Goalie
+  plan with possession changes; heuristic AI is suppressed for plan slots (fallback only when a
+  plan cannot bind). CARRYROK's Throwing animation bridge delivers the authored event and the plan
+  executes action 139 -> RequestAiShot -> shipped LaunchAiShot.
+- Verified: N10_CHECK_OK on the default path defaultPlanAi=True aiPickups=2 aiPasses=1 aiShots=1
+  heuristicFallbackTicks=0 suppressedUpdateTicks=480 slots=5 activeAtEnd=5 planTicks=800
+  planDigest=67159e33ed58442d determinism=True; 7 Editor + 7 player frames byte-identical;
+  N4-N9 regressions and captures preserved; no20xx processes.
+- Boundary: most PlanCond/PlanAction bodies remain unported; exact steering/collision/agenda
+  classes, relay approximation, OffWing/Sideln adoption and shot animation bridge are gaps.
+  Not full AI parity or a release claim.
+- Docs: docs/NATIVE-MATCH-N10.md.
+
 ## 2026.10.31.014
 
 **Whole-match PlanVM AI roster: five plans active simultaneously in the C# match.**
