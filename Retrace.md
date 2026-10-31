@@ -62,3 +62,14 @@ Prompt and decision log for UBlade3.
   exact native engine. Goal active.
 - Version: 2026.10.31.006
 
+## 6 - 2026-10-31
+
+- Request: continue the pure-C# engine after the plan VM/drome preview.
+- Work: original skater preview (CHIOMX + CHIGMX) with the exact 16-bone rig, WBA timing/pose and
+  original WBM/BMP visuals; six 1280x720 captures.
+- Evidence: UBLADE3_SKATER_PREVIEW_CAPTURES_OK, probe mismatches=0 digest=00f075fe626fe291,
+  479 triangles / 1,437 verts / 25 textures / 0 missing refs.
+- Boundary: validation camera, no match/HUD/planVM wiring; playable release remains embedded native
+  exact engine. Goal active.
+- Version: 2026.10.31.007
+

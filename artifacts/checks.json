@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T06:29:35.825Z",
+  "generatedAt": "2026-10-31T06:53:55.425Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -97,6 +97,28 @@
       "animations": 188,
       "digest": "d860fe66423aa141",
       "warnings": 5
+    },
+    "skaters": {
+      "status": "N3 skater preview captured",
+      "skater": "CHIOMX Evans",
+      "goalie": "CHIGMX Viveros",
+      "models": 2,
+      "bones": 32,
+      "clips": 32,
+      "triangles": 479,
+      "verts": 1437,
+      "textures": 25,
+      "missingRefs": 0,
+      "digest": "00f075fe626fe291",
+      "captures": [
+        "artifacts/skater-preview-chiomx-frame000.png",
+        "artifacts/skater-preview-chiomx-frame009.png",
+        "artifacts/skater-preview-chiomx-frame018.png",
+        "artifacts/skater-preview-chigmx-frame000.png",
+        "artifacts/skater-preview-chigmx-frame040.png",
+        "artifacts/skater-preview-lineup-frame009.png"
+      ],
+      "doc": "docs/SKATER-PREVIEW.md"
     }
   }
 }

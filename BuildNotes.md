@@ -4,6 +4,26 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.007
+
+**C# original skater model, skeleton and animation milestone.**
+
+- Date: 2026-10-31
+- Change: added `UBlade3.Native` skater preview rendering the real CHIOMX skater ("Evans", Chicago
+  The Machine) and CHIGMX goalie ("Viveros") from the player's own Mdltxt WBM + BMP textures with
+  the original 16-bone rig and WBA animation: AA_Skate_Std (azkskat2, frames 0..26 @30fps) and
+  AA_Goalidle (aplread2, frames 0..80). Reconstructed the shipped pose path (bind T(rest), header
+  rotation, format 1/2 clip transforms, packed-rotation quantisation, PropagateTransforms scale
+  rule) and captured six 1280x720 frames. Added docs/SKATER-PREVIEW.md.
+- Verified: `UBLADE3_SKATER_PREVIEW_CAPTURES_OK`; probe `mismatches=0 digest=00f075fe626fe291`;
+  counts models=2 meshes=2 bones=32 clips=32 displayedFrames=108 triangles=479 verts=1437
+  textures=25 missingRefs=0; skater poses at 0/0.3/0.6 s visibly differ (frame0-vs-1 max delta
+  1.5029 units).
+- Boundary: CPU vertex posing, validation camera, no match/HUD/plan-VM wiring, no GPU skinning,
+  no pixel-parity gate. This is the exact visual asset path, not the playable C# renderer yet.
+  The native exact release remains 2026.10.31.002.
+- Docs: docs/SKATER-PREVIEW.md; assets docs unchanged.
+
 ## 2026.10.31.006
 
 **C# Plan VM core and original-drome preview milestone.**
