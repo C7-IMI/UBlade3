@@ -50,3 +50,15 @@ Prompt and decision log for UBlade3.
 - Version: 2026.10.31.005
 - Release: 2026.10.31.002 (SHA-256 ef46aed6...61b926).
 
+## 5 - 2026-10-31
+
+- Request: continue toward the pure-C# native engine after the playable native release.
+- Work: PlanVM C# loader/VM core with 32/32 plans and a self-check/probe; original-drome C# preview
+  loading CHIDRO.ENV and 27 original objects, building Unity meshes and capturing shaded/textured
+  frames. PlanVM probe wired into Unity checks.
+- Evidence: UBLADE3_PLANVM_OK plans=32 instructions=9420 opcodes=16 unknowns=0 digest=141a750a3de1e083;
+  UBLADE3_DROME_PREVIEW_CAPTURES_OK 27 objects; captures in artifacts.
+- Boundary: preview lighting/framing is validation, not exact; playable release remains the embedded
+  exact native engine. Goal active.
+- Version: 2026.10.31.006
+

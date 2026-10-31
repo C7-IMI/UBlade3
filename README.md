@@ -33,6 +33,11 @@ original data formats. **Current verified milestone:**
   `D:\Games\HyperBlade\HYB`; assets are local only).
 - Simulation-core self-check: 209/209 passed; arena 105 x 187.5 x 105, camera FOV 85/bungee 12, rules/steering
   constants cited from the decompilation.
+- C# Plan VM: `UBlade3.PlanVM` loads 32/32 shipped PBN plans, 9,420 instructions, 16 opcodes, 0 unknowns, digest
+  `141a750a3de1e083`; 123/123 self-checks. Action/decision bodies and game wiring are still port gaps.
+- C# original-drome preview: loads `CHIDRO.ENV` + 27 original objects through the C# WBM/BMP readers and builds
+  Unity meshes; captures are in `artifacts/drome-preview-chidro-*.png`. Lighting/camera are validation views, not
+  yet pixel-identical, so this preview is not the playable release.
 - Port ledger: 145 mapped / 20 stubs / 3,976 unmapped = 4.75% of the 3,054 game functions. **The exact full clone is
   not complete yet**; the ledger is the progress measure.
 See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-NOTES.md),
@@ -41,6 +46,8 @@ See [docs/PORT-PLAN.md](./docs/PORT-PLAN.md), [docs/CORE-NOTES.md](./docs/CORE-N
 - Gypsy integration: [docs/GYPSY-UPGRADE-INTEGRATION.md](./docs/GYPSY-UPGRADE-INTEGRATION.md).
 - Performance/resolution plan: [docs/PERFORMANCE-RESOLUTION-PLAN.md](./docs/PERFORMANCE-RESOLUTION-PLAN.md).
 - Native engine plan: [docs/NATIVE-ENGINE-PLAN.md](./docs/NATIVE-ENGINE-PLAN.md).
+- C# Plan VM: [docs/PLAN-VM.md](./docs/PLAN-VM.md).
+- C# drome preview: [docs/DROME-PREVIEW.md](./docs/DROME-PREVIEW.md).
 - Original asset formats: [docs/ASSET-FORMATS.md](./docs/ASSET-FORMATS.md).
 
 ## Requirements

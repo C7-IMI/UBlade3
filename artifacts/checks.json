@@ -1,6 +1,6 @@
 {
   "schema": "ublade3.checks/v3",
-  "generatedAt": "2026-10-31T05:22:20.121Z",
+  "generatedAt": "2026-10-31T06:29:35.825Z",
   "gameInstall": "D:\\Games\\HyperBlade\\HYB",
   "exactCodeTarget": {
     "file": "HyperX-XP.exe",
@@ -63,5 +63,40 @@
     "sha256": "ef46aed6a525fb949513955be65053f6ce53c5bcaa975d23db7fd4ca1171b926",
     "exeSha256": "9806abde4a406ed68647e9505852c49f6aa72a372f4f084e2aa2821affea57a2",
     "externalRuntime": false
+  },
+  "csharpPort": {
+    "planVm": {
+      "probe": "UBLADE3_PLANVM_OK",
+      "plans": 32,
+      "instructions": 9420,
+      "opcodes": 16,
+      "unknowns": 0,
+      "digest": "141a750a3de1e083",
+      "selfTest": "123/123",
+      "doc": "docs/PLAN-VM.md"
+    },
+    "dromePreview": {
+      "status": "N2 preview captured",
+      "drome": "CHIDRO.ENV",
+      "objects": 27,
+      "dromeVertices": 3216,
+      "dromeTriangles": 1072,
+      "dromeSubmeshes": 6,
+      "captures": [
+        "artifacts/drome-preview-chidro-shaded.png",
+        "artifacts/drome-preview-chidro-textured.png"
+      ],
+      "caveat": "validation lighting/camera; not yet pixel-identical; not in playable release",
+      "doc": "docs/DROME-PREVIEW.md"
+    },
+    "assets": {
+      "models": 344,
+      "materials": 3528,
+      "bones": 4182,
+      "textures": 333,
+      "animations": 188,
+      "digest": "d860fe66423aa141",
+      "warnings": 5
+    }
   }
 }

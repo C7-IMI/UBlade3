@@ -4,6 +4,24 @@ Current version: 2026.10.27.002
 
 UBlade3 uses a script-computed version sequence. Versions 001+ are this port; the 1996 game version is unrelated.
 
+## 2026.10.31.006
+
+**C# Plan VM core and original-drome preview milestone.**
+
+- Date: 2026-10-31
+- Change: added the C# `UBlade3.PlanVM` loader/VM core (32/32 shipped PBN plans, 9,420 instructions,
+  16 opcodes, 0 unknowns, digest 141a750a3de1e083, 123/123 self-checks) and the original-asset
+  `UBlade3.Native` drome preview (CHIDRO.ENV, 27 objects, original WBM/BMP data, Unity mesh
+  generation, shader/material, Editor capture/probe). Wired the PlanVM probe into the Unity
+  check gate; added docs/PLAN-VM.md and docs/DROME-PREVIEW.md.
+- Verified: Unity checks `UBLADE3_CHECKS_OK` include `UBLADE3_PLANVM_OK plans=32 ...`; editor
+  `CaptureAll` logs 27 `UBLADE3_DROME_PREVIEW_OBJECT` lines and `UBLADE3_DROME_PREVIEW_CAPTURES_OK`;
+  captures at 1280x720.
+- Boundary: the drome preview uses validation lighting/camera and is not pixel-identical yet; the
+  playable release remains the embedded exact native engine. PlanVM action/decision bodies and
+  renderer/game wiring remain port gaps.
+- Release unchanged: 2026.10.31.002 native exact engine.
+
 ## 2026.10.31.005
 
 **Native exact engine inside Unity: no external process, native release verified.**

@@ -12,6 +12,10 @@ namespace UBlade3.EditorTools
             var failed = false;
             try
             {
+                var planVm = UBlade3.PlanVM.PlanVmProbe.Describe();
+                Debug.Log(planVm);
+                if (!planVm.Contains("UBLADE3_PLANVM_OK")) failed = true;
+
                 var report = UBlade3.Data.DataProbe.Report();
                 Debug.Log(report);
                 if (!report.Contains("UBLADE3_DATA_OK")) failed = true;
